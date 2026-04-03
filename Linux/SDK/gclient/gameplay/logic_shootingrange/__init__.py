@@ -1,0 +1,9 @@
+# module: gclient.gameplay.logic_shootingrange
+
+import avatarmembers
+import challenge_rank_data_mgr
+import combat_avatar_shootingrange
+import game_logic_shootingrange
+import shootingrange_robot_model
+import ui
+

@@ -1,0 +1,61 @@
+    
+    // Get the directory where the loader is running from
+    char loader_dir[512] = {0};
+    char loader_path[512] = {0};
+    
+    // Try /proc/self/exe first (Linux)
+    ssize_t len = readlink("/proc/self/exe", loader_path, sizeof(loader_path) - 1);
+    if (len != -1) {
+        loader_path[len] = '\0';
+        // Extract directory from path
+        strncpy(loader_dir, loader_path, sizeof(loader_dir) - 1);
+        char *last_slash = strrchr(loader_dir, '/');
+        if (last_slash) {
+            *last_slash = '\0';
+        }
+    }
+    
+    // Find injector binary - check multiple locations
+    char injector_path[512] = {0};
+    
+    // 1. Same directory as loader
+    snprintf(injector_path, sizeof(injector_path), "%s/bloodstrike-injector", loader_dir);
+    if (access(injector_path, X_OK) != 0) {
+        // 2. ../build relative to loader
+        snprintf(injector_path, sizeof(injector_path), "%s/../build/bloodstrike-injector", loader_dir);
+        if (access(injector_path, X_OK) != 0) {
+            // 3. ./build in current working directory
+            snprintf(injector_path, sizeof(injector_path), "./build/bloodstrike-injector");
+            if (access(injector_path, X_OK) != 0) {
+                // 4. Check if injector is in PATH
+                FILE *which = popen("which bloodstrike-injector 2>/dev/null", "r");
+                if (which && fgets(injector_path, sizeof(injector_path), which)) {
+                    // Remove newline
+                    injector_path[strcspn(injector_path, "\n")] = '\0';
+                    pclose(which);
+                } else {
+                    if (which) pclose(which);
+                    // 5. Fall back to same directory and hope for the best
+                    snprintf(injector_path, sizeof(injector_path), "bloodstrike-injector");
+                }
+            }
+        }
+    }
+    
+    if (method == 3) {
+        // LD_PRELOAD method - show instructions
+        log_message("LD_PRELOAD method selected");
+        log_message("Add to Steam launch options:");
+        log_message("  LD_PRELOAD=%s %%command%%", abs_library);
+        log_message("Then restart the game.");
+        return 0;
+    }
+    
+    // Build injector command using found path
+    snprintf(command, sizeof(command), 
+        "pkexec \"%s\" -p %s -l \"%s\" -m %d",
+        injector_path, process, abs_library, method);
+    
+    log_message("Using injector: %s", injector_path);
+    log_message("Running injection...");
+    

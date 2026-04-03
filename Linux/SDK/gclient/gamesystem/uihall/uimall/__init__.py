@@ -1,0 +1,37 @@
+# module: gclient.gamesystem.uihall.uimall
+
+import buy_limit_comp
+import gacha_finger_window
+import gacha_model_comp
+import hall_gacha_window
+import hall_mall_get_reward_window
+import mall_box_attribute_new_window
+import mall_box_attribute_v6_window
+import mall_box_attribute_window
+import mall_box_panel_feature
+import mall_box_pre_sale_window
+import mall_box_v5_reward_window
+import mall_box_v6_reward_window
+import mall_box_window
+import mall_corner_node
+import mall_date_comp
+import mall_extra_model_comp
+import mall_gacha_buy_comp
+import mall_hero_model_ctrl
+import mall_item_node
+import mall_jump_comp
+import mall_model_comp
+import mall_model_ctrl
+import mall_model_floor_comp
+import mall_money_comp
+import mall_mystery_discount_window
+import mall_pop_up
+import mall_pre_sale_state_comp
+import mall_reddot_comp
+import mall_roll_nocycle_activity_window
+import mall_roll_nocycle_new_activity_window
+import mall_skin_probability_popup_window
+import mall_sound_effect_comp
+import mall_util
+import melee_feature_node
+

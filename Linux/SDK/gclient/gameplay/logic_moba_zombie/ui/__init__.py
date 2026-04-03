@@ -1,0 +1,23 @@
+# module: gclient.gameplay.logic_moba_zombie.ui
+
+import hud_zombie_frontsight_comp
+import hud_zombie_on_vehicle_comp
+import map
+import moba_zombie_hud_bottom_arms_comp
+import moba_zombie_hud_function_comp
+import team
+import top_reborn_time_comp
+import zombie_blood_effect_comp
+import zombie_contract_crystal_count_comp
+import zombie_die_jumpword_comp
+import zombie_final_vs_count_comp
+import zombie_hud_outstanding_show_comp
+import zombie_ig_main_pc_window
+import zombie_interactive_comp
+import zombie_main_uistage
+import zombie_parachute_button_comp
+import zombie_replay_death_comp
+import zombie_replay_spectator_status_comp
+import zombie_settle_countdown_comp
+import zombie_ui_uitl
+

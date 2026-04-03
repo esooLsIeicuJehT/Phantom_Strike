@@ -1,0 +1,50 @@
+/*
+ * BloodStrike Linux - GUI Loader
+ * A simple graphical interface for injecting the cheat
+ * Features: Injection, Offset Scanner, Skin Changer
+ */
+
+#include <gtk/gtk.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <thread>
+#include <atomic>
+
+// Include offset scanner
+#include "offset_scanner.h"
+
+//=============================================================================
+// Configuration
+//=============================================================================
+
+#define APP_NAME "BloodStrike Loader"
+#define APP_VERSION "2.0.0"
+
+// Default paths
+static char default_library_path[512] = "";
+static char default_process_name[64] = "bloodstrike";
+static int selected_method = 4; // Wine/Proton by default
+
+// Widgets
+static GtkWidget *window;
+static GtkWidget *notebook;
+static GtkWidget *entry_library;
+static GtkWidget *entry_process;
+static GtkWidget *combo_method;
+static GtkWidget *btn_browse;
+static GtkWidget *btn_inject;
+static GtkWidget *btn_refresh;
+static GtkWidget *text_log;
+static GtkWidget *progress_bar;
+static GtkWidget *status_label;
+static GtkWidget *process_list;
+
+// Offset Scanner Widgets
+static GtkWidget *entry_scan_pid;
+static GtkWidget *btn_scan_offsets;
+static GtkWidget *btn_attach_debugger;
+static GtkWidget *text_offsets;

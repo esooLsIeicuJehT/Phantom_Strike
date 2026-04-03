@@ -1,0 +1,28 @@
+35:static GtkWidget *notebook;
+558:        "notebook tab { background-color: #0f3460; padding: 10px 20px; }"
+559:        "notebook tab:checked { background-color: #1a4a7a; }"
+579:    // Create notebook for tabs
+580:    notebook = gtk_notebook_new();
+581:    gtk_box_pack_start(GTK_BOX(vbox), notebook, TRUE, TRUE, 5);
+586:    GtkWidget *tab_injector = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+587:    gtk_container_set_border_width(GTK_CONTAINER(tab_injector), 10);
+591:    gtk_box_pack_start(GTK_BOX(tab_injector), frame_library, FALSE, FALSE, 5);
+613:    gtk_box_pack_start(GTK_BOX(tab_injector), frame_options, FALSE, FALSE, 5);
+639:    gtk_box_pack_start(GTK_BOX(tab_injector), frame_processes, TRUE, TRUE, 5);
+680:    gtk_box_pack_start(GTK_BOX(tab_injector), frame_log, TRUE, TRUE, 5);
+688:    gtk_text_view_set_editable(GTK_TEXT_VIEW(text_log), FALSE);
+694:    gtk_box_pack_start(GTK_BOX(tab_injector), progress_bar, FALSE, FALSE, 5);
+697:    gtk_box_pack_start(GTK_BOX(tab_injector), status_label, FALSE, FALSE, 0);
+703:    gtk_box_pack_start(GTK_BOX(tab_injector), btn_inject, FALSE, FALSE, 5);
+705:    // Add injector tab to notebook
+706:    GtkWidget *tab_label_injector = gtk_label_new("💉 Injector");
+707:    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), tab_injector, tab_label_injector);
+712:    GtkWidget *tab_scanner = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+713:    gtk_container_set_border_width(GTK_CONTAINER(tab_scanner), 10);
+717:    gtk_box_pack_start(GTK_BOX(tab_scanner), frame_target, FALSE, FALSE, 5);
+735:    gtk_box_pack_start(GTK_BOX(tab_scanner), frame_scan_options, FALSE, FALSE, 5);
+763:    gtk_box_pack_start(GTK_BOX(tab_scanner), frame_offsets, TRUE, TRUE, 5);
+771:    gtk_text_view_set_editable(GTK_TEXT_VIEW(text_offsets), FALSE);
+775:    // Add scanner tab to notebook
+776:    GtkWidget *tab_label_scanner = gtk_label_new("🔍 Offset Scanner");
+777:    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), tab_scanner, tab_label_scanner);

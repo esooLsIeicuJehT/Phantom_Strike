@@ -1,0 +1,13 @@
+# module: gclient.gamesystem.uihall.room
+
+import room_choose_match_type_window
+import room_common_node
+import room_config
+import room_list_window
+import room_password_window
+import room_setting_advanced_window
+import room_setting_basic_window
+import room_setting_window
+import room_settlement_window
+import room_util
+

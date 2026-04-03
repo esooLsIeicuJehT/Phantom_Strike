@@ -1,0 +1,407 @@
+#include "skin_changer.h"
+#include "game_offsets.h"
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include <cstdlib>
+#include <cstring>
+#include <sys/uio.h>
+#include <unistd.h>
+
+namespace SkinChanger {
+
+//=============================================================================
+// Static Instance
+//=============================================================================
+
+SkinChangerEngine& SkinChangerEngine::Instance() {
+    static SkinChangerEngine instance;
+    return instance;
+}
+
+//=============================================================================
+// Initialization
+//=============================================================================
+
+bool SkinChangerEngine::Initialize(uintptr_t moduleBase) {
+    if (m_initialized) return true;
+    
+    m_moduleBase = moduleBase;
+    
+    // Initialize skin database
+    InitializeSkinDatabase();
+    
+    // Set up offsets (from game_offsets.h or pattern scanned)
+    // These would be the actual offsets in the game's memory
+    m_offsets.LocalPlayer = 0x0;      // Would be set from game_offsets
+    m_offsets.WeaponManager = 0x0;
+    m_offsets.CurrentWeapon = 0x0;
+    m_offsets.WeaponSkinId = 0x0;
+    m_offsets.WeaponWear = 0x0;
+    m_offsets.WeaponSeed = 0x0;
+    m_offsets.ForceUpdate = 0x0;
+    
+    m_initialized = true;
+    return true;
+}
+
+void SkinChangerEngine::Shutdown() {
+    m_initialized = false;
+    m_moduleBase = 0;
+    m_skins.clear();
+    m_weapons.clear();
+}
+
+//=============================================================================
+// Skin Database
+//=============================================================================
+
+void SkinChangerEngine::InitializeSkinDatabase() {
+    // Popular skins database
+    m_skins = {
+        // AK-47 Skins
+        {Skins::AK47_DRAGON_LORE, "Dragon Lore", "AK-47", 3},
+        {Skins::AK47_NEON_RIDER, "Neon Rider", "AK-47", 3},
+        {Skins::AK47_ASIIMOV, "Asiimov", "AK-47", 2},
+        {Skins::AK47_FIRE_SERPENT, "Fire Serpent", "AK-47", 3},
+        {Skins::AK47_VULCAN, "Vulcan", "AK-47", 2},
+        {Skins::AK47_BLOODSPORT, "Bloodsport", "AK-47", 2},
+        {Skins::AK47_PHANTOM_DISRUPTOR, "Phantom Disruptor", "AK-47", 2},
+        {Skins::AK47_WILDERLOTUS, "Wilderlotus", "AK-47", 2},
+        
+        // M4A4 Skins
+        {Skins::M4A4_HOWL, "Howl", "M4A4", 3},
+        {Skins::M4A4_ASIIMOV, "Asiimov", "M4A4", 2},
+        {Skins::M4A4_Buzz_Military, "Buzz Military", "M4A4", 2},
+        {Skins::M4A4_DESOLATE_SPACE, "Desolate Space", "M4A4", 2},
+        {Skins::M4A4_THE_EMPEROR, "The Emperor", "M4A4", 2},
+        {Skins::M4A4_BLOODSHOT, "Bloodshot", "M4A4", 2},
+        
+        // M4A1-S Skins
+        {Skins::M4A1S_PRINTSTREAM, "Printstream", "M4A1-S", 3},
+        {Skins::M4A1S_BRIGHT_WATER, "Bright Water", "M4A1-S", 1},
+        {Skins::M4A1S_DECORATOR, "Decorator", "M4A1-S", 2},
+        {Skins::M4A1S_CHANTICO_FIRE, "Chantico's Fire", "M4A1-S", 2},
+        {Skins::M4A1S_HYPER_BEAST, "Hyper Beast", "M4A1-S", 2},
+        
+        // AWP Skins
+        {Skins::AWP_DRAGON_LORE, "Dragon Lore", "AWP", 3},
+        {Skins::AWP_GUNGIR, "Gungnir", "AWP", 3},
+        {Skins::AWP_THE_PRINCE, "The Prince", "AWP", 2},
+        {Skins::AWP_ASIIMOV, "Asiimov", "AWP", 2},
+        {Skins::AWP_FEVER_DREAM, "Fever Dream", "AWP", 1},
+        {Skins::AWP_HYPER_BEAST, "Hyper Beast", "AWP", 2},
+        {Skins::AWP_MAN_O_WAR, "Man O'War", "AWP", 2},
+        {Skins::AWP_ELECTRIC_HIVE, "Electric Hive", "AWP", 1},
+        {Skins::AWP_FADE, "Fade", "AWP", 3},
+        {Skins::AWP_DOPPLER, "Doppler", "AWP", 3},
+        
+        // SMG Skins
+        {Skins::MP7_AKULI, "Akuli", "MP7", 2},
+        {Skins::MP7_POWER_CORE, "Power Core", "MP7", 1},
+        {Skins::MP9_STARLIGHT_PROTECTOR, "Starlight Protector", "MP9", 2},
+        {Skins::MAC10_DROPSHOT, "Dropshot", "MAC-10", 1},
+        {Skins::UMP45_MOTORPOOL, "Motorpool", "UMP-45", 1},
+        {Skins::P90_ASIAWOLF, "Asiimov", "P90", 2},
+        {Skins::P90_BLADE, "Blade", "P90", 2},
+        
+        // Pistol Skins
+        {Skins::DEAGLE_BLAZE, "Blaze", "Desert Eagle", 2},
+        {Skins::DEAGLE_PRINTSTREAM, "Printstream", "Desert Eagle", 3},
+        {Skins::DEAGLE_MECHA_INDUSTRIES, "Mecha Industries", "Desert Eagle", 2},
+        {Skins::DEAGLE_CODE_RED, "Code Red", "Desert Eagle", 2},
+        {Skins::DEAGLE_OCEAN_DRIVE, "Ocean Drive", "Desert Eagle", 2},
+        
+        {Skins::GLOCK_FADE, "Fade", "Glock-18", 2},
+        {Skins::GLOCK_MOONRISE, "Moonrise", "Glock-18", 1},
+        {Skins::GLOCK_WATER_ELEMENTAL, "Water Elemental", "Glock-18", 2},
+        {Skins::GLOCK_REBEL, "Rebel", "Glock-18", 1},
+        
+        {Skins::USPS_KILL_CONFIRMED, "Kill Confirmed", "USP-S", 2},
+        {Skins::USPS_PRINTSTREAM, "Printstream", "USP-S", 3},
+        {Skins::USPS_ORION, "Orion", "USP-S", 1},
+        {Skins::USPS_JUNGLE_SLASH, "Jungle Slash", "USP-S", 1},
+        {Skins::USPS_BLOOD_TIGER, "Blood Tiger", "USP-S", 1},
+        {Skins::USPS_CYREX, "Cyrex", "USP-S", 1},
+        {Skins::USPS_FLASHBACK, "Flashback", "USP-S", 1},
+        
+        // Knife Skins
+        {Skins::KARAMBIT_DOPPLER, "Doppler", "Karambit", 3},
+        {Skins::KARAMBIT_FADE, "Fade", "Karambit", 3},
+        {Skins::KARAMBIT_MARBLE_FADE, "Marble Fade", "Karambit", 3},
+        {Skins::KARAMBIT_TIGER_TOOTH, "Tiger Tooth", "Karambit", 3},
+        {Skins::KARAMBIT_GAMMA_DOPPLER, "Gamma Doppler", "Karambit", 3},
+        
+        {Skins::BUTTERFLY_DOPPLER, "Doppler", "Butterfly", 3},
+        {Skins::BUTTERFLY_FADE, "Fade", "Butterfly", 3},
+        {Skins::BUTTERFLY_MARBLE_FADE, "Marble Fade", "Butterfly", 3},
+        {Skins::BUTTERFLY_TIGER_TOOTH, "Tiger Tooth", "Butterfly", 3},
+        
+        {Skins::M9_BAYONET_DOPPLER, "Doppler", "M9 Bayonet", 3},
+        {Skins::M9_BAYONET_FADE, "Fade", "M9 Bayonet", 3},
+        {Skins::M9_BAYONET_CRIMSON_WEB, "Crimson Web", "M9 Bayonet", 3},
+    };
+    
+    // Weapon database
+    m_weapons = {
+        {Weapons::AK47, "AK-47"},
+        {Weapons::M4A4, "M4A4"},
+        {Weapons::M4A1S, "M4A1-S"},
+        {Weapons::FAMAS, "FAMAS"},
+        {Weapons::GALIL, "Galil AR"},
+        {Weapons::AUG, "AUG"},
+        {Weapons::SG553, "SG 553"},
+        {Weapons::AWP, "AWP"},
+        {Weapons::SCAR20, "SCAR-20"},
+        {Weapons::G3SG1, "G3SG1"},
+        {Weapons::SSG08, "SSG 08"},
+        {Weapons::MP7, "MP7"},
+        {Weapons::MP9, "MP9"},
+        {Weapons::MAC10, "MAC-10"},
+        {Weapons::UMP45, "UMP-45"},
+        {Weapons::P90, "P90"},
+        {Weapons::BIZON, "PP-Bizon"},
+        {Weapons::DEAGLE, "Desert Eagle"},
+        {Weapons::GLOCK, "Glock-18"},
+        {Weapons::USPS, "USP-S"},
+        {Weapons::P2000, "P2000"},
+        {Weapons::FIVESEVEN, "Five-SeveN"},
+        {Weapons::TEC9, "Tec-9"},
+        {Weapons::CZ75, "CZ75-Auto"},
+        {Weapons::NOVA, "Nova"},
+        {Weapons::XM1014, "XM1014"},
+        {Weapons::MAG7, "MAG-7"},
+        {Weapons::NEGEV, "Negev"},
+        {Weapons::M249, "M249"},
+    };
+}
+
+//=============================================================================
+// Memory Operations
+//=============================================================================
+
+bool SkinChangerEngine::ReadMemory(uintptr_t address, void* buffer, size_t size) {
+    // For self-process reading
+    struct iovec local = { buffer, size };
+    struct iovec remote = { reinterpret_cast<void*>(address), size };
+    
+    ssize_t bytesRead = process_vm_readv(getpid(), &local, 1, &remote, 1, 0);
+    return bytesRead == static_cast<ssize_t>(size);
+}
+
+bool SkinChangerEngine::WriteMemory(uintptr_t address, const void* buffer, size_t size) {
+    // For self-process writing
+    struct iovec local = { const_cast<void*>(buffer), size };
+    struct iovec remote = { reinterpret_cast<void*>(address), size };
+    
+    ssize_t bytesWritten = process_vm_writev(getpid(), &local, 1, &remote, 1, 0);
+    return bytesWritten == static_cast<ssize_t>(size);
+}
+
+//=============================================================================
+// Player/Weapon Access
+//=============================================================================
+
+uintptr_t SkinChangerEngine::GetLocalPlayer() {
+    if (!m_initialized) return 0;
+    
+    // Read local player pointer from game memory
+    // This would use offsets from game_offsets.h
+    uintptr_t localPlayer = 0;
+    
+    // Example: ReadMemory(m_moduleBase + m_offsets.LocalPlayer, &localPlayer, sizeof(localPlayer));
+    
+    return localPlayer;
+}
+
+uintptr_t SkinChangerEngine::GetCurrentWeapon() {
+    uintptr_t player = GetLocalPlayer();
+    if (!player) return 0;
+    
+    uintptr_t weapon = 0;
+    // Read current weapon from player structure
+    // ReadMemory(player + m_offsets.CurrentWeapon, &weapon, sizeof(weapon));
+    
+    return weapon;
+}
+
+uintptr_t SkinChangerEngine::GetWeaponByIndex(int index) {
+    uintptr_t weaponManager = 0;
+    // Read weapon manager
+    // ReadMemory(m_moduleBase + m_offsets.WeaponManager, &weaponManager, sizeof(weaponManager));
+    
+    if (!weaponManager) return 0;
+    
+    // Calculate weapon address by index
+    uintptr_t weapon = weaponManager + (index * 0x10);  // Assuming 0x10 stride
+    return weapon;
+}
+
+bool SkinChangerEngine::IsInGame() {
+    return GetLocalPlayer() != 0;
+}
+
+//=============================================================================
+// Skin Application
+//=============================================================================
+
+void SkinChangerEngine::WriteSkinInfo(uintptr_t weaponPtr, const WeaponSkinInfo& info) {
+    if (!weaponPtr) return;
+    
+    // Write skin ID
+    WriteMemory(weaponPtr + m_offsets.WeaponSkinId, &info.skinId, sizeof(info.skinId));
+    
+    // Write wear
+    WriteMemory(weaponPtr + m_offsets.WeaponWear, &info.wear, sizeof(info.wear));
+    
+    // Write seed
+    WriteMemory(weaponPtr + m_offsets.WeaponSeed, &info.seed, sizeof(info.seed));
+    
+    // Write stattrak if enabled
+    if (m_settings.enableStatTrak) {
+        WriteMemory(weaponPtr + 0x0, &m_settings.statTrakCount, sizeof(m_settings.statTrakCount));
+    }
+}
+
+bool SkinChangerEngine::ApplySkinToWeapon(uint32_t weaponId, uint32_t skinId, float wear, uint32_t seed) {
+    if (!m_initialized) return false;
+    
+    // Store in settings for persistence
+    ActiveSkinConfig config;
+    config.weaponId = weaponId;
+    config.skinId = skinId;
+    config.wear = wear;
+    config.seed = seed;
+    config.enabled = true;
+    m_settings.weaponSkins[weaponId] = config;
+    
+    return true;
+}
+
+bool SkinChangerEngine::ApplySkinToCurrentWeapon(uint32_t skinId, float wear, uint32_t seed) {
+    if (!m_initialized || !IsInGame()) return false;
+    
+    uintptr_t weapon = GetCurrentWeapon();
+    if (!weapon) return false;
+    
+    WeaponSkinInfo info = {};
+    info.skinId = skinId;
+    info.wear = wear;
+    info.seed = seed;
+    info.stattrak = m_settings.enableStatTrak ? m_settings.statTrakCount : 0;
+    
+    WriteSkinInfo(weapon, info);
+    ForceUpdate();
+    
+    return true;
+}
+
+bool SkinChangerEngine::ApplySkinToAllWeapons(uint32_t skinId, float wear, uint32_t seed) {
+    if (!m_initialized) return false;
+    
+    // Store in settings for all weapons
+    m_settings.forceAllWeapons = true;
+    m_settings.defaultWear = wear;
+    m_settings.defaultSeed = seed;
+    
+    // Apply to all weapon slots
+    for (int i = 0; i < 8; i++) {  // Typical 8 weapon slots
+        uintptr_t weapon = GetWeaponByIndex(i);
+        if (weapon) {
+            WeaponSkinInfo info = {};
+            info.skinId = skinId;
+            info.wear = wear;
+            info.seed = seed;
+            WriteSkinInfo(weapon, info);
+        }
+    }
+    
+    ForceUpdate();
+    return true;
+}
+
+void SkinChangerEngine::ForceUpdate() {
+    // This would call a game function to force visual update
+    // Often done by:
+    // 1. Changing to a different weapon and back
+    // 2. Calling a game update function
+    // 3. Writing to a specific memory location that triggers update
+    
+    if (!m_initialized || !IsInGame()) return;
+    
+    // Example: Write to force update address
+    // int value = 1;
+    // WriteMemory(m_moduleBase + m_offsets.ForceUpdate, &value, sizeof(value));
+}
+
+//=============================================================================
+// Getters
+//=============================================================================
+
+const std::vector<SkinDefinition>& SkinChangerEngine::GetAvailableSkins() const {
+    return m_skins;
+}
+
+const std::vector<std::pair<uint32_t, std::string>>& SkinChangerEngine::GetWeapons() const {
+    return m_weapons;
+}
+
+uint32_t SkinChangerEngine::GetWeaponIdByName(const std::string& name) {
+    for (const auto& weapon : m_weapons) {
+        if (weapon.second == name) {
+            return weapon.first;
+        }
+    }
+    return 0;
+}
+
+uint32_t SkinChangerEngine::GetSkinIdByName(const std::string& name) {
+    for (const auto& skin : m_skins) {
+        if (skin.name == name) {
+            return skin.id;
+        }
+    }
+    return 0;
+}
+
+bool SkinChangerEngine::GetCurrentWeaponSkinInfo(WeaponSkinInfo& info) {
+    uintptr_t weapon = GetCurrentWeapon();
+    if (!weapon) return false;
+    
+    // Read current skin info
+    ReadMemory(weapon + m_offsets.WeaponSkinId, &info.skinId, sizeof(info.skinId));
+    ReadMemory(weapon + m_offsets.WeaponWear, &info.wear, sizeof(info.wear));
+    ReadMemory(weapon + m_offsets.WeaponSeed, &info.seed, sizeof(info.seed));
+    
+    return true;
+}
+
+//=============================================================================
+// Frame-Based Update (Call this every frame)
+//=============================================================================
+
+// This would be called from the main cheat loop to apply skins dynamically
+void UpdateSkinChanger() {
+    auto& engine = SkinChangerEngine::Instance();
+    auto& settings = engine.GetSettings();
+    
+    if (!settings.enabled) return;
+    
+    if (settings.forceAllWeapons) {
+        // Apply default skin to current weapon
+        engine.ApplySkinToCurrentWeapon(
+            settings.weaponSkins.begin()->second.skinId,
+            settings.defaultWear,
+            settings.defaultSeed
+        );
+    } else {
+        // Apply specific skin for current weapon type
+        uintptr_t weapon = engine.GetCurrentWeapon();
+        if (weapon) {
+            // Get weapon ID and apply configured skin
+            // This would need weapon ID detection
+        }
+    }
+}
+
+} // namespace SkinChanger

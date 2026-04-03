@@ -1,0 +1,19 @@
+# module: HelenFramework.helen_define
+
+import asiocore
+import six2
+
+COMPONENT: str = 'Client'
+HOST_PROJECT: int = 0
+HOST_PROJECT_G83: int = 0
+IS_HELEN: bool = False
+USE_HELEN_DEBUGGER: bool = False
+graph_dir: str = 'HelenChar/graph/'
+
+def init_helen(): ...
+def is_g83(): ...
+def require_helen(f): ...
+def set_host_project(project=0): ...
+def set_use_helen(): ...
+def set_use_helen_debugger(is_use=False): ...
+

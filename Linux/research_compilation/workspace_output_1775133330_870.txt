@@ -1,0 +1,284 @@
+#include "cheat_features.h"
+#include "renderer.h"
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+
+namespace Cheat {
+
+//=============================================================================
+// Aimbot Implementation
+//=============================================================================
+namespace Aimbot {
+
+struct TargetInfo {
+    float position[3];
+    float screenPos[2];
+    int boneIndex;
+    float distance;
+    bool visible;
+};
+
+// Bone offsets (these would be game-specific, using placeholders)
+constexpr float BONE_OFFSETS[][3] = {
+    {0.0f, 1.6f, 0.0f},   // Head
+    {0.0f, 1.5f, 0.0f},   // Neck
+    {0.0f, 1.2f, 0.0f},   // Chest
+    {0.0f, 1.0f, 0.0f},   // Body
+};
+
+void Update() {
+    auto& settings = CheatManager::Instance().GetSettings();
+    if (!settings.aimbot.enabled) return;
+    
+    // TODO: Implement actual aimbot logic
+    // This would involve:
+    // 1. Reading entity list from game memory
+    // 2. Filtering by team if teamCheck enabled
+    // 3. Finding closest target within FOV
+    // 4. Calculating angles to target
+    // 5. Applying smooth aiming
+}
+
+void SetTargetBone(int bone) {
+    auto& settings = CheatManager::Instance().GetSettings();
+    settings.aimbot.targetBone = std::clamp(bone, 0, 3);
+}
+
+float CalculateFov(const float* viewAngles, const float* targetAngles) {
+    float delta[2] = {
+        targetAngles[0] - viewAngles[0],
+        targetAngles[1] - viewAngles[1]
+    };
+    
+    // Normalize angles
+    while (delta[0] > 180.0f) delta[0] -= 360.0f;
+    while (delta[0] < -180.0f) delta[0] += 360.0f;
+    while (delta[1] > 180.0f) delta[1] -= 360.0f;
+    while (delta[1] < -180.0f) delta[1] += 360.0f;
+    
+    return std::sqrt(delta[0] * delta[0] + delta[1] * delta[1]);
+}
+
+void SmoothAim(float* currentAngles, const float* targetAngles, float smoothAmount) {
+    float delta[2] = {
+        targetAngles[0] - currentAngles[0],
+        targetAngles[1] - currentAngles[1]
+    };
+    
+    // Normalize
+    while (delta[0] > 180.0f) delta[0] -= 360.0f;
+    while (delta[0] < -180.0f) delta[0] += 360.0f;
+    while (delta[1] > 180.0f) delta[1] -= 360.0f;
+    while (delta[1] < -180.0f) delta[1] += 360.0f;
+    
+    // Apply smoothing
+    currentAngles[0] += delta[0] / smoothAmount;
+    currentAngles[1] += delta[1] / smoothAmount;
+}
+
+} // namespace Aimbot
+
+//=============================================================================
+// ESP Implementation
+//=============================================================================
+namespace ESP {
+
+void Render() {
+    auto& settings = CheatManager::Instance().GetSettings();
+    if (!settings.esp.active) return;
+    
+    // Draw FOV circle if aimbot is enabled
+    auto& aimSettings = CheatManager::Instance().GetSettings().aimbot;
+    if (aimSettings.enabled && aimSettings.drawFovCircle) {
+        DrawFovCircle(aimSettings.fovRadius);
+    }
+    
+    // TODO: Implement entity iteration
+    // This would involve:
+    // 1. Reading entity list from game memory
+    // 2. Calculating screen positions
+    // 3. Drawing ESP elements for each entity
+}
+
+void DrawBox2D(float x, float y, float w, float h, uint32_t color) {
+    Renderer::DrawRect(x, y, w, h, color);
+    Renderer::DrawRect(x + 1, y + 1, w - 2, h - 2, 0x00000000); // Inner black
+    Renderer::DrawRect(x - 1, y - 1, w + 2, h + 2, 0x00000000); // Outer black
+}
+
+void DrawSkeleton(const float* bonePositions, int boneCount) {
+    // Bone connections for standard humanoid skeleton
+    static const int boneConnections[][2] = {
+        {0, 1},   // Head to Neck
+        {1, 2},   // Neck to Spine
+        {2, 3},   // Spine to Pelvis
+        {1, 4},   // Neck to L Shoulder
+        {4, 5},   // L Shoulder to L Elbow
+        {5, 6},   // L Elbow to L Hand
+        {1, 7},   // Neck to R Shoulder
+        {7, 8},   // R Shoulder to R Elbow
+        {8, 9},   // R Elbow to R Hand
+        {3, 10},  // Pelvis to L Hip
+        {10, 11}, // L Hip to L Knee
+        {11, 12}, // L Knee to L Foot
+        {3, 13},  // Pelvis to R Hip
+        {13, 14}, // R Hip to R Knee
+        {14, 15}, // R Knee to R Foot
+    };
+    
+    uint32_t boneColor = 0xFFFFFFFF; // White
+    
+    for (const auto& conn : boneConnections) {
+        if (conn[0] < boneCount && conn[1] < boneCount) {
+            float x1 = bonePositions[conn[0] * 2];
+            float y1 = bonePositions[conn[0] * 2 + 1];
+            float x2 = bonePositions[conn[1] * 2];
+            float y2 = bonePositions[conn[1] * 2 + 1];
+            
+            Renderer::DrawLine(x1, y1, x2, y2, boneColor);
+        }
+    }
+}
+
+void DrawHealthBar(float x, float y, float health, float maxHealth) {
+    constexpr float barWidth = 50.0f;
+    constexpr float barHeight = 4.0f;
+    
+    float healthPercent = health / maxHealth;
+    healthPercent = std::clamp(healthPercent, 0.0f, 1.0f);
+    
+    // Background (red)
+    Renderer::DrawRect(x, y, barWidth, barHeight, 0xFF0000FF);
+    
+    // Health (green gradient)
+    uint32_t healthColor = 0xFF00FF00; // Green
+    if (healthPercent < 0.5f) healthColor = 0xFFFFFF00; // Yellow
+    if (healthPercent < 0.25f) healthColor = 0xFF0000FF; // Red
+    
+    Renderer::DrawRect(x, y, barWidth * healthPercent, barHeight, healthColor);
+}
+
+void DrawFovCircle(float radius) {
+    constexpr int segments = 64;
+    constexpr float pi = 3.14159265f;
+    
+    float centerX = Renderer::GetScreenWidth() / 2.0f;
+    float centerY = Renderer::GetScreenHeight() / 2.0f;
+    
+    uint32_t color = 0x80FFFFFF; // Semi-transparent white
+    
+    for (int i = 0; i < segments; i++) {
+        float angle1 = (2.0f * pi * i) / segments;
+        float angle2 = (2.0f * pi * (i + 1)) / segments;
+        
+        float x1 = centerX + std::cos(angle1) * radius;
+        float y1 = centerY + std::sin(angle1) * radius;
+        float x2 = centerX + std::cos(angle2) * radius;
+        float y2 = centerY + std::sin(angle2) * radius;
+        
+        Renderer::DrawLine(x1, y1, x2, y2, color);
+    }
+}
+
+} // namespace ESP
+
+//=============================================================================
+// Weapon Mods Implementation
+//=============================================================================
+namespace WeaponMods {
+
+static float originalRecoil = 0.0f;
+static float originalSpread = 0.0f;
+static float originalFov = 90.0f;
+
+void ApplyNoRecoil() {
+    // TODO: Find and patch recoil function/memory
+    // This would involve:
+    // 1. Finding recoil offset in weapon struct
+    // 2. Writing 0.0f to the value
+}
+
+void ApplyNoSpread() {
+    // TODO: Find and patch spread function/memory
+}
+
+void SetFov(float fov) {
+    fov = std::clamp(fov, 60.0f, 120.0f);
+    // TODO: Write to game's FOV memory location
+}
+
+} // namespace WeaponMods
+
+//=============================================================================
+// Memory Operations Implementation
+//=============================================================================
+namespace Memory {
+
+// For Linux, we use process_vm_readv/writev or ptrace
+#include <sys/uio.h>
+#include <sys/ptrace.h>
+#include <unistd.h>
+
+bool Read(uintptr_t address, void* buffer, size_t size) {
+    auto& manager = CheatManager::Instance();
+    
+    struct iovec local_iov = {
+        .iov_base = buffer,
+        .iov_len = size
+    };
+    
+    struct iovec remote_iov = {
+        .iov_base = (void*)address,
+        .iov_len = size
+    };
+    
+    ssize_t result = process_vm_readv(manager.targetPid, &local_iov, 1, &remote_iov, 1, 0);
+    return result == static_cast<ssize_t>(size);
+}
+
+bool Write(uintptr_t address, const void* buffer, size_t size) {
+    auto& manager = CheatManager::Instance();
+    
+    struct iovec local_iov = {
+        .iov_base = (void*)buffer,
+        .iov_len = size
+    };
+    
+    struct iovec remote_iov = {
+        .iov_base = (void*)address,
+        .iov_len = size
+    };
+    
+    ssize_t result = process_vm_writev(manager.targetPid, &local_iov, 1, &remote_iov, 1, 0);
+    return result == static_cast<ssize_t>(size);
+}
+
+uintptr_t FindPattern(const char* pattern, const char* mask, uintptr_t start, size_t range) {
+    // Pattern scanning implementation
+    size_t patternLength = strlen(mask);
+    
+    std::vector<uint8_t> buffer(range);
+    if (!Read(start, buffer.data(), range)) {
+        return 0;
+    }
+    
+    for (size_t i = 0; i < range - patternLength; i++) {
+        bool found = true;
+        for (size_t j = 0; j < patternLength; j++) {
+            if (mask[j] == 'x' && buffer[i + j] != static_cast<uint8_t>(pattern[j])) {
+                found = false;
+                break;
+            }
+        }
+        if (found) {
+            return start + i;
+        }
+    }
+    
+    return 0;
+}
+
+} // namespace Memory
+
+} // namespace Cheat

@@ -1,0 +1,60 @@
+##MainMenuBar
+##NavWindowingOverlay
+(Debug Log: Auto-disabled some ImGuiDebugLogFlags after 2 frames)
+(Main menu bar)
+.fptable
+2D Box ESP
+?XXXXXXXXXXXXXXXXEndTable() call should only be done while in BeginTable() scope!
+@.fptable
+Aimbot
+Calling EndDisabled() too many times!
+Clipper: Step(): inside frozen table row.
+Configuration
+Custom FOV
+DisableThreadLibraryCalls
+Draw FOV Circle
+ESP Active
+ESP Range
+ETab
+Enable Asserts
+Enabled##aimbot
+Enemy Only (Team Check)
+FOV Degree
+FOV Radius
+Health Bars
+Main Toggles
+MainTabs
+Mismatched BeginTabBar()/EndTabBar()!
+Missing EndDisabled()
+Missing EndMenuBar()
+Missing EndTabBar()
+Missing EndTable()
+Needs to be called between BeginTabBar() and EndTabBar()!
+NewFrame(): ClearActiveID() 0x%08X because it isn't marked alive anymore!
+Overlay Elements
+Overlay Utility
+Reduce Recoil
+Reduce Spread
+Remaining
+Set io.ConfigDebugHighlightIdConflicts=false to disable this warning in non-programmers builds.
+SetActiveID() cancel MovingWindow
+SetActiveID() old:0x%08X (window "%s") -> new:0x%08X (window "%s")
+Settings
+Skeleton (Bone ESP)
+Smooth Value
+Table
+Target Bone
+Team Check##aimbot
+Weapon Mods
+[imgui-error] (current settings: Assert=%d, Log=%d, Tooltip=%d)
+[selection] %s: Request: SetRange %I64d..%I64d (0x%I64X..0x%I64X) = %d (dir %d)
+[selection] EndMultiSelect: Reset RangeSrcItem.
+`anonymous namespace'
+`local vftable constructor closure'
+`local vftable'
+`vbtable'
+`vftable'
+cbuffer vertexBuffer : register(b0)             {              float4x4 ProjectionMatrix;             };            struct VS_INPUT            {              float2 pos : POSITION;              float4 col : COLOR0;              float2 uv  : TEXCOORD0;            };                        struct PS_INPUT            {              float4 pos : SV_POSITION;              float4 col : COLOR0;              float2 uv  : TEXCOORD0;            };                        PS_INPUT main(VS_INPUT input)            {              PS_INPUT output;              output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));              output.col = input.col;              output.uv  = input.uv;              return output;            }
+main
+struct PS_INPUT            {            float4 pos : SV_POSITION;            float4 col : COLOR0;            float2 uv  : TEXCOORD0;            };            sampler sampler0;            Texture2D texture0;                        float4 main(PS_INPUT input) : SV_Target            {            float4 out_col = input.col * texture0.Sample(sampler0, input.uv);             return out_col;             }
+verticalbar

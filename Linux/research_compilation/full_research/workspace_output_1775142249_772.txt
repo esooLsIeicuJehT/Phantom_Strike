@@ -1,0 +1,100 @@
+#pragma once
+
+//=============================================================================
+// ANTI-CHEAT BYPASS TECHNIQUES
+// Based on HITB SecConf 2023 - "Bypassing Anti-Cheats & Hacking Competitive Games"
+// by Rohan Aggarwal (@nahoragg)
+//=============================================================================
+
+#include <cstdint>
+#include <string>
+#include <vector>
+
+namespace AntiCheat {
+
+//=============================================================================
+// KERNEL ANTI-CHEAT FEATURES TO BYPASS
+//=============================================================================
+// Modern kernel anti-cheats (like Vanguard, BattlEye, EAC) implement:
+//
+// 1. Blocking/stripping of process handles in User Mode
+// 2. Detection of test signing
+// 3. Detection of usermode hooks
+// 4. Detection of injected modules
+// 5. Detection of manually mapped modules
+// 6. Detection of kernel drivers
+// 7. Detection of traces of manually mapped drivers
+// 8. Detection of virtual machines and emulation
+//=============================================================================
+
+namespace Detection {
+    // What anti-cheats look for
+    enum class DetectionVector {
+        PROCESS_HANDLE_STRIPPING,   // Block handle access
+        TEST_SIGNING,               // Test mode detection
+        USERMODE_HOOKS,             // IAT/hooks detection
+        INJECTED_MODULES,           // DLL injection detection
+        MANUALLY_MAPPED_MODULES,    // Manual map detection
+        KERNEL_DRIVERS,             // Driver detection
+        DRIVER_TRACES,              // PiDDBCacheTable, MmUnloadedDrivers
+        VM_DETECTION,               // Virtual machine detection
+        POOL_BIG_PAGE_TABLE,        // PoolBigPageTable traces
+    };
+
+    struct DetectionInfo {
+        DetectionVector vector;
+        std::string description;
+        std::string bypassMethod;
+    };
+}
+
+//=============================================================================
+// CHEAT TYPES
+//=============================================================================
+namespace CheatType {
+    // Internal: Injected into target process
+    // - More complex to make
+    // - Better performance
+    // - Preferred for games with low-level or no AC
+    
+    // External: Separate process manipulating target
+    // - Easier to make
+    // - Works with any language
+    // - Preferred for games with strong AC
+    
+    enum class Type {
+        INTERNAL,       // Injected into game process
+        EXTERNAL,       // Separate process
+        KERNEL,         // Kernel driver
+        HARDWARE        // External hardware (Arduino)
+    };
+}
+
+//=============================================================================
+// KERNEL DRIVER BYPASS TECHNIQUES
+//=============================================================================
+namespace KernelBypass {
+
+// Driver loading methods
+enum class LoadMethod {
+    TEST_MODE,          // Only for testing, detected by modern AC
+    SIGNED_DRIVER,      // Pay Microsoft for signing (can be revoked)
+    VULNERABLE_DRIVER,  // Exploit signed driver to load unsigned
+    MANUAL_MAP          // KDMapper-style manual mapping
+};
+
+// System call hooking targets
+// Avoid public syscalls that are signatured
+struct SystemCallHook {
+    std::string moduleName;     // e.g., "dxgkrnl.sys"
+    std::string functionName;   // e.g., "NtOpenCompositionSurfaceSectionInfo"
+    bool isSignatured;          // Is this signatured by AC?
+};
+
+// Traces to clear after manual mapping
+namespace Traces {
+    // KDMapper clears these automatically:
+    constexpr const char* MM_UNLOADED_DRIVERS = "MmUnloadedDrivers";
+    constexpr const char* PIDDB_CACHE_TABLE = "PiDDBCacheTable";
+    constexpr const char* KERNEL_HASH_BUCKET_LIST = "g_KernelHashBucketList";
+    

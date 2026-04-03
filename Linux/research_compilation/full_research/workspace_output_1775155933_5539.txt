@@ -1,0 +1,47 @@
+    address = entityAddr;
+    
+    using namespace GameOffsets::Entity::Structure;
+    
+    // Read entity ID and type
+    entityId = ReadMemory<uint32_t>(targetPid, entityAddr + ENTITY_ID);
+    entityType = static_cast<EntityType>(ReadMemory<int>(targetPid, entityAddr + ENTITY_TYPE));
+    
+    // Read team
+    int teamId = ReadMemory<int>(targetPid, entityAddr + TEAM_ID);
+    team = static_cast<Team>(teamId);
+    
+    // Read status
+    health = ReadMemory<float>(targetPid, entityAddr + HEALTH);
+    maxHealth = ReadMemory<float>(targetPid, entityAddr + MAX_HEALTH);
+    armor = ReadMemory<float>(targetPid, entityAddr + ARMOR);
+    isAlive = ReadMemory<bool>(targetPid, entityAddr + IS_ALIVE);
+    isCrouching = ReadMemory<bool>(targetPid, entityAddr + IS_CROUCHING);
+    isProne = ReadMemory<bool>(targetPid, entityAddr + IS_PRONE);
+    isReloading = ReadMemory<bool>(targetPid, entityAddr + IS_RELOADING);
+    isVisible = ReadMemory<bool>(targetPid, entityAddr + IS_VISIBLE);
+    
+    // Read positions
+    ReadVector3(targetPid, entityAddr + POSITION, position);
+    ReadVector3(targetPid, entityAddr + ROTATION, rotation);
+    ReadVector3(targetPid, entityAddr + VELOCITY, velocity);
+    ReadVector3(targetPid, entityAddr + HEAD_POSITION, bonePositions[GameOffsets::Bones::HEAD]);
+    
+    // Read player info
+    ReadString(targetPid, entityAddr + PLAYER_NAME, playerName, sizeof(playerName));
+    playerLevel = ReadMemory<int>(targetPid, entityAddr + PLAYER_LEVEL);
+    weaponId = ReadMemory<int>(targetPid, entityAddr + WEAPON_ID);
+    
+    // Read bone matrix pointer and bone positions
+    uintptr_t boneMatrixPtr = ReadMemory<uintptr_t>(targetPid, entityAddr + BONE_MATRIX);
+    if (boneMatrixPtr != 0) {
+        for (int i = 0; i < GameOffsets::Bones::BONE_COUNT; i++) {
+            uintptr_t boneAddr = boneMatrixPtr + (i * 0x30);  // Each bone is 0x30 bytes
+            ReadVector3(targetPid, boneAddr, bonePositions[i]);
+        }
+    }
+    
+    return true;
+}
+
+// ============================================================================
+// ENTITY MANAGER IMPLEMENTATION

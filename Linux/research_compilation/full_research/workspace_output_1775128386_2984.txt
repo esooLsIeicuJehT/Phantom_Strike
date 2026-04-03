@@ -1,0 +1,85 @@
+@.fptable
+MainTabs
+Configuration
+Enabled##aimbot
+Team Check##aimbot
+Settings
+Size column to fit###SizeOne
+Size all columns to fit###SizeAll
+Size all columns to default###SizeAll
+Reset order###ResetOrder
+(Main menu bar)
+Copy Link###CopyLink
+Clipper: Step(): inside frozen table row.
+Window
+SetActiveID() cancel MovingWindow
+SetActiveID() old:0x%08X (window "%s") -> new:0x%08X (window "%s")
+##Background
+##Foreground
+##DragDropCancelHandler
+Debug##Default
+##Child
+Invalid flags for IsWindowHovered()!
+[io] LockWheelingWindow() "%s"
+Code uses SetCursorPos()/SetCursorScreenPos() to extend window/parent boundaries.
+Please submit an item e.g. Dummy() afterwards in order to grow window/parent boundaries.
+Missing EndTable()
+Missing EndTabBar()
+Missing EndMenuBar()
+[imgui-error] (current settings: Assert=%d, Log=%d, Tooltip=%d)
+[imgui-error] In window '%s': %s
+In window '%s': %s
+Code should use PushID()/PopID() in loops, or append "##xx" to same-label identifiers!
+Empty label e.g. Button("") == same ID as parent widget/node. Use Button("##xx") instead!
+Set io.ConfigDebugHighlightIdConflicts=false to disable this warning in non-programmers builds.
+##Tooltip_Error
+##Tooltip_DragDrop_%02d
+##Tooltip_%02d
+[popup] ClosePopupsOverWindow("%s")
+[popup] - Closing PopupID 0x%08X Window "%s"
+##Popup_%08x
+Calling EndPopup() in wrong window!
+[focus] FocusWindow("%s", UnlessBelowModal): prevented by "%s".
+[focus] SetNavWindow("%s")
+[focus] NavRestoreLayer: from "%s" to SetNavWindow("%s")
+[nav] NavInitRequest: from NavInitWindow(), init_for_nav=%d, window="%s", layer=%d
+[nav] NavInitRequest: ApplyResult: NavID 0x%08X in Layer %d Window "%s"
+[nav] NavInitRequest: from move, window "%s", layer=%d
+[focus] NavMoveRequest: SetNavWindow("%s")
+[nav] NavMoveRequest: result NavID 0x%08X in Layer %d Window "%s"
+##NavUpdateWindowing
+##MainMenuBar
+##NavWindowingOverlay
+2##2#T.
+#1##1i
+?XXXXXXXXXXXXXXXXEndTable() call should only be done while in BeginTable() scope!
+##ContextMenu
+##ComboPopup
+##Combo_%02d
+Calling EndCombo() in wrong window!
+Mismatched BeginTabBar()/EndTabBar()!
+Needs to be called between BeginTabBar() and EndTabBar()!
+`vftable'
+`vbtable'
+`local vftable'
+`local vftable constructor closure'
+InitializeCriticalSectionEx
+.fptable
+LoadLibraryA
+DefWindowProcA
+CallWindowProcA
+CreateWindowExA
+DestroyWindow
+SetWindowLongPtrA
+DefWindowProcW
+IsWindowUnicode
+GetForegroundWindow
+LoadCursorA
+ImmSetCompositionWindow
+ImmSetCandidateWindow
+EnterCriticalSection
+LeaveCriticalSection
+DeleteCriticalSection
+InitializeCriticalSectionAndSpinCount
+LoadLibraryExW
+InitializeCriticalSectionEx

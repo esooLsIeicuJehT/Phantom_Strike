@@ -1,0 +1,282 @@
+#pragma once
+
+#include <cstdint>
+#include <string>
+#include <vector>
+#include <map>
+
+namespace SkinChanger {
+
+//=============================================================================
+// Skin Definitions
+//=============================================================================
+
+// Popular BloodStrike skin IDs (these would need to be found via reverse engineering)
+// Format: {skin_id, "Display Name"}
+struct SkinDefinition {
+    uint32_t id;
+    std::string name;
+    std::string weapon;
+    int rarity;  // 0=Common, 1=Rare, 2=Epic, 3=Legendary
+};
+
+// Weapon info structure (matches game's internal structure)
+#pragma pack(push, 1)
+struct WeaponSkinInfo {
+    uint32_t skinId;        // Skin ID (defines which skin)
+    float wear;             // 0.0 = Factory New, 1.0 = Battle-Scarred
+    uint32_t seed;          // Pattern seed (affects pattern orientation)
+    uint32_t stattrak;      // StatTrak kill count (0 = no StatTrak)
+    uint8_t  rank;          // Item wear rank (affects icon)
+    uint8_t  pad[3];        // Padding
+};
+#pragma pack(pop)
+
+// Active weapon skin config
+struct ActiveSkinConfig {
+    uint32_t weaponId;
+    uint32_t skinId;
+    float wear;
+    uint32_t seed;
+    bool stattrak;
+    bool enabled;
+};
+
+//=============================================================================
+// Settings Structure (for menu integration)
+//=============================================================================
+
+struct SkinChangerSettings {
+    bool enabled = false;
+    bool forceAllWeapons = false;  // Apply to all weapons
+    
+    // Per-weapon skin configs
+    std::map<uint32_t, ActiveSkinConfig> weaponSkins;
+    
+    // Global settings
+    float defaultWear = 0.0f;       // Factory New by default
+    uint32_t defaultSeed = 0;       // Random seed
+    bool enableStatTrak = false;
+    uint32_t statTrakCount = 9999;
+};
+
+//=============================================================================
+// Skin Changer Engine
+//=============================================================================
+
+class SkinChangerEngine {
+public:
+    static SkinChangerEngine& Instance();
+    
+    // Initialize with base address
+    bool Initialize(uintptr_t moduleBase);
+    void Shutdown();
+    
+    // Skin application
+    bool ApplySkinToWeapon(uint32_t weaponId, uint32_t skinId, float wear = 0.0f, uint32_t seed = 0);
+    bool ApplySkinToCurrentWeapon(uint32_t skinId, float wear = 0.0f, uint32_t seed = 0);
+    bool ApplySkinToAllWeapons(uint32_t skinId, float wear = 0.0f, uint32_t seed = 0);
+    
+    // Force update - call this to make game reload weapon visuals
+    void ForceUpdate();
+    
+    // Getters
+    const std::vector<SkinDefinition>& GetAvailableSkins() const;
+    const std::vector<std::pair<uint32_t, std::string>>& GetWeapons() const;
+    
+    // Settings
+    SkinChangerSettings& GetSettings() { return m_settings; }
+    void SetSettings(const SkinChangerSettings& settings) { m_settings = settings; }
+    
+    // Find weapon by name
+    uint32_t GetWeaponIdByName(const std::string& name);
+    uint32_t GetSkinIdByName(const std::string& name);
+    
+    // Get current weapon's skin info
+    bool GetCurrentWeaponSkinInfo(WeaponSkinInfo& info);
+    
+    // Check if player is in-game
+    bool IsInGame();
+    
+    // Get current weapon (public for frame update)
+    uintptr_t GetCurrentWeapon();
+    
+private:
+    SkinChangerEngine() = default;
+    ~SkinChangerEngine() = default;
+    
+    // Internal helpers
+    void InitializeSkinDatabase();
+    uintptr_t GetLocalPlayer();
+    uintptr_t GetWeaponByIndex(int index);
+    void WriteSkinInfo(uintptr_t weaponPtr, const WeaponSkinInfo& info);
+    
+    // Memory operations
+    bool ReadMemory(uintptr_t address, void* buffer, size_t size);
+    bool WriteMemory(uintptr_t address, const void* buffer, size_t size);
+    
+private:
+    bool m_initialized = false;
+    uintptr_t m_moduleBase = 0;
+    SkinChangerSettings m_settings;
+    
+    // Skin/Weapon databases
+    std::vector<SkinDefinition> m_skins;
+    std::vector<std::pair<uint32_t, std::string>> m_weapons;
+    
+    // Offsets (would be found via pattern scanning or hardcoded from game_offsets.h)
+    struct Offsets {
+        uintptr_t LocalPlayer;
+        uintptr_t WeaponManager;
+        uintptr_t CurrentWeapon;
+        uintptr_t WeaponSkinId;
+        uintptr_t WeaponWear;
+        uintptr_t WeaponSeed;
+        uintptr_t ForceUpdate;
+    } m_offsets;
+};
+
+//=============================================================================
+// Skin Database - Popular skins with their IDs
+//=============================================================================
+
+namespace Skins {
+    // These IDs are placeholders - real IDs would be found via reverse engineering
+    // or from game data files
+    
+    // Assault Rifles
+    constexpr uint32_t AK47_DRAGON_LORE = 1001;
+    constexpr uint32_t AK47_NEON_RIDER = 1002;
+    constexpr uint32_t AK47_ASIIMOV = 1003;
+    constexpr uint32_t AK47_FIRE_SERPENT = 1004;
+    constexpr uint32_t AK47_VULCAN = 1005;
+    constexpr uint32_t AK47_BLOODSPORT = 1006;
+    constexpr uint32_t AK47_PHANTOM_DISRUPTOR = 1007;
+    constexpr uint32_t AK47_WILDERLOTUS = 1008;
+    
+    constexpr uint32_t M4A4_HOWL = 1101;
+    constexpr uint32_t M4A4_ASIIMOV = 1102;
+    constexpr uint32_t M4A4_Buzz_Military = 1103;
+    constexpr uint32_t M4A4_DESOLATE_SPACE = 1104;
+    constexpr uint32_t M4A4_THE_EMPEROR = 1105;
+    constexpr uint32_t M4A4_BLOODSHOT = 1106;
+    
+    constexpr uint32_t M4A1S_PRINTSTREAM = 1151;
+    constexpr uint32_t M4A1S_BRIGHT_WATER = 1152;
+    constexpr uint32_t M4A1S_DECORATOR = 1153;
+    constexpr uint32_t M4A1S_CHANTICO_FIRE = 1154;
+    constexpr uint32_t M4A1S_HYPER_BEAST = 1155;
+    
+    // Sniper Rifles
+    constexpr uint32_t AWP_DRAGON_LORE = 2001;
+    constexpr uint32_t AWP_GUNGIR = 2002;
+    constexpr uint32_t AWP_THE_PRINCE = 2003;
+    constexpr uint32_t AWP_ASIIMOV = 2004;
+    constexpr uint32_t AWP_FEVER_DREAM = 2005;
+    constexpr uint32_t AWP_HYPER_BEAST = 2006;
+    constexpr uint32_t AWP_MAN_O_WAR = 2007;
+    constexpr uint32_t AWP_ELECTRIC_HIVE = 2008;
+    constexpr uint32_t AWP_SUN_IN_LEO = 2009;
+    
+    constexpr uint32_t AWP_FADE = 2051;
+    constexpr uint32_t AWP_DOPPLER = 2052;
+    
+    // SMGs
+    constexpr uint32_t MP7_AKULI = 3001;
+    constexpr uint32_t MP7_POWER_CORE = 3002;
+    constexpr uint32_t MP9_STARLIGHT_PROTECTOR = 3003;
+    constexpr uint32_t MAC10_DROPSHOT = 3004;
+    constexpr uint32_t UMP45_MOTORPOOL = 3005;
+    constexpr uint32_t P90_ASIAWOLF = 3006;
+    constexpr uint32_t P90_BLADE = 3007;
+    
+    // Pistols
+    constexpr uint32_t DEAGLE_BLAZE = 4001;
+    constexpr uint32_t DEAGLE_PRINTSTREAM = 4002;
+    constexpr uint32_t DEAGLE_MECHA_INDUSTRIES = 4003;
+    constexpr uint32_t DEAGLE_CODE_RED = 4004;
+    constexpr uint32_t DEAGLE_OCEAN_DRIVE = 4005;
+    
+    constexpr uint32_t GLOCK_FADE = 4101;
+    constexpr uint32_t GLOCK_MOONRISE = 4102;
+    constexpr uint32_t GLOCK_WATER_ELEMENTAL = 4103;
+    constexpr uint32_t GLOCK_REBEL = 4104;
+    
+    constexpr uint32_t USPS_KILL_CONFIRMED = 4201;
+    constexpr uint32_t USPS_PRINTSTREAM = 4202;
+    constexpr uint32_t USPS_ORION = 4203;
+    constexpr uint32_t USPS_JUNGLE_SLASH = 4204;
+    constexpr uint32_t USPS_BLOOD_TIGER = 4205;
+    
+    constexpr uint32_t USPS_CYREX = 4251;
+    constexpr uint32_t USPS_FLASHBACK = 4252;
+    
+    // Knives (if game supports them)
+    constexpr uint32_t KARAMBIT_DOPPLER = 5001;
+    constexpr uint32_t KARAMBIT_FADE = 5002;
+    constexpr uint32_t KARAMBIT_MARBLE_FADE = 5003;
+    constexpr uint32_t KARAMBIT_TIGER_TOOTH = 5004;
+    constexpr uint32_t KARAMBIT_GAMMA_DOPPLER = 5005;
+    
+    constexpr uint32_t BUTTERFLY_DOPPLER = 5101;
+    constexpr uint32_t BUTTERFLY_FADE = 5102;
+    constexpr uint32_t BUTTERFLY_MARBLE_FADE = 5103;
+    constexpr uint32_t BUTTERFLY_TIGER_TOOTH = 5104;
+    
+    constexpr uint32_t M9_BAYONET_DOPPLER = 5201;
+    constexpr uint32_t M9_BAYONET_FADE = 5202;
+    constexpr uint32_t M9_BAYONET_CRIMSON_WEB = 5203;
+    
+    // Gloves (if game supports them)
+    constexpr uint32_t GLOVES_PANDORA_BOX = 6001;
+    constexpr uint32_t GLOVES_CRIMSON_KIMONO = 6002;
+    constexpr uint32_t GLOVES_EMERALD_WEB = 6003;
+    constexpr uint32_t GLOVES_SUPERCONDUCTOR = 6004;
+}
+
+//=============================================================================
+// Weapon IDs
+//=============================================================================
+
+namespace Weapons {
+    // Assault Rifles
+    constexpr uint32_t AK47 = 1;
+    constexpr uint32_t M4A4 = 2;
+    constexpr uint32_t M4A1S = 3;
+    constexpr uint32_t FAMAS = 4;
+    constexpr uint32_t GALIL = 5;
+    constexpr uint32_t AUG = 6;
+    constexpr uint32_t SG553 = 7;
+    
+    // Sniper Rifles
+    constexpr uint32_t AWP = 10;
+    constexpr uint32_t SCAR20 = 11;
+    constexpr uint32_t G3SG1 = 12;
+    constexpr uint32_t SSG08 = 13;
+    
+    // SMGs
+    constexpr uint32_t MP7 = 20;
+    constexpr uint32_t MP9 = 21;
+    constexpr uint32_t MAC10 = 22;
+    constexpr uint32_t UMP45 = 23;
+    constexpr uint32_t P90 = 24;
+    constexpr uint32_t BIZON = 25;
+    
+    // Pistols
+    constexpr uint32_t DEAGLE = 30;
+    constexpr uint32_t GLOCK = 31;
+    constexpr uint32_t USPS = 32;
+    constexpr uint32_t P2000 = 33;
+    constexpr uint32_t FIVESEVEN = 34;
+    constexpr uint32_t TEC9 = 35;
+    constexpr uint32_t CZ75 = 36;
+    
+    // Heavy
+    constexpr uint32_t NOVA = 40;
+    constexpr uint32_t XM1014 = 41;
+    constexpr uint32_t MAG7 = 42;
+    constexpr uint32_t NEGEV = 43;
+    constexpr uint32_t M249 = 44;
+}
+
+} // namespace SkinChanger

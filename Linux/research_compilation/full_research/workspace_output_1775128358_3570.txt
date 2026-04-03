@@ -1,0 +1,200 @@
+
+bloodstrike.dll:     file format pei-x86-64
+
+Characteristics 0x2022
+	executable
+	large address aware
+	DLL
+
+Time/Date		Thu Mar 26 16:10:16 2026
+Magic			020b	(PE32+)
+MajorLinkerVersion	14
+MinorLinkerVersion	44
+SizeOfCode		0000000000080600
+SizeOfInitializedData	000000000002be00
+SizeOfUninitializedData	0000000000000000
+AddressOfEntryPoint	000000000005bbd4
+BaseOfCode		0000000000001000
+ImageBase		0000000180000000
+SectionAlignment	00001000
+FileAlignment		00000200
+MajorOSystemVersion	6
+MinorOSystemVersion	0
+MajorImageVersion	0
+MinorImageVersion	0
+MajorSubsystemVersion	6
+MinorSubsystemVersion	0
+Win32Version		00000000
+SizeOfImage		000b2000
+SizeOfHeaders		00000400
+CheckSum		00000000
+Subsystem		00000003	(Windows CUI)
+DllCharacteristics	00000160
+					HIGH_ENTROPY_VA
+					DYNAMIC_BASE
+					NX_COMPAT
+SizeOfStackReserve	0000000000100000
+SizeOfStackCommit	0000000000001000
+SizeOfHeapReserve	0000000000100000
+SizeOfHeapCommit	0000000000001000
+LoaderFlags		00000000
+NumberOfRvaAndSizes	00000010
+
+The Data Directory
+Entry 0 0000000000000000 00000000 Export Directory [.edata (or where ever we found it)]
+Entry 1 00000000000a39f4 0000008c Import Directory [parts of .idata]
+Entry 2 00000000000b0000 000001e0 Resource Directory [.rsrc]
+Entry 3 00000000000a8000 00006324 Exception Directory [.pdata]
+Entry 4 0000000000000000 00000000 Security Directory
+Entry 5 00000000000b1000 00000868 Base Relocation Directory [.reloc]
+Entry 6 000000000009a550 0000001c Debug Directory
+Entry 7 0000000000000000 00000000 Description Directory
+Entry 8 0000000000000000 00000000 Special Directory
+Entry 9 000000000009a700 00000028 Thread Storage Directory [.tls]
+Entry a 000000000009a410 00000140 Load Configuration Directory
+Entry b 0000000000000000 00000000 Bound Import Directory
+Entry c 0000000000082000 000004b8 Import Address Table Directory
+Entry d 0000000000000000 00000000 Delay Import Directory
+Entry e 0000000000000000 00000000 CLR Runtime Header
+Entry f 0000000000000000 00000000 Reserved
+
+There is an import table in .rdata at 0x1800a39f4
+
+The Import Tables (interpreted .rdata section contents)
+ vma:            Hint    Time      Forward  DLL       First
+                 Table   Stamp     Chain    Name      Thunk
+ 000a39f4	000a3f28 00000000 00000000 000a3f58 000824a8
+
+	DLL Name: d3d11.dll
+	vma:  Hint/Ord Member-Name Bound-To
+	a3f38	    7  D3D11CreateDeviceAndSwapChain
+
+ 000a3a08	000a3ab8 00000000 00000000 000a427a 00082038
+
+	DLL Name: KERNEL32.dll
+	vma:  Hint/Ord Member-Name Bound-To
+	a400a	  885  GlobalUnlock
+	a401a	  878  GlobalLock
+	a4028	  874  GlobalFree
+	a4036	 1058  MultiByteToWideChar
+	a404c	 1611  WideCharToMultiByte
+	a4062	 1152  QueryPerformanceCounter
+	a407c	 1153  QueryPerformanceFrequency
+	a4098	  467  FreeLibrary
+	a40a6	  732  GetProcAddress
+	a40b8	 1011  LoadLibraryA
+	a40c8	  654  GetLocaleInfoA
+	a40da	  941  IsDBCSLeadByte
+	a40ec	  787  GetSystemInfo
+	a40fc	 1555  VirtualAlloc
+	a410c	 1558  VirtualFree
+	a411a	 1563  VirtualQuery
+	a412a	  652  GetLastError
+	a413a	  893  HeapCreate
+	a4148	  894  HeapDestroy
+	a4156	  891  HeapAlloc
+	a4162	  898  HeapReAlloc
+	a4170	  895  HeapFree
+	a417c	  576  GetCurrentProcess
+	a4190	  577  GetCurrentProcessId
+	a41a6	  581  GetCurrentThreadId
+	a41bc	 1093  OpenThread
+	a41ca	 1488  SuspendThread
+	a41da	 1286  ResumeThread
+	a41ea	  809  GetThreadContext
+	a41fe	 1436  SetThreadContext
+	a4212	  456  FlushInstructionCache
+	a422a	  676  GetModuleHandleW
+	a423e	  279  CreateToolhelp32Snapshot
+	a425a	 1511  Thread32First
+	a426a	 1512  Thread32Next
+	a49ce	 1630  WriteConsoleW
+	a3fe6	 1097  OutputDebugStringA
+	a49b2	  900  HeapSize
+	a49a4	  229  CreateFileW
+	a4994	 1426  SetStdHandle
+	a4982	  775  GetStringTypeW
+	a4970	  739  GetProcessHeap
+	a4956	  466  FreeEnvironmentStringsW
+	a493c	  609  GetEnvironmentStringsW
+	a492a	  511  GetCommandLineW
+	a4918	  510  GetCommandLineA
+	a490c	  489  GetCPInfo
+	a4900	  709  GetOEMCP
+	a48f6	  474  GetACP
+	a48e4	  957  IsValidCodePage
+	a48d4	  435  FindNextFileW
+	a48c0	  418  FindFirstFileExW
+	a48b4	  412  FindClose
+	a48a4	  631  GetFileSizeEx
+	a4890	 1384  SetFilePointerEx
+	a4880	 1189  ReadConsoleW
+	a486e	  548  GetConsoleMode
+	a4858	  552  GetConsoleOutputCP
+	a484c	 1631  WriteFile
+	a4838	  455  FlushFileBuffers
+	a4828	  995  LCMapStringW
+	a480a	  918  InitializeCriticalSectionEx
+	a3fd2	  673  GetModuleHandleA
+	a3fb6	  468  FreeLibraryAndExitThread
+	a3f9a	  321  DisableThreadLibraryCalls
+	a3f88	 1561  VirtualProtect
+	a4800	  450  FlsFree
+	a47f2	  453  FlsSetValue
+	a3f78	  270  CreateThread
+	a3f70	 1479  Sleep
+	a3f62	  156  CloseHandle
+	a3ffc	  867  GlobalAlloc
+	a49be	 1365  SetEndOfFile
+	a47e4	  451  FlsGetValue
+	a47d8	  449  FlsAlloc
+	a47ca	  633  GetFileType
+	a4552	 1288  RtlCaptureContext
+	a4566	 1296  RtlLookupFunctionEntry
+	a4580	 1303  RtlVirtualUnwind
+	a4594	  943  IsDebuggerPresent
+	a45a8	 1530  UnhandledExceptionFilter
+	a45c4	 1463  SetUnhandledExceptionFilter
+	a45e2	  768  GetStartupInfoW
+	a45f4	  951  IsProcessorFeaturePresent
+	a4610	 1495  TerminateProcess
+	a4624	  793  GetSystemTimeAsFileTime
+	a463e	  921  InitializeSListHead
+	a4654	 1298  RtlPcToFileHeader
+	a4668	 1175  RaiseException
+	a467a	 1302  RtlUnwindEx
+	a4688	  925  InterlockedFlushSList
+	a46a0	 1399  SetLastError
+	a46b0	  338  EncodePointer
+	a46c0	  342  EnterCriticalSection
+	a46d8	 1007  LeaveCriticalSection
+	a46f0	  302  DeleteCriticalSection
+	a4708	  917  InitializeCriticalSectionAndSpinCount
+	a4730	 1513  TlsAlloc
+	a473c	 1515  TlsGetValue
+	a474a	 1517  TlsSetValue
+	a4758	 1514  TlsFree
+	a4762	 1013  LoadLibraryExW
+	a4774	 1192  ReadFile
+	a4780	  389  ExitProcess
+	a478e	  675  GetModuleHandleExW
+	a47a4	  672  GetModuleFileNameW
+	a47ba	  770  GetStdHandle
+
+ 000a3a1c	000a3e28 00000000 00000000 000a44a8 000823a8
+
+	DLL Name: USER32.dll
+	vma:  Hint/Ord Member-Name Bound-To
+	a429c	  169  DefWindowProcA
+	a4288	  295  GetAsyncKeyState
+	a43e4	  299  GetCapture
+	a42c0	  986  UnregisterClassA
+	a449a	  611  LoadCursorA
+	a4488	  797  ScreenToClient
+	a4476	   78  ClientToScreen
+	a4466	  329  GetCursorPos
+	a445a	  830  SetCursor
+	a444a	  832  SetCursorPos
+	a443a	  313  GetClientRect
+	a4424	  353  GetForegroundWindow
+	a4412	  602  IsWindowUnicode

@@ -1,0 +1,30 @@
+# module: gclient.gameplay.logic_moba.ui
+
+import hud_moba_spectator_comp
+import hud_spectator_ghost_comp
+import main_uistage
+import moba_apply_para_trainer_comp
+import moba_calculation
+import moba_game_introduction_comp
+import moba_ghost_bottom_arms_comp
+import moba_guide_comp
+import moba_hero_choose_comp
+import moba_hud_airdrop_comp
+import moba_hud_airdrop_comp_pc
+import moba_hud_backpack_comp
+import moba_hud_bottom_arms_comp
+import moba_hud_bottom_arms_v2_comp
+import moba_hud_field_shop_comp
+import moba_hud_pickup_comp
+import moba_hud_shield_remain_comp
+import moba_hud_wait_count_down_comp
+import moba_in_poison_area_comp
+import moba_main_pc_window
+import moba_main_uistage_comp
+import moba_map_base
+import moba_parachute_button_comp
+import moba_reborn_countdown_comp
+import moba_talent_crisis_awareness_find
+import moba_teammate_reborn_time_cut_comp
+import single_revive_tips_node
+

@@ -1,0 +1,6 @@
+# module: gclient.gameplay.uicomponents.uigunrefit
+
+import hud_gunrefit_backpack_comp
+import hud_gunrefit_gun_select_comp
+import hud_gunrefit_part_select_comp
+

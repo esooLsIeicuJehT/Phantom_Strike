@@ -1,0 +1,30 @@
+# module: gclient.gamesystem.uigunsmith
+
+import gun_armory_window
+import gun_backpack_select_box_comp
+import gun_diy_ui_component
+import gun_exp_card_pop
+import gun_info_comp
+import gun_overview_window
+import gun_part_feature_listview
+import gun_part_lock_attention_pop
+import gun_smith_util
+import gun_sys_sub_window_base
+import gun_sys_tab_window
+import gun_tag_node
+import gun_touch_panel
+import gun_type_side_bar
+import gunsmith_backpack_select_window
+import gunsmith_backpack_window
+import gunsmith_diy_window
+import gunsmith_gun_part_count_dot_list
+import gunsmith_gun_select_drawer_comp
+import gunsmith_gun_select_window
+import gunsmith_model_ctrl
+import gunsmith_part_blueprint_window
+import gunsmith_part_select_window
+import gunsmith_part_tag_value_node
+import gunsmith_property_panel
+import gunsmith_recommend_window
+import gunsmith_unlock_condition_list
+

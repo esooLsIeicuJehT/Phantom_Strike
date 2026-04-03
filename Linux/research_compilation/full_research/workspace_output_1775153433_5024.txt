@@ -1,0 +1,27 @@
+total 268
+drwxr-xr-x 2 root root  4096 Apr  2 14:10 .
+drwxr-xr-x 6 root root  4096 Apr  2 13:38 ..
+-rw-r--r-- 1 root root 16366 Apr  2 15:27 aimbot.cpp
+-rw-r--r-- 1 root root  8356 Apr  2 14:01 aimbot.h
+-rw-r--r-- 1 root root 18347 Apr  2 15:07 anticheat_bypass.h
+-rw-r--r-- 1 root root 10114 Apr  2 14:53 cheat_features.cpp
+-rw-r--r-- 1 root root  3126 Apr  2 12:37 cheat_features.h
+-rw-r--r-- 1 root root 12411 Apr  2 14:51 entity_manager.cpp
+-rw-r--r-- 1 root root 10114 Apr  2 16:06 entity_manager.h
+-rw-r--r-- 1 root root 20520 Apr  2 16:08 esp.cpp
+-rw-r--r-- 1 root root  7030 Apr  2 14:08 esp.h
+-rw-r--r-- 1 root root 13275 Apr  2 13:55 game_offsets.h
+-rw-r--r-- 1 root root  5658 Apr  2 15:23 hooks.cpp
+-rw-r--r-- 1 root root  1162 Apr  2 12:19 hooks.h
+-rw-r--r-- 1 root root 10696 Apr  2 12:19 injector.cpp
+-rw-r--r-- 1 root root  1181 Apr  2 12:18 injector.h
+-rw-r--r-- 1 root root  2551 Apr  2 12:17 input.cpp
+-rw-r--r-- 1 root root  1566 Apr  2 12:17 input.h
+-rw-r--r-- 1 root root  9279 Apr  2 14:56 main.cpp
+-rw-r--r-- 1 root root  7420 Apr  2 12:15 menu.cpp
+-rw-r--r-- 1 root root   323 Apr  2 12:13 menu.h
+-rw-r--r-- 1 root root 11412 Apr  2 12:37 offsets.h
+-rw-r--r-- 1 root root 18067 Apr  2 13:32 pixelbot.cpp
+-rw-r--r-- 1 root root 10392 Apr  2 13:27 pixelbot.h
+-rw-r--r-- 1 root root  8631 Apr  2 15:44 renderer.cpp
+-rw-r--r-- 1 root root  1349 Apr  2 14:50 renderer.h

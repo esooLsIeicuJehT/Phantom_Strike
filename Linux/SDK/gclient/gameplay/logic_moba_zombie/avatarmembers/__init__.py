@@ -1,0 +1,9 @@
+# module: gclient.gameplay.logic_moba_zombie.avatarmembers
+
+import cimp_input_controller
+import cimp_zombie_combat_item
+import cimp_zombie_combat_unit
+import cimp_zombie_crystal
+import cimp_zombie_talent
+import cimp_zombie_xray
+

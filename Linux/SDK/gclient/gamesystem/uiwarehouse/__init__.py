@@ -1,0 +1,18 @@
+# module: gclient.gamesystem.uiwarehouse
+
+import warehouse_assemble_window
+import warehouse_bomb_skin_window
+import warehouse_box_pop_window
+import warehouse_box_sale_pop_window
+import warehouse_common_node
+import warehouse_gun_skin_window
+import warehouse_hero_model_ctrl
+import warehouse_item_node
+import warehouse_item_window
+import warehouse_melee_skin_window
+import warehouse_reddot_ctrl
+import warehouse_sort_ctrl
+import warehouse_treasure_choose_window
+import warehouse_use_item
+import warehouse_window
+

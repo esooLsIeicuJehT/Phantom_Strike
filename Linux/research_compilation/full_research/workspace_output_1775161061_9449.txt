@@ -1,0 +1,191 @@
+#include "menu.h"
+#include "renderer.h"
+#include "input.h"
+
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_vulkan.h>
+
+namespace Menu {
+
+static bool s_showMenu = false;
+static int s_targetBoneIndex = 0;
+static const char* s_boneNames[] = { "Head", "Neck", "Chest", "Body" };
+
+void Initialize() {
+    ImGui::CreateContext();
+    
+    // Configure ImGui
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    
+    // Set font
+    io.Fonts->AddFontDefault();
+    
+    ApplyStyle();
+}
+
+void ApplyStyle() {
+    ImGuiStyle& style = ImGui::GetStyle();
+    
+    // Dark theme
+    ImVec4* colors = style.Colors;
+    colors[ImGuiCol_Text]                   = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+    colors[ImGuiCol_TextDisabled]           = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
+    colors[ImGuiCol_WindowBg]               = ImVec4(0.10f, 0.10f, 0.13f, 0.95f);
+    colors[ImGuiCol_ChildBg]                = ImVec4(0.15f, 0.15f, 0.18f, 1.00f);
+    colors[ImGuiCol_PopupBg]                = ImVec4(0.08f, 0.08f, 0.11f, 1.00f);
+    colors[ImGuiCol_Border]                 = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
+    colors[ImGuiCol_BorderShadow]           = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    colors[ImGuiCol_FrameBg]                = ImVec4(0.20f, 0.20f, 0.24f, 1.00f);
+    colors[ImGuiCol_FrameBgHovered]         = ImVec4(0.30f, 0.30f, 0.36f, 1.00f);
+    colors[ImGuiCol_FrameBgActive]          = ImVec4(0.35f, 0.35f, 0.42f, 1.00f);
+    colors[ImGuiCol_TitleBg]                = ImVec4(0.04f, 0.04f, 0.04f, 1.00f);
+    colors[ImGuiCol_TitleBgActive]          = ImVec4(0.29f, 0.29f, 0.34f, 1.00f);
+    colors[ImGuiCol_TitleBgCollapsed]       = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
+    colors[ImGuiCol_MenuBarBg]              = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
+    colors[ImGuiCol_ScrollbarBg]            = ImVec4(0.02f, 0.02f, 0.02f, 0.53f);
+    colors[ImGuiCol_ScrollbarGrab]          = ImVec4(0.31f, 0.31f, 0.31f, 1.00f);
+    colors[ImGuiCol_ScrollbarGrabHovered]   = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
+    colors[ImGuiCol_ScrollbarGrabActive]    = ImVec4(0.51f, 0.51f, 0.51f, 1.00f);
+    colors[ImGuiCol_CheckMark]              = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+    colors[ImGuiCol_SliderGrab]             = ImVec4(0.24f, 0.52f, 0.88f, 1.00f);
+    colors[ImGuiCol_SliderGrabActive]       = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+    colors[ImGuiCol_Button]                 = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+    colors[ImGuiCol_ButtonHovered]          = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+    colors[ImGuiCol_ButtonActive]           = ImVec4(0.06f, 0.53f, 0.98f, 1.00f);
+    colors[ImGuiCol_Header]                 = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+    colors[ImGuiCol_HeaderHovered]          = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+    colors[ImGuiCol_HeaderActive]           = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+    colors[ImGuiCol_Separator]              = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
+    colors[ImGuiCol_Tab]                    = ImVec4(0.18f, 0.18f, 0.22f, 1.00f);
+    colors[ImGuiCol_TabHovered]             = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+    colors[ImGuiCol_TabActive]              = ImVec4(0.20f, 0.41f, 0.68f, 1.00f);
+    
+    style.WindowRounding = 4.0f;
+    style.FrameRounding = 3.0f;
+    style.ScrollbarRounding = 3.0f;
+    style.GrabRounding = 3.0f;
+    style.TabRounding = 3.0f;
+}
+
+void Render() {
+    if (!s_showMenu) return;
+    
+    auto& settings = Cheat::CheatManager::Instance().GetSettings();
+    
+    // Set window position and size
+    ImGui::SetNextWindowPos(ImVec2(100, 100), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(450, 400), ImGuiCond_FirstUseEver);
+    
+    // Begin main window
+    ImGui::Begin("Overlay Utility", &s_showMenu, 
+        ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    
+    // Tab bar
+    if (ImGui::BeginTabBar("MainTabs")) {
+        
+        //========== OVERLAY UTILITY TAB ==========
+        if (ImGui::BeginTabItem("Overlay Utility")) {
+            
+            ImGui::Text("Main Toggles");
+            ImGui::Separator();
+            
+            ImGui::Checkbox("ESP Active", &settings.esp.active);
+            ImGui::Checkbox("Enemy Only (Team Check)", &settings.esp.enemyOnly);
+            
+            ImGui::Spacing();
+            ImGui::Text("Overlay Elements");
+            ImGui::Separator();
+            
+            ImGui::Checkbox("2D Box ESP", &settings.esp.box2D);
+            ImGui::Checkbox("Skeleton (Bone ESP)", &settings.esp.skeleton);
+            ImGui::Checkbox("Health Bars", &settings.esp.healthBars);
+            
+            ImGui::Spacing();
+            ImGui::SliderFloat("ESP Range", &settings.esp.range, 0.0f, 500.0f, "%.1f");
+            
+            ImGui::EndTabItem();
+        }
+        
+        //========== AIMBOT TAB ==========
+        if (ImGui::BeginTabItem("Aimbot")) {
+            
+            ImGui::Checkbox("Enabled", &settings.aimbot.enabled);
+            ImGui::Checkbox("Team Check", &settings.aimbot.teamCheck);
+            ImGui::Checkbox("Draw FOV Circle", &settings.aimbot.drawFovCircle);
+            
+            ImGui::Spacing();
+            ImGui::Text("Aimbot Settings");
+            ImGui::Separator();
+            
+            ImGui::SliderFloat("FOV Radius", &settings.aimbot.fovRadius, 0.0f, 180.0f, "%.1f");
+            ImGui::SliderFloat("FOV Degree", &settings.aimbot.fovDegree, 0.0f, 360.0f, "%.1f");
+            ImGui::SliderFloat("Smooth Value", &settings.aimbot.smoothValue, 1.0f, 20.0f, "%.1f");
+            
+            ImGui::Spacing();
+            ImGui::Combo("Target Bone", &s_targetBoneIndex, s_boneNames, IM_ARRAYSIZE(s_boneNames));
+            settings.aimbot.targetBone = s_targetBoneIndex;
+            
+            ImGui::EndTabItem();
+        }
+        
+        //========== WEAPON MODS TAB ==========
+        if (ImGui::BeginTabItem("Weapon Mods")) {
+            
+            ImGui::Text("Weapon Modifications");
+            ImGui::Separator();
+            
+            ImGui::Checkbox("Reduce Recoil", &settings.weaponMods.reduceRecoil);
+            ImGui::Checkbox("Reduce Spread", &settings.weaponMods.reduceSpread);
+            
+            ImGui::Spacing();
+            ImGui::SliderFloat("Custom FOV", &settings.weaponMods.customFov, 60.0f, 120.0f, "%.1f");
+            
+            ImGui::EndTabItem();
+        }
+        
+        //========== CONFIGURATION TAB ==========
+        if (ImGui::BeginTabItem("Configuration")) {
+            
+            ImGui::Text("Settings");
+            ImGui::Separator();
+            
+            ImGui::SliderFloat("Overlay Opacity", &settings.overlay.opacity, 0.0f, 1.0f, "%.2f");
+            ImGui::SliderInt("Font Size", &settings.overlay.fontSize, 10, 20);
+            
+            ImGui::Spacing();
+            
+            if (ImGui::Button("Save Config")) {
+                // TODO: Implement config save
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Load Config")) {
+                // TODO: Implement config load
+            }
+            
+            ImGui::EndTabItem();
+        }
+        
+        ImGui::EndTabBar();
+    }
+    
+    ImGui::End();
+}
+
+void HandleInput() {
+    // Toggle menu with Insert key
+    if (Input::IsKeyPressed(Input::Key::Insert)) {
+        Toggle();
+    }
+}
+
+void Toggle() {
+    s_showMenu = !s_showMenu;
+}
+
+bool IsOpen() {
+    return s_showMenu;
+}
+
+} // namespace Menu

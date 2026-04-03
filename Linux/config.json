@@ -1,0 +1,95 @@
+{
+    "aimbot": {
+        "enabled": false,
+        "aim_key": "mouse_right",
+        "aim_mode": "smooth",
+        "target_bone": "head",
+        "fov": 90.0,
+        "smoothness": 5.0,
+        "max_distance": 300.0,
+        "visibility_check": true,
+        "target_allies": false,
+        "rcs_enabled": true,
+        "rcs_amount": 0.7
+    },
+    "esp": {
+        "enabled": false,
+        "show_enemies": true,
+        "show_teammates": true,
+        "show_box": true,
+        "show_skeleton": true,
+        "show_health": true,
+        "show_name": false,
+        "show_distance": true,
+        "show_weapon": true,
+        "show_snaplines": false,
+        "enemy_color": [
+            255,
+            0,
+            0,
+            255
+        ],
+        "team_color": [
+            0,
+            255,
+            0,
+            255
+        ],
+        "visible_color": [
+            255,
+            255,
+            0,
+            255
+        ],
+        "max_distance": 500.0
+    },
+    "misc": {
+        "no_recoil": false,
+        "no_spread": false,
+        "infinite_ammo": false,
+        "rapid_fire": false,
+        "rapid_fire_delay": 0.05,
+        "speed_hack": false,
+        "speed_multiplier": 1.0,
+        "xray_vision": false,
+        "fov_changer": false,
+        "custom_fov": 90.0
+    },
+    "skin_changer": {
+        "enabled": false,
+        "auto_apply": true,
+        "skins": {},
+        "enabled_weapons": {
+            "1": false,
+            "2": false,
+            "40": false,
+            "38": false,
+            "88": false,
+            "98": false
+        }
+    },
+    "overlay": {
+        "mode": "internal",
+        "socket_port": 6969,
+        "file_path": "/tmp/bloodstrike_esp.json",
+        "render_fov_circle": false,
+        "render_crosshair": true,
+        "crosshair_size": 10,
+        "crosshair_color": [
+            255,
+            255,
+            255,
+            255
+        ]
+    },
+    "keybinds": {
+        "aimbot_key": "mouse_right",
+        "esp_toggle": "f1",
+        "aimbot_toggle": "f2",
+        "misc_toggle": "f3",
+        "skin_apply": "f4",
+        "panic_key": "end"
+    },
+    "created": "2026-04-03T10:51:06.971473",
+    "modified": "2026-04-03T10:58:12.916714"
+}

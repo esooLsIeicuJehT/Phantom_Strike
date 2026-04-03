@@ -1,0 +1,14 @@
+# module: gclient.gameplay.logic_shootingrange.ui
+
+import challenge_main_window
+import challenge_rank_window
+import challenge_result_window
+import challenge_share_node
+import challenge_share_window
+import hero_choose_comp
+import main_uistage
+import shootingrange_backpack_select_comp
+import shootingrange_bottom_arms_comp
+import shootingrange_bottom_arms_v2_comp
+import shootingrange_main_pc_window
+

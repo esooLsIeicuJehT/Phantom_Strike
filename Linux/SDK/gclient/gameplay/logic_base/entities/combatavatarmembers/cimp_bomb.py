@@ -1,0 +1,13 @@
+# module: gclient.gameplay.logic_base.entities.combatavatarmembers.cimp_bomb
+
+class CombatAvatarMember(object):
+    def AddTechStateXray(self, effect, proto_id=1): ...
+    @property
+    def missile_entity(self): ...    @property
+    def throw_item(self): ...
+class PlayerCombatAvatarMember(CombatAvatarMember):
+    def AddTechStateXray(self, effect, proto_id=1): ...
+    @property
+    def missile_entity(self): ...    @property
+    def throw_item(self): ...
+

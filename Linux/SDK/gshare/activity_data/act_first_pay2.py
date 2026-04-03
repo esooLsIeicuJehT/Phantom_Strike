@@ -1,0 +1,126 @@
+# module: gshare.activity_data.act_first_pay2
+
+class ActFirstPay2(ActivityDataBase):
+    IS_CUSTOM_TYPE: bool = True
+    clear: method_descriptor = <method 'clear' of 'area_map' objects>
+    copy: method_descriptor = <method 'copy' of 'area_map' objects>
+    dict: method_descriptor = <method 'dict' of 'area_map' objects>
+    dsize: method_descriptor = <method 'dsize' of 'area_map' objects>
+    get: method_descriptor = <method 'get' of 'area_map' objects>
+    get_owner: method_descriptor = <method 'get_owner' of 'area_map' objects>
+    get_parent: method_descriptor = <method 'get_parent' of 'area_map' objects>
+    iteritems: method_descriptor = <method 'iteritems' of 'area_map' objects>
+    iterkeys: method_descriptor = <method 'iterkeys' of 'area_map' objects>
+    itervalues: method_descriptor = <method 'itervalues' of 'area_map' objects>
+    normal_iteritems: method_descriptor = <method 'normal_iteritems' of 'area_map' objects>
+    normal_iterkeys: method_descriptor = <method 'normal_iterkeys' of 'area_map' objects>
+    normal_itervalues: method_descriptor = <method 'normal_itervalues' of 'area_map' objects>
+    pop: method_descriptor = <method 'pop' of 'area_map' objects>
+    props_all: method_descriptor = <method 'props_all' of 'area_map' objects>
+    size: method_descriptor = <method 'size' of 'area_map' objects>
+    total_size: method_descriptor = <method 'total_size' of 'area_map' objects>
+    update: method_descriptor = <method 'update' of 'area_map' objects>
+    weak_dict: method_descriptor = <method 'weak_dict' of 'area_map' objects>
+
+    def AddTask(self, task_id): ...
+    def DoBitMark(self, bits, index): ...
+    def HasBitMark(self, bits, index): ...
+    def _initProperty(self, data): ...
+    @property
+    def act_proto(self): ...    def items(self): ...
+    def keys(self): ...
+    def setdefault(self, key, default): ...
+    def show_memory_status(self): ...
+    def update2(self, data): ...
+    def values(self): ...
+
+class ActivityDataBase(CustomMapType):
+    IS_CUSTOM_TYPE: bool = True
+    clear: method_descriptor = <method 'clear' of 'area_map' objects>
+    copy: method_descriptor = <method 'copy' of 'area_map' objects>
+    dict: method_descriptor = <method 'dict' of 'area_map' objects>
+    dsize: method_descriptor = <method 'dsize' of 'area_map' objects>
+    get: method_descriptor = <method 'get' of 'area_map' objects>
+    get_owner: method_descriptor = <method 'get_owner' of 'area_map' objects>
+    get_parent: method_descriptor = <method 'get_parent' of 'area_map' objects>
+    iteritems: method_descriptor = <method 'iteritems' of 'area_map' objects>
+    iterkeys: method_descriptor = <method 'iterkeys' of 'area_map' objects>
+    itervalues: method_descriptor = <method 'itervalues' of 'area_map' objects>
+    normal_iteritems: method_descriptor = <method 'normal_iteritems' of 'area_map' objects>
+    normal_iterkeys: method_descriptor = <method 'normal_iterkeys' of 'area_map' objects>
+    normal_itervalues: method_descriptor = <method 'normal_itervalues' of 'area_map' objects>
+    pop: method_descriptor = <method 'pop' of 'area_map' objects>
+    props_all: method_descriptor = <method 'props_all' of 'area_map' objects>
+    size: method_descriptor = <method 'size' of 'area_map' objects>
+    total_size: method_descriptor = <method 'total_size' of 'area_map' objects>
+    update: method_descriptor = <method 'update' of 'area_map' objects>
+    weak_dict: method_descriptor = <method 'weak_dict' of 'area_map' objects>
+
+    def AddTask(self, task_id): ...
+    def DoBitMark(self, bits, index): ...
+    def HasBitMark(self, bits, index): ...
+    def _initProperty(self, data): ...
+    @property
+    def act_proto(self): ...    def items(self): ...
+    def keys(self): ...
+    def setdefault(self, key, default): ...
+    def show_memory_status(self): ...
+    def update2(self, data): ...
+    def values(self): ...
+
+class CustomMapType(area_map):
+    IS_CUSTOM_TYPE: bool = True
+    clear: method_descriptor = <method 'clear' of 'area_map' objects>
+    copy: method_descriptor = <method 'copy' of 'area_map' objects>
+    dict: method_descriptor = <method 'dict' of 'area_map' objects>
+    dsize: method_descriptor = <method 'dsize' of 'area_map' objects>
+    get: method_descriptor = <method 'get' of 'area_map' objects>
+    get_owner: method_descriptor = <method 'get_owner' of 'area_map' objects>
+    get_parent: method_descriptor = <method 'get_parent' of 'area_map' objects>
+    iteritems: method_descriptor = <method 'iteritems' of 'area_map' objects>
+    iterkeys: method_descriptor = <method 'iterkeys' of 'area_map' objects>
+    itervalues: method_descriptor = <method 'itervalues' of 'area_map' objects>
+    normal_iteritems: method_descriptor = <method 'normal_iteritems' of 'area_map' objects>
+    normal_iterkeys: method_descriptor = <method 'normal_iterkeys' of 'area_map' objects>
+    normal_itervalues: method_descriptor = <method 'normal_itervalues' of 'area_map' objects>
+    pop: method_descriptor = <method 'pop' of 'area_map' objects>
+    props_all: method_descriptor = <method 'props_all' of 'area_map' objects>
+    size: method_descriptor = <method 'size' of 'area_map' objects>
+    total_size: method_descriptor = <method 'total_size' of 'area_map' objects>
+    update: method_descriptor = <method 'update' of 'area_map' objects>
+    weak_dict: method_descriptor = <method 'weak_dict' of 'area_map' objects>
+
+    def _initProperty(self, data): ...
+    def items(self): ...
+    def keys(self): ...
+    def setdefault(self, key, default): ...
+    def show_memory_status(self): ...
+    def update2(self, data): ...
+    def values(self): ...
+
+class RewardState(enum):
+    NONE: int = 0
+    PAYED: int = 1
+    RECEIVED: int = 2
+    name_to_values: dict = {'NONE': 0, 'PAYED': 1, 'RECEIVED': 2}
+    value_to_names: dict = {0: 'NONE', 1: 'PAYED', 2: 'RECEIVED'}
+
+    def add_string(name, value): ...
+    def from_string(name): ...
+    def to_string(value): ...
+    def to_values(): ...
+    def values(): ...
+
+class enum(object):
+    name_to_values: dict = {}
+    value_to_names: dict = {}
+
+    def add_string(name, value): ...
+    def from_string(name): ...
+    def to_string(value): ...
+    def to_values(): ...
+    def values(): ...
+
+
+def Property(name, default, flag=2): ...
+

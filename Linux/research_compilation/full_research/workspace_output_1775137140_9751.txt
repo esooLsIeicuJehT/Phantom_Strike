@@ -1,0 +1,23 @@
+bloodstrike_linux/ANTICHEAT_BYPASS_GUIDE.md
+bloodstrike_linux/OFFSETS_GUIDE.md
+bloodstrike_linux/README.md
+bloodstrike_linux/arduino/pixelbot_arduino/pixelbot_arduino.ino
+bloodstrike_linux/src/anticheat_bypass.h
+bloodstrike_linux/src/cheat_features.cpp
+bloodstrike_linux/src/cheat_features.h
+bloodstrike_linux/src/hooks.cpp
+bloodstrike_linux/src/hooks.h
+bloodstrike_linux/src/injector.cpp
+bloodstrike_linux/src/injector.h
+bloodstrike_linux/src/input.cpp
+bloodstrike_linux/src/input.h
+bloodstrike_linux/src/main.cpp
+bloodstrike_linux/src/menu.cpp
+bloodstrike_linux/src/menu.h
+bloodstrike_linux/src/offsets.h
+bloodstrike_linux/src/pixelbot.cpp
+bloodstrike_linux/src/pixelbot.h
+bloodstrike_linux/src/renderer.cpp
+bloodstrike_linux/src/renderer.h
+---
+  3687 total

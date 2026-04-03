@@ -1,0 +1,9 @@
+# module: gclient.gamesystem.uihall.uirank
+
+import comp_rank_listview
+import hall_rank_lbs_gun_refit_comp
+import hall_rank_lbs_gun_score_detail
+import hall_rank_lbs_prompt_notice
+import hall_rank_lbs_week_prompt_notice
+import lbs_ranking_prompt_comp
+

@@ -1,0 +1,17 @@
+[  4%] Building CXX object CMakeFiles/bloodstrike_injector.dir/src/injector_main.cpp.o
+[  9%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/renderer.cpp.o
+[ 14%] Building CXX object CMakeFiles/bloodstrike_injector.dir/src/stealth_injector.cpp.o
+[ 19%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/pixelbot.cpp.o
+[ 23%] Linking CXX executable bloodstrike-injector
+[ 23%] Built target bloodstrike_injector
+[ 28%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/entity_manager.cpp.o
+[ 33%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/aimbot.cpp.o
+[ 38%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/esp.cpp.o
+[ 42%] Building CXX object CMakeFiles/bloodstrike_linux.dir/libs/imgui/imgui.cpp.o
+[ 47%] Building CXX object CMakeFiles/bloodstrike_linux.dir/libs/imgui/imgui_draw.cpp.o
+[ 52%] Building CXX object CMakeFiles/bloodstrike_linux.dir/libs/imgui/imgui_tables.cpp.o
+[ 57%] Building CXX object CMakeFiles/bloodstrike_linux.dir/libs/imgui/imgui_widgets.cpp.o
+[ 61%] Building CXX object CMakeFiles/bloodstrike_linux.dir/libs/imgui/backends/imgui_impl_glfw.cpp.o
+[ 66%] Building CXX object CMakeFiles/bloodstrike_linux.dir/libs/imgui/backends/imgui_impl_vulkan.cpp.o
+[ 71%] Linking CXX shared library libbloodstrike.so
+[100%] Built target bloodstrike_linux

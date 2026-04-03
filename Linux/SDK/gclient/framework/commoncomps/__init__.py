@@ -1,0 +1,16 @@
+# module: gclient.framework.commoncomps
+
+import camera_shake_sunshine_component
+import common_toplogo
+import gunsmith_camera_sunshine_component
+import model_char_component
+import model_component
+import showroom_component
+import space_high_value_item_comp
+import space_vehicle_cache_comp
+import space_water_trigger
+import space_weather_comp
+import sunshine_component
+import timer_component
+import toplogo_component
+

@@ -1,0 +1,15 @@
+# module: gclient.gamesystem.uihall.ui_personal_space
+
+import hall_personal_space_comp
+import hall_player_combat_record_comp
+import hall_player_detail_comp
+import hall_space_credit_window
+import hall_space_head_change
+import profilephoto_reddot_mgr
+import space_combat_history_detail_comp
+import space_grand_theft_calculation_comp
+import space_hotspot_calculation_comp
+import space_moba_calculation_comp
+import space_privacy_setting_comp
+import space_squadfight_calculation_comp
+

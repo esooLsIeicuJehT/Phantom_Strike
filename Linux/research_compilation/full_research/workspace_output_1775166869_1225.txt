@@ -1,0 +1,31 @@
+    gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text_skin_log), GTK_WRAP_WORD_CHAR);
+    gtk_container_add(GTK_CONTAINER(scroll_skin_log), text_skin_log);
+    
+    // Add skin tab to notebook
+    GtkWidget *tab_label_skin = gtk_label_new("🎨 Skin Changer");
+    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), tab_skin, tab_label_skin);
+    
+    //=========================================================================
+    // Final Setup
+    //=========================================================================
+    // Initial process list refresh
+    refresh_process_list(process_list);
+    
+    log_message("BloodStrike Loader v2.0 initialized");
+    log_message("Select a process and click Inject to begin");
+    log_offset_message("Offset Scanner ready");
+    log_skin_message("Skin Changer ready");
+    
+    gtk_widget_show_all(window);
+}
+
+//=============================================================================
+// Main Entry Point
+//=============================================================================
+
+int main(int argc, char **argv) {
+    GtkApplication *app = gtk_application_new("com.bloodstrike.loader", 
+        G_APPLICATION_DEFAULT_FLAGS);
+    
+    g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
+    

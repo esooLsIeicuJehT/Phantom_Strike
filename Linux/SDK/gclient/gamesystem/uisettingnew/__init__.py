@@ -1,0 +1,28 @@
+# module: gclient.gamesystem.uisettingnew
+
+import common_language_choose_comp
+import setting_account_window
+import setting_basic_window
+import setting_cloud_input_name_node
+import setting_control_pc_window
+import setting_control_window
+import setting_controller_window
+import setting_custom_layout_moba_base_window
+import setting_custom_layout_moba_window
+import setting_gameplay_window
+import setting_graphics_audio_window
+import setting_language_window
+import setting_reset_window
+import setting_sensitivity_window
+import setting_template_account_window
+import setting_template_basic_window
+import setting_template_control_window
+import setting_template_gameplay_window
+import setting_template_graphics_audio
+import setting_template_language_windows
+import setting_template_sensitivity_window
+import setting_template_util
+import setting_template_window
+import setting_window
+import tips_node
+

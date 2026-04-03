@@ -1,0 +1,25 @@
+# module: gclient.gameplay.logic_base.models
+
+import als_avatar_model
+import avatar_model
+import avatar_model_cache
+import avatar_model_cue
+import calculation_model_manager
+import common_hand_model_cue
+import hand_model
+import hand_model_cue
+import hand_model_extra_attach_comp
+import hand_model_watch_comp
+import model_attch_comp
+import model_material_comp
+import model_stealth_comp
+import model_tick_comp
+import monster_model
+import para_hand_model_comp
+import para_model_comp
+import replay_hand_model
+import robot_avatar_model
+import robot_hand_model
+import weapon_model
+import weapon_part_model
+

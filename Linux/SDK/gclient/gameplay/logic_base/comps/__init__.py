@@ -1,0 +1,38 @@
+# module: gclient.gameplay.logic_base.comps
+
+import avatar_scene_node
+import comp_advertising
+import comp_attach
+import comp_beard
+import comp_cannon_toplogo
+import comp_compatible
+import comp_continue_kill_count
+import comp_contract
+import comp_default
+import comp_dissolving_destroy
+import comp_emote
+import comp_enemy_show_distance
+import comp_footstep
+import comp_gamelogic_vehicle_media
+import comp_gamelogic_weather
+import comp_grand_theft
+import comp_gunrefit
+import comp_helen
+import comp_hero
+import comp_ladder
+import comp_map_tag
+import comp_mark
+import comp_monster_toplogo
+import comp_mountain_detect
+import comp_occupy_air_drop
+import comp_parachute
+import comp_restrict_wall
+import comp_rookieguide
+import comp_safe_region
+import comp_shutter_island
+import comp_strop
+import comp_talent
+import comp_toplogo
+import fsm_avatar_toplogo
+import model_hero_attach_comp
+

@@ -1,0 +1,9 @@
+# module: gclient.ui.common.common_text_util
+
+import cc
+import six2
+
+def color_str_2_list(color_str): ...
+def cut_text_add_suffix(text, limit_width, suffix='...', text_node=None, rich_text_node=None): ...
+def limit_text_max_width(text_node, limit_width): ...
+

@@ -1,0 +1,17 @@
+# module: gclient.gameplay.logic_squad_fight.ui
+
+import main_uistage
+import squad_fight_bottom_arms_comp
+import squad_fight_bottom_arms_v2_comp
+import squad_fight_calculation_manager
+import squad_fight_equip_info_toplogo_comp
+import squad_fight_hero_choose_comp
+import squad_fight_hud_backpack_comp
+import squad_fight_interactive_comp
+import squad_fight_main_pc_window
+import squad_fight_map_base
+import squad_fight_shop_comp
+import squad_fight_state_comp
+import squad_fight_teaminfo_comp
+import squad_fight_wait_countdown_comp
+

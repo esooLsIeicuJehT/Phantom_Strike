@@ -1,0 +1,50 @@
+MainTabs
+Overlay Elements
+(Untitled)
+GraveAccent
+PrintScreen
+KeypadEnter
+[io] Super+Left Click aliased into Right Click
+Calling PushStyleVar() variant with wrong type!
+[io] Calling Platform_SetImeDataFn(): WantVisible: %d, InputPos (%.2f,%.2f) for Viewport 0x%08X
+Calling PopFont() too many times!
+SetShortcutRouting(%s, flags=%04X, owner_id=0x%08X) -> filtered as potential char input
+--> granting current route
+Code uses SetCursorPos()/SetCursorScreenPos() to extend window/parent boundaries.
+Please submit an item e.g. Dummy() afterwards in order to grow window/parent boundaries.
+Missing PopFont()
+[imgui-error] (current settings: Assert=%d, Log=%d, Tooltip=%d)
+Code should use PushID()/PopID() in loops, or append "##xx" to same-label identifiers!
+Empty label e.g. Button("") == same ID as parent widget/node. Use Button("##xx") instead!
+[popup] CloseCurrentPopup %d -> %d
+[focus] FocusWindow("%s", UnlessBelowModal): prevented by "%s".
+Press ESC to abort picking.
+5by Tristan GrimmerRegularTTX ProggyCleanTT2004/
+FontForge 2.0 : .
+Backend does not support ImGuiBackendFlags_RendererHasTextures, and font atlas is not built! Update backend OR make sure you called ImGui_ImplXXXX_NewFrame() function for renderer backend, which should call io.Fonts->GetTexDataAsRGBA32() / GetTexDataAsAlpha8().
+Called ImFontAtlas::Build() before ImGuiBackendFlags_RendererHasTextures got set! With new backends: you don't need to call Build().
+[font] Created baked %.2fpx
+[font] Discard baked %.2f for "%s"
+[font] Texture #%03d: resize+repack %dx%d => Texture #%03d: %dx%d
+[font] Texture #%03d: resize failed. Will grow.
+[font] Failed packing %dx%d rectangle. Returning fallback.
+[font] Texture #%03d: create %dx%d
+[font] Texture #%03d: destroy %dx%d, texid=0x%I64X, backend_data=%p
+[font] Texture #%03d: update %d regions, texid=0x%I64X, backend_data=0x%I64X
+stbtt_GetFontOffsetForIndex(): FontData is incorrect, or FontNo cannot be found.
+stbtt_InitFont(): failed to parse FontData. It is correct and complete? Check FontDataSize.
+?XXXXXXXXXXXXXXXXEndTable() call should only be done while in BeginTable() scope!
+##ContextMenu
+Mismatched BeginTabBar()/EndTabBar()!
+Needs to be called between BeginTabBar() and EndTabBar()!
+`virtual displacement map'
+`placement delete closure'
+`placement delete[] closure'
+.rdata$zzzdbg
+QueryPerformanceCounter
+GetCurrentProcess
+GetCurrentProcessId
+GetCurrentThreadId
+OpenThread
+GetThreadContext
+SetThreadContext

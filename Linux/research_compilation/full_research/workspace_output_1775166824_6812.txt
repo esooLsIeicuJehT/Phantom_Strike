@@ -1,0 +1,91 @@
+    
+    //=========================================================================
+    // Tab 3: Skin Changer
+    //=========================================================================
+    GtkWidget *tab_skin = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+    gtk_container_set_border_width(GTK_CONTAINER(tab_skin), 10);
+    
+    // Weapon selection
+    GtkWidget *frame_weapon = gtk_frame_new(" Weapon Selection ");
+    gtk_box_pack_start(GTK_BOX(tab_skin), frame_weapon, FALSE, FALSE, 5);
+    
+    GtkWidget *grid_skin = gtk_grid_new();
+    gtk_container_set_border_width(GTK_CONTAINER(grid_skin), 10);
+    gtk_grid_set_row_spacing(GTK_GRID(grid_skin), 8);
+    gtk_grid_set_column_spacing(GTK_GRID(grid_skin), 10);
+    gtk_container_add(GTK_CONTAINER(frame_weapon), grid_skin);
+    
+    // Weapon dropdown
+    gtk_grid_attach(GTK_GRID(grid_skin), gtk_label_new("Weapon:"), 0, 0, 1, 1);
+    combo_weapon = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_weapon), "AK-47");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_weapon), "M4A4");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_weapon), "AWP");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_weapon), "Desert Eagle");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_weapon), "Glock-18");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_weapon), "USP-S");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(combo_weapon), 0);
+    gtk_grid_attach(GTK_GRID(grid_skin), combo_weapon, 1, 0, 1, 1);
+    
+    // Skin dropdown
+    gtk_grid_attach(GTK_GRID(grid_skin), gtk_label_new("Skin:"), 0, 1, 1, 1);
+    combo_skin = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_skin), "Dragon Lore");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_skin), "Asiimov");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_skin), "Fade");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_skin), "Doppler");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_skin), "Fire Serpent");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_skin), "Neon Rider");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_skin), "Printstream");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_skin), "Emerald");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(combo_skin), 0);
+    gtk_grid_attach(GTK_GRID(grid_skin), combo_skin, 1, 1, 1, 1);
+    
+    // Wear slider
+    gtk_grid_attach(GTK_GRID(grid_skin), gtk_label_new("Wear:"), 0, 2, 1, 1);
+    spin_wear = gtk_spin_button_new_with_range(0.0, 1.0, 0.01);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin_wear), 0.0);
+    gtk_grid_attach(GTK_GRID(grid_skin), spin_wear, 1, 2, 1, 1);
+    
+    // Seed
+    gtk_grid_attach(GTK_GRID(grid_skin), gtk_label_new("Pattern Seed:"), 0, 3, 1, 1);
+    spin_seed = gtk_spin_button_new_with_range(0, 1000, 1);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin_seed), 0);
+    gtk_grid_attach(GTK_GRID(grid_skin), spin_seed, 1, 3, 1, 1);
+    
+    // Apply button
+    btn_apply_skin = gtk_button_new_with_label("🎨 Apply Skin");
+    gtk_widget_set_size_request(btn_apply_skin, -1, 40);
+    g_signal_connect(btn_apply_skin, "clicked", G_CALLBACK(on_apply_skin_clicked), NULL);
+    gtk_grid_attach(GTK_GRID(grid_skin), btn_apply_skin, 0, 4, 2, 1);
+    
+    // Skin log output
+    GtkWidget *frame_skin_log = gtk_frame_new(" Skin Changer Log ");
+    gtk_box_pack_start(GTK_BOX(tab_skin), frame_skin_log, TRUE, TRUE, 5);
+    
+    GtkWidget *scroll_skin_log = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_skin_log),
+        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_container_add(GTK_CONTAINER(frame_skin_log), scroll_skin_log);
+    
+    text_skin_log = gtk_text_view_new();
+    gtk_text_view_set_editable(GTK_TEXT_VIEW(text_skin_log), FALSE);
+    gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text_skin_log), GTK_WRAP_WORD_CHAR);
+    gtk_container_add(GTK_CONTAINER(scroll_skin_log), text_skin_log);
+    
+    // Add skin tab to notebook
+    GtkWidget *tab_label_skin = gtk_label_new("🎨 Skin Changer");
+    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), tab_skin, tab_label_skin);
+    
+    //=========================================================================
+    // Final Setup
+    //=========================================================================
+    // Initial process list refresh
+    refresh_process_list(process_list);
+    
+    log_message("BloodStrike Loader v2.0 initialized");
+    log_message("Select a process and click Inject to begin");
+    log_offset_message("Offset Scanner ready");
+    log_skin_message("Skin Changer ready");
+    
+    gtk_widget_show_all(window);

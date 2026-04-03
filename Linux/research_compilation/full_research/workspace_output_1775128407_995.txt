@@ -1,0 +1,37 @@
+MainTabs
+Main Toggles
+(Main menu bar)
+GamepadStart
+Remaining
+[nav] NavInitRequest: from NavInitWindow(), init_for_nav=%d, window="%s", layer=%d
+[nav] NavInitRequest: ApplyResult: NavID 0x%08X in Layer %d Window "%s"
+[nav] NavInitRequest: from move, window "%s", layer=%d
+##MainMenuBar
+stbtt_InitFont(): failed to parse FontData. It is correct and complete? Check FontDataSize.
+cbuffer vertexBuffer : register(b0)             {              float4x4 ProjectionMatrix;             };            struct VS_INPUT            {              float2 pos : POSITION;              float4 col : COLOR0;              float2 uv  : TEXCOORD0;            };                        struct PS_INPUT            {              float4 pos : SV_POSITION;              float4 col : COLOR0;              float2 uv  : TEXCOORD0;            };                        PS_INPUT main(VS_INPUT input)            {              PS_INPUT output;              output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));              output.col = input.col;              output.uv  = input.uv;              return output;            }
+struct PS_INPUT            {            float4 pos : SV_POSITION;            float4 col : COLOR0;            float2 uv  : TEXCOORD0;            };            sampler sampler0;            Texture2D texture0;                        float4 main(PS_INPUT input) : SV_Target            {            float4 out_col = input.col * texture0.Sample(sampler0, input.uv);             return out_col;             }
+xinput1_4.dll
+xinput1_3.dll
+xinput9_1_0.dll
+xinput1_2.dll
+xinput1_1.dll
+`dynamic initializer for '
+InitializeCriticalSectionEx
+INITY
+inity
+INITY
+inity
+d3d11.dll
+LoadLibraryA
+KERNEL32.dll
+LoadCursorA
+USER32.dll
+SHELL32.dll
+IMM32.dll
+D3DCOMPILER_47.dll
+RtlLookupFunctionEntry
+GetStartupInfoW
+InitializeSListHead
+InitializeCriticalSectionAndSpinCount
+LoadLibraryExW
+InitializeCriticalSectionEx

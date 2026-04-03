@@ -1,0 +1,100 @@
+/*
+ * BloodStrike Linux - GUI Loader
+ * A simple graphical interface for injecting the cheat
+ * Features: Injection, Offset Scanner
+ */
+
+#include <gtk/gtk.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <thread>
+#include <atomic>
+
+// Include offset scanner
+#include "offset_scanner.h"
+
+//=============================================================================
+// Configuration
+//=============================================================================
+
+#define APP_NAME "BloodStrike Loader"
+#define APP_VERSION "2.0.0"
+
+// Default paths
+static char default_library_path[512] = "";
+static char default_process_name[64] = "bloodstrike";
+static int selected_method = 4; // Wine/Proton by default
+static char g_loader_dir[512] = "";  // Global loader directory path
+
+// Widgets
+static GtkWidget *window;
+static GtkWidget *notebook;
+static GtkWidget *entry_library;
+static GtkWidget *entry_process;
+static GtkWidget *combo_method;
+static GtkWidget *btn_browse;
+static GtkWidget *btn_inject;
+static GtkWidget *btn_refresh;
+static GtkWidget *text_log;
+static GtkWidget *progress_bar;
+static GtkWidget *status_label;
+static GtkWidget *process_list;
+
+// Offset Scanner Widgets
+static GtkWidget *entry_scan_pid;
+static GtkWidget *btn_scan_offsets;
+static GtkWidget *btn_attach_debugger;
+static GtkWidget *text_offsets;
+static GtkWidget *check_deep_scan;
+static GtkWidget *check_auto_update;
+static GtkWidget *offset_progress;
+
+// Scanner state
+static std::atomic<bool> scanning_active(false);
+static OffsetScanner::OffsetScannerEngine* g_scanner = nullptr;
+
+//=============================================================================
+// Helper Functions
+//=============================================================================
+
+static void log_message(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    
+    char buffer[1024];
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+    
+    GtkTextBuffer *text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_log));
+    GtkTextIter iter;
+    gtk_text_buffer_get_end_iter(text_buffer, &iter);
+    
+    // Add timestamp
+    time_t now = time(NULL);
+    char timestamp[32];
+    strftime(timestamp, sizeof(timestamp), "[%H:%M:%S] ", localtime(&now));
+    
+    gtk_text_buffer_insert(text_buffer, &iter, timestamp, -1);
+    gtk_text_buffer_insert(text_buffer, &iter, buffer, -1);
+    gtk_text_buffer_insert(text_buffer, &iter, "\n", -1);
+    
+    // Scroll to end
+    gtk_text_view_scroll_to_iter(GTK_TEXT_VIEW(text_log), &iter, 0.0, FALSE, 0.0, 0.0);
+}
+
+static void set_status(const char* status, gboolean is_error) {
+    if (is_error) {
+        gtk_label_set_markup(GTK_LABEL(status_label), 
+            g_markup_printf_escaped("<span foreground='red'>%s</span>", status));
+    } else {
+        gtk_label_set_markup(GTK_LABEL(status_label),
+            g_markup_printf_escaped("<span foreground='green'>%s</span>", status));
+    }
+}
+
+static void run_command_async(const char* command, GAsyncReadyCallback callback, gpointer user_data) {
+    GSubprocess *subprocess = g_subprocess_new(

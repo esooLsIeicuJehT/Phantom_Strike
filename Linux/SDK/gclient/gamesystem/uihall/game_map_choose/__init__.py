@@ -1,0 +1,17 @@
+# module: gclient.gamesystem.uihall.game_map_choose
+
+import blood_weapon_icon_node
+import game_choose_window
+import game_mode_list_node
+import map_choose_util
+import panel_leisure_list
+import panel_map_node
+import panel_match_node
+import panel_match_with_leisure_node
+import panel_match_with_lock_node
+import panel_match_with_rank_node
+import panel_match_zombie_battle_node
+import panel_person_and_confirm_node
+import panel_person_node
+import panel_update_node
+

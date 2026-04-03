@@ -1,0 +1,25 @@
+# module: gclient.gamesystem.entities.avatarmembers.activity_data_cls
+
+import act_valid_func_map_type
+import cact_act_crazy_sale
+import cact_annual_pass
+import cact_blood_pass
+import cact_bp
+import cact_coins_box_data
+import cact_combat_privilege
+import cact_crystal_rank
+import cact_first_pay_data
+import cact_growth_fund
+import cact_gun_king
+import cact_gun_school
+import cact_gun_skin_common
+import cact_gun_skin_recall
+import cact_less_is_more
+import cact_month_login
+import cact_newbie_sale
+import cact_package_download
+import cact_roll_no_cycle_data
+import cact_stuff_act_data
+import cact_vote
+import cact_weekend_login
+

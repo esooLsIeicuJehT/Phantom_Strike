@@ -1,0 +1,31 @@
+# module: gclient.ui.common
+
+import age_warning_window
+import base_scoreboard_comp
+import capture_share_window
+import common_effect
+import common_gun_change_comp
+import common_language_choose_node
+import common_personal_card
+import common_text_util
+import common_tips_node
+import common_video_ui
+import festival_tag_node
+import gun_level_panel
+import head_and_frame_comp
+import head_frame_to_personal_space_node
+import hero_skill_node
+import listener_layer
+import loading_window
+import match_settle_common
+import one_more_game_node
+import prompt_base_node
+import prompt_manager
+import qualifying_star_node
+import quality_tag_node
+import reconnect_window
+import reddot_node
+import safe_region_remind_panel
+import segment_name_node
+import ui_animation_util
+

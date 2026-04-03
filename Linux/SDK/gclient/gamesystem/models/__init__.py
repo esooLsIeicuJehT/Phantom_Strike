@@ -1,0 +1,19 @@
+# module: gclient.gamesystem.models
+
+import gacha_box_model
+import hall_attach_model_component
+import hall_common_model_show_ctrl
+import hall_doll_manager_base
+import hall_emote_model_component
+import hall_execute_model_component
+import hall_head_model_component
+import hall_hero_skin_model_component
+import hall_model_component
+import hall_parachute_tail_model_component
+import hall_show_model
+import hall_title_toplogo_component
+import helmet_model_component
+import model_rotate_component
+import warehouse_item_model_ctrl
+import warehouse_model_manager
+

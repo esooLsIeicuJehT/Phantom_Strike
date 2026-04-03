@@ -1,0 +1,54 @@
+[  3%] Building CXX object CMakeFiles/bloodstrike_injector.dir/src/stealth_injector.cpp.o
+[ 77%] Built target bloodstrike_linux
+[ 81%] Building CXX object CMakeFiles/bloodstrike_loader.dir/src/loader_gui.cpp.o
+/workspace/bloodstrike_linux/src/stealth_injector.cpp: In member function ‘std::vector<StealthInjector::ProcessInfo> StealthInjector::StealthInjection::FindProcesses(const std::string&)’:
+/workspace/bloodstrike_linux/src/stealth_injector.cpp:117:39: error: no matching function for call to ‘std::vector<StealthInjector::ProcessInfo>::push_back(<brace-enclosed initializer list>)’
+  117 |             sandboxProcesses.push_back({pid, comm, "", false, ""});
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/12/vector:64,
+                 from /workspace/bloodstrike_linux/src/stealth_injector.h:5,
+                 from /workspace/bloodstrike_linux/src/stealth_injector.cpp:1:
+/usr/include/c++/12/bits/stl_vector.h:1276:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = StealthInjector::ProcessInfo; _Alloc = std::allocator<StealthInjector::ProcessInfo>; value_type = StealthInjector::ProcessInfo]’
+ 1276 |       push_back(const value_type& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/12/bits/stl_vector.h:1276:35: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘const std::vector<StealthInjector::ProcessInfo>::value_type&’ {aka ‘const StealthInjector::ProcessInfo&’}
+ 1276 |       push_back(const value_type& __x)
+      |                 ~~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/12/bits/stl_vector.h:1293:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = StealthInjector::ProcessInfo; _Alloc = std::allocator<StealthInjector::ProcessInfo>; value_type = StealthInjector::ProcessInfo]’
+ 1293 |       push_back(value_type&& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/12/bits/stl_vector.h:1293:30: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘std::vector<StealthInjector::ProcessInfo>::value_type&&’ {aka ‘StealthInjector::ProcessInfo&&’}
+ 1293 |       push_back(value_type&& __x)
+      |                 ~~~~~~~~~~~~~^~~
+make[2]: *** [CMakeFiles/bloodstrike_injector.dir/build.make:90: CMakeFiles/bloodstrike_injector.dir/src/stealth_injector.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:113: CMakeFiles/bloodstrike_injector.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 85%] Building CXX object CMakeFiles/bloodstrike_loader.dir/src/stealth_injector.cpp.o
+/workspace/bloodstrike_linux/src/loader_gui.cpp: In function ‘void run_offset_scan(int, bool, bool)’:
+/workspace/bloodstrike_linux/src/loader_gui.cpp:318:78: error: ‘loader_dir’ was not declared in this scope
+  318 |     snprintf(offsets_path, sizeof(offsets_path), "%s/../src/game_offsets.h", loader_dir);
+      |                                                                              ^~~~~~~~~~
+make[2]: *** [CMakeFiles/bloodstrike_loader.dir/build.make:76: CMakeFiles/bloodstrike_loader.dir/src/loader_gui.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/workspace/bloodstrike_linux/src/stealth_injector.cpp: In member function ‘std::vector<StealthInjector::ProcessInfo> StealthInjector::StealthInjection::FindProcesses(const std::string&)’:
+/workspace/bloodstrike_linux/src/stealth_injector.cpp:117:39: error: no matching function for call to ‘std::vector<StealthInjector::ProcessInfo>::push_back(<brace-enclosed initializer list>)’
+  117 |             sandboxProcesses.push_back({pid, comm, "", false, ""});
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/12/vector:64,
+                 from /workspace/bloodstrike_linux/src/stealth_injector.h:5,
+                 from /workspace/bloodstrike_linux/src/stealth_injector.cpp:1:
+/usr/include/c++/12/bits/stl_vector.h:1276:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = StealthInjector::ProcessInfo; _Alloc = std::allocator<StealthInjector::ProcessInfo>; value_type = StealthInjector::ProcessInfo]’
+ 1276 |       push_back(const value_type& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/12/bits/stl_vector.h:1276:35: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘const std::vector<StealthInjector::ProcessInfo>::value_type&’ {aka ‘const StealthInjector::ProcessInfo&’}
+ 1276 |       push_back(const value_type& __x)
+      |                 ~~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/12/bits/stl_vector.h:1293:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = StealthInjector::ProcessInfo; _Alloc = std::allocator<StealthInjector::ProcessInfo>; value_type = StealthInjector::ProcessInfo]’
+ 1293 |       push_back(value_type&& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/12/bits/stl_vector.h:1293:30: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘std::vector<StealthInjector::ProcessInfo>::value_type&&’ {aka ‘StealthInjector::ProcessInfo&&’}
+ 1293 |       push_back(value_type&& __x)
+      |                 ~~~~~~~~~~~~~^~~
+make[2]: *** [CMakeFiles/bloodstrike_loader.dir/build.make:90: CMakeFiles/bloodstrike_loader.dir/src/stealth_injector.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:139: CMakeFiles/bloodstrike_loader.dir/all] Error 2
+make: *** [Makefile:136: all] Error 2

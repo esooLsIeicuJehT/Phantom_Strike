@@ -1,0 +1,500 @@
+ Bypassing Anti-Cheats &
+Hacking Competitive Games
+
+                            1
+2
+    Hello I’m…
+    Rohan Aggarwal @nahoragg
+    Founder at DefCore Security
+    Bug Bounties
+    Live Hacking Event(H1 & Intigriti)
+    Love playing games(Valorant, Elden Ring, etc)
+
+
+
+
+3
+    Outline
+    01 - Cheats vs Anti-Cheats
+
+    02 - Game Hacking Basics
+
+    03 - Kernel Cheats
+
+    04 - External Hardware Cheats
+
+    05 - Demonstration
+
+
+
+
+4
+    What kind of Game Hacking?
+
+
+
+
+5
+    History of Game Hacking
+
+
+
+
+6
+    1980 - Modding
+
+
+
+
+7
+    1995 - First Aimbot
+
+
+
+
+8
+    Early 2000 - Multiplayer Cheats
+
+
+
+
+9
+     Early 2000 - AntiCheats
+
+
+
+
+             2000              2002
+
+
+10
+     Popular Kernel AntiCheats
+
+
+
+
+11
+     Anti-Cheats
+     Detect Cheats - Signatures
+
+     Discover Cheats - Reports, Manual
+
+     Prevent Cheats - Obfuscation, Sandbox
+
+
+
+
+12
+     Features of Kernel AC
+     ●   Blocking / stripping of process handles in UM
+     ●   Detection of test signing
+     ●   Detection of usermode hooks
+     ●   Detection of injected modules
+     ●   Detection of manually mapped modules
+     ●   Detection of kernel drivers
+     ●   Detecting of traces of manually mapped drivers
+     ●   Detection of virtual machines and emulation
+
+
+
+
+13
+        User Mode                        Kernel Mode
+
+
+     Restricted access to        direct and unrestricted
+     system resources            access to system
+                                 resources
+     Private virtual space for
+     each process                Single virtual space for
+                                 whole kernel
+
+
+
+
+14
+     Game Hacking Basics
+
+15
+     Types of Cheats
+                Internal                                               External
+
+
+      Injected into the target process itself.     Have their own process that manipulates
+                                                   target process
+      Complex to make(depends on engine)
+                                                   Easy to make(Any lang.)
+      Much Flexible and great performance
+                                                   Enough Flexibility and performance
+      Prefered for Games with low-level or No AC
+                                                   Prefered for Games with Strong AC
+
+
+
+
+16
+      Cheat.exe                    Game.exe
+
+         Cheat                        Game
+       User Mode                     Memory
+                   read/write
+
+
+
+
+     Kernel
+
+                                AntiCheat.sys
+
+
+
+
+17
+      Cheat.exe                            Game.exe
+
+         Cheat             X                     Game
+       User Mode          X                     Memory
+                   read/write
+
+
+
+
+     Kernel
+
+                                AntiCheat.sys
+
+
+
+
+18
+      Cheat.exe                      Game.exe
+
+         Cheat                          Game
+       User Mode                       Memory
+
+
+
+
+                   ✅                 ✅
+
+
+     Kernel
+
+                   CheatDriver.sys          AntiCheat.sys
+
+
+
+
+19
+     Challenges
+     1.   How to create driver?
+     2.   How to load the driver into kernel?
+     3.   How to communicate from user mode to kernel mode?
+     4.   How I can make my driver Undetected?
+
+
+
+
+20
+     Kernel Cheat Development
+
+21
+      Cheat Development
+
+            1. Reversing                              2. Hooking                           3. Creating Driver
+
+     Reversing Game to ﬁnd the                Hooking to system call function         Creating Custom Driver that
+     offsets for required cheat.              and placing our shell code for          read/write to game memory
+                                              establishing communication              from kernel.
+                                              b/w UM & KM.
+
+
+
+                       4. Loading Driver                                 5. Creating User Mode
+
+                  Loading the Driver into Kernel.                      Creating User Mode that sends
+                                                                       read/write request to kernel
+                                                                       mode.
+
+
+
+22
+     1. Reversing
+        Debugging(Cheat Engine)   Disassembling(IDA pro)
+
+
+
+
+23
+     What are oﬀsets?
+                                      0                                   12
+
+                 Starting point
+                                      A                                    B
+     0x123    Game.exe                              B offset = 12km            0x456   Game.exe
+
+
+     0x126          int health;
+                                                                          0x459            int health;
+
+
+
+
+             First Launch                                                          Second Launch
+
+
+
+
+                            Health Offset from game.exe is same in both cases i.e. 0x3
+
+24
+     What are oﬀsets?
+      Game.exe
+                                         0x0 0x10
+     struct enemy { //0x0
+              int health;       //0x0               ammo = 40
+              int ammo;         //0x4                  ↓
+              ﬂoat x;           //0x8
+              ﬂoat y;           //0xC
+                                                    *(ammoAdd) = 40
+              ﬂoat z;           //0x10                     ↓
+     };                                             *(playerAdd + 0x4) = *(ammoAdd) = 40
+                                                               ↓
+     struct player {   //0x10
+              int health;       //0x0               *(*(GameAdd + 0x10) + 0x4)) = *(playerAdd + 0x4)
+              int ammo;         //0x4               =*(ammoAdd) = 40
+              ﬂoat x;           //0x8
+              ﬂoat y;           //0xC
+              ﬂoat z;           //0x10
+     };                                             Ammo Offset = Game.exe + 0x10 -> 0x4
+
+
+25
+     Lazy Oﬀsets
+     ●   https://dumps.host/
+     ●   https://www.unknowncheats.me/
+     ●   https://github.com/
+
+
+
+
+26
+     Hello World Driver
+     Requirements:
+
+
+      1.   Visual Studio
+     2.    Windows Driver Kit
+     3.    WinDBG / DBGview
+
+
+
+
+27
+     2. Hooking
+
+
+                  Communication
+                  Path            Kernel
+
+       Cheat              X
+                                           CheatDriver.sys
+     User Mode            X
+
+
+
+
+28
+     2. Hooking
+
+                                    Kernel
+
+
+                                          Windows Driver
+
+       Cheat
+     User Mode                               System Call   CheatDriver.sys
+
+
+
+
+                      Mov rax, CheatDriver_address
+        shell code:
+                      Jmp rax
+29
+                                               User Mode
+
+                                              systemCall (instruction)
+                                              ourFunction (instruction)
+
+
+
+
+                                                                             X
+     Kernel
+
+         WindowsDriver(dxgkrnl.sys)                                       OurDriver.sys
+
+
+         systemCall(NtOpenCompositionSurfac                               ourFunction (instruction){
+         eSectionInfo)
+                                                                          if (instruction==READ)
+          mov rax, ourFunctionAddress                                            readMem ()
+          jmp rax                                                         else if (instruction==WRITE)
+                                                                                 writeMem ()
+                 Our shell code                                           };
+
+
+
+
+30
+     Till now
+     A basic hello world driver
+
+     Communication = Hooking
+
+     What else our driver needs to do?
+
+
+
+
+31
+     What makes a Kernel Cheat Driver?
+
+             1. System Call Addr.                   2. Hooking
+
+           We need the address of system   Placing our shellcode into hook
+           module & function in order to   function to jump to our driver in
+           place our hook                  kernel
+
+
+
+
+               3. Hook Handler                  4. Clearing Traces
+
+          Handler that handles the         Clearing our loaded driver
+          instructions from User mode,     traces from PiDDBCacheTable &
+          executes and response back.      MmUnloadedDrivers.
+
+
+
+32
+     Detection vectors while using hook
+
+               1. Hook Function                          2. Shell Code
+
+       Almost all public system calls are       mov rax,xxx & jmp rax is a classic
+       sigged by AntiCheats ex:                 hook shell code which is well known and
+       NtOpenCompositionSurfaceSectionInfo.     sigged by AntiCheats. Create your own
+       Find your own system call that you can   Shell Code that prefers mid function
+       hook to.                                 hooking.
+
+
+
+
+33
+     4. Loading Driver
+                Test Mode              Pay to load               Exploit
+
+
+     Only good for testing our   Get your driver signed by       Exploit official signed driver
+     driver                      Microsoft by paying.            to load our driver.
+
+
+     Doesn’t work with Modern    Can be revoked easily if gets   Easy pzzz
+     Anti-Cheats                 reported
+
+
+
+
+34
+     KDMapper
+     https://github.com/TheCruZ/kdmapper
+
+     Exploits iqvw64e.sys Intel driver CVE-2015-229 to manually map non-signed drivers in
+     kernel memory.
+
+     Automatically clears major Traces such as MmUnloadedDrivers, PiDDBCacheTable &
+     g_KernelHashBucketList but not all like PoolBigPageTable.
+
+     Loading driver is easy: kdmapper.exe driver.sys
+
+
+
+
+35
+     More Vuln Drivers?
+     https://github.com/hﬁref0x/KDU
+
+     https://github.com/eclypsium/Screwed-Drivers
+
+     https://guidedhacking.com/threads/vulnerable-kernel-drivers-for-exploitation.15979/
+
+     https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=driver
+
+     Exploit drivers on your own
+
+
+
+
+36
+     5. Creating User Mode
+
+            1. Call Hooked Function                      2. Prepare Instruction
+
+           Call the hooked function or                  Construct the instruction
+           system call with our shell code              according to your needs for
+                                                        sending to the hooked function
+
+
+
+
+                                  3. Handle the cheat logic
+
+                                  Aimbot, ESP, etc.
+
+
+
+
+37
+     Kernel WallHack Showcase
+
+38
+     Moving onto Ext. Hardware Cheat
+
+39
+     Pixelbots
+     Color based aimbots
+
+
+
+
+40
+     How do these work?
+
+            PC              Monitor
+
+
+                 pixelbot
+
+
+
+                 valorant
+
+
+
+
+41
+     How do these work?
+
+                          pixelbot
+
+
+
+
+           Capture                   Move
+                           Find
+            Pixels                   Mouse
+                          enemy
+
+

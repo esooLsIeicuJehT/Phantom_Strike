@@ -1,0 +1,14 @@
+# module: gclient.gameplay.logic_big_head.ui
+
+import bighead_ammo_prompt_comp
+import bighead_bottom_arms_base_comp
+import bighead_bottom_arms_comp
+import bighead_bottom_arms_v2_vomp
+import bighead_calculation
+import bighead_hero_choose_comp
+import bighead_map_base
+import bighead_replay_room_spectator_comp
+import bighead_stronghold_state_comp
+import hud_backpack_select_bighead_comp
+import main_uistage
+

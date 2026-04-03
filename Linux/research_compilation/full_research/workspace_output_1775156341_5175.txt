@@ -1,0 +1,128 @@
+[ 12%] Built target bloodstrike_injector
+[ 16%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/aimbot.cpp.o
+[ 29%] Built target bloodstrike_loader
+[ 33%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/esp.cpp.o
+/workspace/bloodstrike_linux/src/esp.cpp:22:26: error: ‘PELVIS’ is not a member of ‘GameOffsets::Bones’
+   22 |     {GameOffsets::Bones::PELVIS, GameOffsets::Bones::SPINE},
+      |                          ^~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:22:54: error: ‘SPINE’ is not a member of ‘GameOffsets::Bones’
+   22 |     {GameOffsets::Bones::PELVIS, GameOffsets::Bones::SPINE},
+      |                                                      ^~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:23:26: error: ‘SPINE’ is not a member of ‘GameOffsets::Bones’
+   23 |     {GameOffsets::Bones::SPINE, GameOffsets::Bones::SPINE1},
+      |                          ^~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:23:53: error: ‘SPINE1’ is not a member of ‘GameOffsets::Bones’; did you mean ‘Spine1’?
+   23 |     {GameOffsets::Bones::SPINE, GameOffsets::Bones::SPINE1},
+      |                                                     ^~~~~~
+      |                                                     Spine1
+/workspace/bloodstrike_linux/src/esp.cpp:24:26: error: ‘SPINE1’ is not a member of ‘GameOffsets::Bones’; did you mean ‘Spine1’?
+   24 |     {GameOffsets::Bones::SPINE1, GameOffsets::Bones::SPINE2},
+      |                          ^~~~~~
+      |                          Spine1
+/workspace/bloodstrike_linux/src/esp.cpp:24:54: error: ‘SPINE2’ is not a member of ‘GameOffsets::Bones’; did you mean ‘Spine2’?
+   24 |     {GameOffsets::Bones::SPINE1, GameOffsets::Bones::SPINE2},
+      |                                                      ^~~~~~
+      |                                                      Spine2
+/workspace/bloodstrike_linux/src/esp.cpp:25:26: error: ‘SPINE2’ is not a member of ‘GameOffsets::Bones’; did you mean ‘Spine2’?
+   25 |     {GameOffsets::Bones::SPINE2, GameOffsets::Bones::NECK},
+      |                          ^~~~~~
+      |                          Spine2
+/workspace/bloodstrike_linux/src/esp.cpp:25:54: error: ‘NECK’ is not a member of ‘GameOffsets::Bones’
+   25 |     {GameOffsets::Bones::SPINE2, GameOffsets::Bones::NECK},
+      |                                                      ^~~~
+/workspace/bloodstrike_linux/src/esp.cpp:26:26: error: ‘NECK’ is not a member of ‘GameOffsets::Bones’
+   26 |     {GameOffsets::Bones::NECK, GameOffsets::Bones::HEAD},
+      |                          ^~~~
+/workspace/bloodstrike_linux/src/esp.cpp:29:26: error: ‘NECK’ is not a member of ‘GameOffsets::Bones’
+   29 |     {GameOffsets::Bones::NECK, GameOffsets::Bones::LEFT_CLAVICLE},
+      |                          ^~~~
+/workspace/bloodstrike_linux/src/esp.cpp:29:52: error: ‘LEFT_CLAVICLE’ is not a member of ‘GameOffsets::Bones’
+   29 |     {GameOffsets::Bones::NECK, GameOffsets::Bones::LEFT_CLAVICLE},
+      |                                                    ^~~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:30:26: error: ‘LEFT_CLAVICLE’ is not a member of ‘GameOffsets::Bones’
+   30 |     {GameOffsets::Bones::LEFT_CLAVICLE, GameOffsets::Bones::LEFT_UPPER_ARM},
+      |                          ^~~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:30:61: error: ‘LEFT_UPPER_ARM’ is not a member of ‘GameOffsets::Bones’
+   30 |     {GameOffsets::Bones::LEFT_CLAVICLE, GameOffsets::Bones::LEFT_UPPER_ARM},
+      |                                                             ^~~~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:31:26: error: ‘LEFT_UPPER_ARM’ is not a member of ‘GameOffsets::Bones’
+   31 |     {GameOffsets::Bones::LEFT_UPPER_ARM, GameOffsets::Bones::LEFT_FOREARM},
+      |                          ^~~~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:31:62: error: ‘LEFT_FOREARM’ is not a member of ‘GameOffsets::Bones’
+   31 |     {GameOffsets::Bones::LEFT_UPPER_ARM, GameOffsets::Bones::LEFT_FOREARM},
+      |                                                              ^~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:32:26: error: ‘LEFT_FOREARM’ is not a member of ‘GameOffsets::Bones’
+   32 |     {GameOffsets::Bones::LEFT_FOREARM, GameOffsets::Bones::LEFT_HAND},
+      |                          ^~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:32:60: error: ‘LEFT_HAND’ is not a member of ‘GameOffsets::Bones’
+   32 |     {GameOffsets::Bones::LEFT_FOREARM, GameOffsets::Bones::LEFT_HAND},
+      |                                                            ^~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:35:26: error: ‘NECK’ is not a member of ‘GameOffsets::Bones’
+   35 |     {GameOffsets::Bones::NECK, GameOffsets::Bones::RIGHT_CLAVICLE},
+      |                          ^~~~
+/workspace/bloodstrike_linux/src/esp.cpp:35:52: error: ‘RIGHT_CLAVICLE’ is not a member of ‘GameOffsets::Bones’
+   35 |     {GameOffsets::Bones::NECK, GameOffsets::Bones::RIGHT_CLAVICLE},
+      |                                                    ^~~~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:36:26: error: ‘RIGHT_CLAVICLE’ is not a member of ‘GameOffsets::Bones’
+   36 |     {GameOffsets::Bones::RIGHT_CLAVICLE, GameOffsets::Bones::RIGHT_UPPER_ARM},
+      |                          ^~~~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:36:62: error: ‘RIGHT_UPPER_ARM’ is not a member of ‘GameOffsets::Bones’
+   36 |     {GameOffsets::Bones::RIGHT_CLAVICLE, GameOffsets::Bones::RIGHT_UPPER_ARM},
+      |                                                              ^~~~~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:37:26: error: ‘RIGHT_UPPER_ARM’ is not a member of ‘GameOffsets::Bones’
+   37 |     {GameOffsets::Bones::RIGHT_UPPER_ARM, GameOffsets::Bones::RIGHT_FOREARM},
+      |                          ^~~~~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:37:63: error: ‘RIGHT_FOREARM’ is not a member of ‘GameOffsets::Bones’
+   37 |     {GameOffsets::Bones::RIGHT_UPPER_ARM, GameOffsets::Bones::RIGHT_FOREARM},
+      |                                                               ^~~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:38:26: error: ‘RIGHT_FOREARM’ is not a member of ‘GameOffsets::Bones’
+   38 |     {GameOffsets::Bones::RIGHT_FOREARM, GameOffsets::Bones::RIGHT_HAND},
+      |                          ^~~~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:38:61: error: ‘RIGHT_HAND’ is not a member of ‘GameOffsets::Bones’
+   38 |     {GameOffsets::Bones::RIGHT_FOREARM, GameOffsets::Bones::RIGHT_HAND},
+      |                                                             ^~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:41:26: error: ‘PELVIS’ is not a member of ‘GameOffsets::Bones’
+   41 |     {GameOffsets::Bones::PELVIS, GameOffsets::Bones::LEFT_THIGH},
+      |                          ^~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:41:54: error: ‘LEFT_THIGH’ is not a member of ‘GameOffsets::Bones’
+   41 |     {GameOffsets::Bones::PELVIS, GameOffsets::Bones::LEFT_THIGH},
+      |                                                      ^~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:42:26: error: ‘LEFT_THIGH’ is not a member of ‘GameOffsets::Bones’
+   42 |     {GameOffsets::Bones::LEFT_THIGH, GameOffsets::Bones::LEFT_CALF},
+      |                          ^~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:42:58: error: ‘LEFT_CALF’ is not a member of ‘GameOffsets::Bones’
+   42 |     {GameOffsets::Bones::LEFT_THIGH, GameOffsets::Bones::LEFT_CALF},
+      |                                                          ^~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:43:26: error: ‘LEFT_CALF’ is not a member of ‘GameOffsets::Bones’
+   43 |     {GameOffsets::Bones::LEFT_CALF, GameOffsets::Bones::LEFT_FOOT},
+      |                          ^~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:43:57: error: ‘LEFT_FOOT’ is not a member of ‘GameOffsets::Bones’
+   43 |     {GameOffsets::Bones::LEFT_CALF, GameOffsets::Bones::LEFT_FOOT},
+      |                                                         ^~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:46:26: error: ‘PELVIS’ is not a member of ‘GameOffsets::Bones’
+   46 |     {GameOffsets::Bones::PELVIS, GameOffsets::Bones::RIGHT_THIGH},
+      |                          ^~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:46:54: error: ‘RIGHT_THIGH’ is not a member of ‘GameOffsets::Bones’
+   46 |     {GameOffsets::Bones::PELVIS, GameOffsets::Bones::RIGHT_THIGH},
+      |                                                      ^~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:47:26: error: ‘RIGHT_THIGH’ is not a member of ‘GameOffsets::Bones’
+   47 |     {GameOffsets::Bones::RIGHT_THIGH, GameOffsets::Bones::RIGHT_CALF},
+      |                          ^~~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:47:59: error: ‘RIGHT_CALF’ is not a member of ‘GameOffsets::Bones’
+   47 |     {GameOffsets::Bones::RIGHT_THIGH, GameOffsets::Bones::RIGHT_CALF},
+      |                                                           ^~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:48:26: error: ‘RIGHT_CALF’ is not a member of ‘GameOffsets::Bones’
+   48 |     {GameOffsets::Bones::RIGHT_CALF, GameOffsets::Bones::RIGHT_FOOT}
+      |                          ^~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:48:58: error: ‘RIGHT_FOOT’ is not a member of ‘GameOffsets::Bones’
+   48 |     {GameOffsets::Bones::RIGHT_CALF, GameOffsets::Bones::RIGHT_FOOT}
+      |                                                          ^~~~~~~~~~
+/workspace/bloodstrike_linux/src/esp.cpp:49:1: error: could not convert ‘{{<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, GameOffsets::Bones::HEAD}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}, {<expression error>, <expression error>}}’ from ‘<brace-enclosed initializer list>’ to ‘const std::vector<ESP::ESPRenderer::BoneConnection>’
+   49 | };
+      | ^
+      | |
+      | <brace-enclosed initializer list>
+make[2]: *** [CMakeFiles/bloodstrike_linux.dir/build.make:216: CMakeFiles/bloodstrike_linux.dir/src/esp.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [CMakeFiles/Makefile2:87: CMakeFiles/bloodstrike_linux.dir/all] Error 2
+make: *** [Makefile:136: all] Error 2

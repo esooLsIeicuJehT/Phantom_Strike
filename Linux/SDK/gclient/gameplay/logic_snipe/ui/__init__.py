@@ -1,0 +1,14 @@
+# module: gclient.gameplay.logic_snipe.ui
+
+import main_uistage
+import snipe_backpack_select_comp
+import snipe_big_map_comp
+import snipe_calculation_info_window
+import snipe_calculation_mgr
+import snipe_hero_choose_comp
+import snipe_hud_bottom_arms_comp
+import snipe_room_spectator_status_window
+import snipe_score_comp
+import snipe_socreboard_comp
+import snipe_top_right_map_comp
+

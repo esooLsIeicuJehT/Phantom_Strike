@@ -1,0 +1,8 @@
+[ 12%] Built target bloodstrike_injector
+[ 16%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/main.cpp.o
+[ 29%] Built target bloodstrike_loader
+[ 33%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/entity_manager.cpp.o
+[ 37%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/aimbot.cpp.o
+[ 41%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/esp.cpp.o
+[ 45%] Linking CXX shared library libbloodstrike.so
+[100%] Built target bloodstrike_linux

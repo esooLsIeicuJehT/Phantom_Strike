@@ -1,0 +1,38 @@
+=== Key Offsets Found in Code ===
+
+Global Variables (RVA from ImageBase 0x180000000):
+  g_Device                  RVA: 0x0A5EC8  VA: 0x1800A5EC8
+  g_DeviceContext           RVA: 0x0A5ED0  VA: 0x1800A5ED0
+  g_SwapChain               RVA: 0x0A5ED8  VA: 0x1800A5ED8
+  g_DeviceContext_Ptr       RVA: 0x0A5EC0  VA: 0x1800A5EC0
+  g_ModuleHandle            RVA: 0x0A5EB0  VA: 0x1800A5EB0
+  g_OriginalPresent         RVA: 0x0A5EB8  VA: 0x1800A5EB8
+  g_Initialized             RVA: 0x0A5EE0  VA: 0x1800A5EE0
+  g_PresentCallback         RVA: 0x0A5EE8  VA: 0x1800A5EE8
+  g_MenuToggle              RVA: 0x0A509E  VA: 0x1800A509E
+  g_StackCookie             RVA: 0x0A5300  VA: 0x1800A5300
+
+=== Feature String Offsets (File Offset) ===
+  Overlay Utility                File: 0x81138  RVA: 0x82738
+  MainTabs                       File: 0x81148  RVA: 0x82748
+  Aimbot                         File: 0x81154  RVA: 0x82754
+  Configuration                  File: 0x81160  RVA: 0x82760
+  Enabled##aimbot                File: 0x81170  RVA: 0x82770
+  Team Check##aimbot             File: 0x81180  RVA: 0x82780
+  Draw FOV Circle                File: 0x81198  RVA: 0x82798
+  FOV Radius                     File: 0x811C0  RVA: 0x827C0
+  Smooth Value                   File: 0x811D8  RVA: 0x827D8
+  Settings                       File: 0x811E8  RVA: 0x827E8
+  Target Bone                    File: 0x81218  RVA: 0x82818
+  Main Toggles                   File: 0x81230  RVA: 0x82830
+  ESP Active                     File: 0x81240  RVA: 0x82840
+  Enemy Only (Team Check)        File: 0x81250  RVA: 0x82850
+  Overlay Elements               File: 0x81268  RVA: 0x82868
+  2D Box ESP                     File: 0x81280  RVA: 0x82880
+  Skeleton (Bone ESP)            File: 0x81290  RVA: 0x82890
+  Health Bars                    File: 0x812B8  RVA: 0x828B8
+  ESP Range                      File: 0x812E0  RVA: 0x828E0
+  Reduce Recoil                  File: 0x81308  RVA: 0x82908
+  Reduce Spread                  File: 0x81318  RVA: 0x82918
+  Custom FOV                     File: 0x81338  RVA: 0x82938
+  FOV Degree                     File: 0x81350  RVA: 0x82950

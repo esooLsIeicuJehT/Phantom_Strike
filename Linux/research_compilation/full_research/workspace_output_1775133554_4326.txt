@@ -1,0 +1,118 @@
+total 108
+drwxr-xr-x 2 root root  4096 Apr  2 12:37 .
+drwxr-xr-x 5 root root  4096 Apr  2 12:22 ..
+-rw-r--r-- 1 root root 10096 Apr  2 12:38 cheat_features.cpp
+-rw-r--r-- 1 root root  3126 Apr  2 12:37 cheat_features.h
+-rw-r--r-- 1 root root  5613 Apr  2 12:38 hooks.cpp
+-rw-r--r-- 1 root root  1162 Apr  2 12:19 hooks.h
+-rw-r--r-- 1 root root 10696 Apr  2 12:19 injector.cpp
+-rw-r--r-- 1 root root  1181 Apr  2 12:18 injector.h
+-rw-r--r-- 1 root root  2551 Apr  2 12:17 input.cpp
+-rw-r--r-- 1 root root  1566 Apr  2 12:17 input.h
+-rw-r--r-- 1 root root  7576 Apr  2 12:39 main.cpp
+-rw-r--r-- 1 root root  7420 Apr  2 12:15 menu.cpp
+-rw-r--r-- 1 root root   323 Apr  2 12:13 menu.h
+-rw-r--r-- 1 root root 11412 Apr  2 12:37 offsets.h
+-rw-r--r-- 1 root root  8590 Apr  2 12:16 renderer.cpp
+-rw-r--r-- 1 root root  1322 Apr  2 12:15 renderer.h
+---
+#pragma once
+
+//=============================================================================
+// BLOOD STRIKE DLL - EXTRACTED OFFSETS & SIGNATURES
+// Reverse Engineered from: bloodstrike.dll
+// ImageBase: 0x180000000
+// Entry Point: 0x5BBD4
+//=============================================================================
+
+#include <cstdint>
+
+namespace Offsets {
+
+//=============================================================================
+// DLL INTERNAL OFFSETS (RVA - Relative Virtual Address)
+// These are offsets within the cheat DLL itself, not game memory
+//=============================================================================
+
+namespace DLL {
+    // Entry Point
+    constexpr uintptr_t ENTRY_POINT = 0x5BBD4;
+
+    // Global Variables (.data section)
+    constexpr uintptr_t G_MODULE_HANDLE    = 0xA5EB0;  // HMODULE of injected DLL
+    constexpr uintptr_t G_ORIGINAL_PRESENT = 0xA5EB8;  // Original IDXGISwapChain::Present pointer
+    constexpr uintptr_t G_DEVICE_CONTEXT_PTR = 0xA5EC0; // ID3D11DeviceContext* storage
+    constexpr uintptr_t G_DEVICE           = 0xA5EC8;  // ID3D11Device* pointer
+    constexpr uintptr_t G_DEVICE_CONTEXT   = 0xA5ED0;  // ID3D11DeviceContext* pointer
+    constexpr uintptr_t G_SWAP_CHAIN       = 0xA5ED8;  // IDXGISwapChain* pointer
+    constexpr uintptr_t G_INITIALIZED      = 0xA5EE0;  // bool initialization flag
+    constexpr uintptr_t G_PRESENT_CALLBACK = 0xA5EE8;  // Present hook callback pointer
+    constexpr uintptr_t G_MENU_TOGGLE      = 0xA509E;  // Menu visibility toggle state
+    constexpr uintptr_t G_STACK_COOKIE     = 0xA5300;  // Stack canary for security
+
+    // Virtual Addresses (ImageBase + RVA)
+    constexpr uintptr_t IMAGE_BASE = 0x180000000;
+    
+    constexpr uintptr_t VA_G_MODULE_HANDLE    = IMAGE_BASE + G_MODULE_HANDLE;
+    constexpr uintptr_t VA_G_ORIGINAL_PRESENT = IMAGE_BASE + G_ORIGINAL_PRESENT;
+    constexpr uintptr_t VA_G_DEVICE           = IMAGE_BASE + G_DEVICE;
+    constexpr uintptr_t VA_G_DEVICE_CONTEXT   = IMAGE_BASE + G_DEVICE_CONTEXT;
+    constexpr uintptr_t VA_G_SWAP_CHAIN       = IMAGE_BASE + G_SWAP_CHAIN;
+    constexpr uintptr_t VA_G_INITIALIZED      = IMAGE_BASE + G_INITIALIZED;
+    constexpr uintptr_t VA_G_MENU_TOGGLE      = IMAGE_BASE + G_MENU_TOGGLE;
+}
+
+//=============================================================================
+// DIRECTX 11 VTABLE OFFSETS
+// These are the VTable slot offsets for DirectX 11 interfaces
+//=============================================================================
+
+namespace DirectX {
+    // IDXGISwapChain VTable
+    constexpr uintptr_t VTABLE_QUERY_INTERFACE = 0x00;
+    constexpr uintptr_t VTABLE_ADD_REF         = 0x08;
+    constexpr uintptr_t VTABLE_RELEASE         = 0x10;
+    constexpr uintptr_t VTABLE_PRESENT         = 0x140;  // *** HOOK TARGET ***
+    constexpr uintptr_t VTABLE_GET_BUFFER      = 0x148;
+    constexpr uintptr_t VTABLE_RESIZE_BUFFERS  = 0x138;
+
+    // ID3D11Device VTable
+    constexpr uintptr_t VTABLE_CREATE_VERTEX_SHADER = 0x38;
+    constexpr uintptr_t VTABLE_CREATE_PIXEL_SHADER  = 0x48;
+    constexpr uintptr_t VTABLE_CREATE_INPUT_LAYOUT  = 0x28;
+    constexpr uintptr_t VTABLE_CREATE_BUFFER        = 0x18;
+
+    // ID3D11DeviceContext VTable
+    constexpr uintptr_t VTABLE_IA_SET_VERTEX_BUFFERS   = 0x60;
+    constexpr uintptr_t VTABLE_OM_SET_RENDER_TARGETS   = 0x108;
+    constexpr uintptr_t VTABLE_DRAW_INDEXED            = 0x10;
+    constexpr uintptr_t VTABLE_DRAW                    = 0x18;
+    constexpr uintptr_t VTABLE_MAP                     = 0x20;
+    constexpr uintptr_t VTABLE_UNMAP                   = 0x28;
+    constexpr uintptr_t VTABLE_PSSET_SHADER            = 0x30;
+    constexpr uintptr_t VTABLE_VSSET_SHADER            = 0x38;
+}
+
+//=============================================================================
+// BYTE PATTERNS & SIGNATURES
+// For finding functions and data in memory
+//=============================================================================
+
+namespace Patterns {
+    // Entry Point Pattern
+    // Address: 0x18005BBD4
+    const char ENTRY_POINT[] = "\x48\x83\xEC\x28\xE8\xBB\xFF\xFF\xFF\x48\xF7\xD8\x1B\xC0\xF7\xD8\xFF\xC8\x48\x83\xC4\x28\xC3";
+    const char ENTRY_POINT_MASK[] = "xxxxxxxxxxxxxxxxxxxxxxx";
+
+    // DirectX Present Hook Pattern
+    // Address: 0x1800011D0
+    const char PRESENT_HOOK[] = "\x40\x53\x55\x56\x48\x81\xEC\x90\x00\x00\x00\x48\x8B\x05";
+    const char PRESENT_HOOK_MASK[] = "xxxxxxxxxxxxxx";
+
+    // Menu Toggle Pattern (GetAsyncKeyState for VK_INSERT)
+    // Address: 0x180001331
+    const char MENU_TOGGLE[] = "\xB9\x2D\x00\x00\x00\xFF\x15";
+    const char MENU_TOGGLE_MASK[] = "xx???xx";
+
+    // ImGui Initialization Pattern
+    // Address: 0x1800014C0

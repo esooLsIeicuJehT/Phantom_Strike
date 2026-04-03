@@ -1,0 +1,8 @@
+# module: gclient.gameplay.logic_rookieguide.ui
+
+import hud_rookie_guide_comp
+import hud_rookie_guide_window
+import main_uistage
+import rookie_guide_bottom_arms_comp
+import rookieguide_hud_team_info_comp
+

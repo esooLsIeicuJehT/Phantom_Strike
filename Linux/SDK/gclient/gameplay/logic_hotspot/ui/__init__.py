@@ -1,0 +1,13 @@
+# module: gclient.gameplay.logic_hotspot.ui
+
+import hotspot_ammo_prompt_comp
+import hotspot_bottom_arms_base_comp
+import hotspot_bottom_arms_comp
+import hotspot_bottom_arms_v2_vomp
+import hotspot_calculation
+import hotspot_hero_choose_comp
+import hotspot_map_base
+import hotspot_stronghold_state_comp
+import hud_backpack_select_hotspot_comp
+import main_uistage
+

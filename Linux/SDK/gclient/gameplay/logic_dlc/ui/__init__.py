@@ -1,0 +1,11 @@
+# module: gclient.gameplay.logic_dlc.ui
+
+import squad_fight_coin_comp
+import squad_fight_hud_bottom_like_comp
+import squad_fight_round_comp
+import squad_fight_scoreboard_comp
+import squad_fight_shop_base
+import squad_fight_state_base
+import squad_fight_tactical_level_comp
+import squad_fight_teaminfo_base
+

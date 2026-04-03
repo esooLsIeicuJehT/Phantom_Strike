@@ -1,0 +1,9 @@
+155:        auto box = Helpers::CalculateBox2D(entity->position, entity->headScreenPos, 
+225:    auto box = Helpers::CalculateBox2D(entity->position, entity->headScreenPos, 
+273:    auto box = Helpers::CalculateBox2D(entity->position, entity->headScreenPos, 
+286:    auto box = Helpers::CalculateBox2D(entity->position, entity->headScreenPos, 
+304:    auto box = Helpers::CalculateBox2D(entity->position, entity->headScreenPos, 
+319:    auto box = Helpers::CalculateBox2D(entity->position, entity->headScreenPos, 
+363:    auto box = Helpers::CalculateBox2D(entity->position, entity->headScreenPos, 
+377:    if (!entity->headScreenPos.onScreen) return;
+379:    DrawCircle(entity->headScreenPos.x, entity->headScreenPos.y,

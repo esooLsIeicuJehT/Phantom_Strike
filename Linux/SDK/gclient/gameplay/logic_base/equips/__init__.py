@@ -1,0 +1,32 @@
+# module: gclient.gameplay.logic_base.equips
+
+import citem
+import common_skill_case
+import dual_melee_case
+import equip_attach_model_comp
+import equip_case
+import gun_melee_case
+import item_case
+import left_xdroid_case
+import lefthand_case
+import leftshield_case
+import melee_case
+import none_case
+import replay_common_skill_case
+import replay_dual_melee_case
+import replay_gun_melee_case
+import replay_item_case
+import replay_left_xdroid_case
+import replay_lefthand_case
+import replay_melee_case
+import replay_none_case
+import replay_righthand_throwable_case
+import replay_samurai_sword_case
+import replay_weapon_case
+import righthand_throwable_case
+import samurai_sword_case
+import weapon_case
+import weapon_case_base
+import weapon_material_feature
+import weapon_sunshine
+

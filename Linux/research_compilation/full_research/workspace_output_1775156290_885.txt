@@ -1,0 +1,19 @@
+[ 12%] Built target bloodstrike_injector
+[ 16%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/entity_manager.cpp.o
+[ 29%] Built target bloodstrike_loader
+[ 33%] Building CXX object CMakeFiles/bloodstrike_linux.dir/src/aimbot.cpp.o
+/workspace/bloodstrike_linux/src/aimbot.cpp: In member function ‘EntitySystem::Vector3 Aimbot::AimbotEngine::GetBestBonePosition(EntitySystem::Entity*)’:
+/workspace/bloodstrike_linux/src/aimbot.cpp:381:29: error: ‘NECK’ is not a member of ‘GameOffsets::Bones’
+  381 |         GameOffsets::Bones::NECK,
+      |                             ^~~~
+/workspace/bloodstrike_linux/src/aimbot.cpp:382:29: error: ‘SPINE2’ is not a member of ‘GameOffsets::Bones’; did you mean ‘Spine2’?
+  382 |         GameOffsets::Bones::SPINE2,  // Upper spine/chest area
+      |                             ^~~~~~
+      |                             Spine2
+/workspace/bloodstrike_linux/src/aimbot.cpp:383:29: error: ‘PELVIS’ is not a member of ‘GameOffsets::Bones’
+  383 |         GameOffsets::Bones::PELVIS
+      |                             ^~~~~~
+make[2]: *** [CMakeFiles/bloodstrike_linux.dir/build.make:202: CMakeFiles/bloodstrike_linux.dir/src/aimbot.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [CMakeFiles/Makefile2:87: CMakeFiles/bloodstrike_linux.dir/all] Error 2
+make: *** [Makefile:136: all] Error 2

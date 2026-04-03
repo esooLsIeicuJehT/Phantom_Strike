@@ -1,0 +1,34 @@
+Archive:  bloodstrike_linux.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+        0  2026-04-02 13:38   bloodstrike_linux/
+        0  2026-04-02 12:10   bloodstrike_linux/libs/
+     4787  2026-04-02 12:22   bloodstrike_linux/README.md
+        0  2026-04-02 13:32   bloodstrike_linux/src/
+    10696  2026-04-02 12:19   bloodstrike_linux/src/injector.cpp
+     1162  2026-04-02 12:19   bloodstrike_linux/src/hooks.h
+     1322  2026-04-02 12:15   bloodstrike_linux/src/renderer.h
+     2551  2026-04-02 12:17   bloodstrike_linux/src/input.cpp
+     1181  2026-04-02 12:18   bloodstrike_linux/src/injector.h
+     5613  2026-04-02 12:38   bloodstrike_linux/src/hooks.cpp
+     3126  2026-04-02 12:37   bloodstrike_linux/src/cheat_features.h
+     8590  2026-04-02 12:16   bloodstrike_linux/src/renderer.cpp
+     7576  2026-04-02 12:39   bloodstrike_linux/src/main.cpp
+      323  2026-04-02 12:13   bloodstrike_linux/src/menu.h
+     7420  2026-04-02 12:15   bloodstrike_linux/src/menu.cpp
+     1566  2026-04-02 12:17   bloodstrike_linux/src/input.h
+    10096  2026-04-02 12:38   bloodstrike_linux/src/cheat_features.cpp
+        0  2026-04-02 12:10   bloodstrike_linux/shaders/
+     1956  2026-04-02 13:35   bloodstrike_linux/CMakeLists.txt
+     2316  2026-04-02 12:21   bloodstrike_linux/build.sh
+     3531  2026-04-02 12:40   bloodstrike_linux/OFFSETS_GUIDE.md
+     9825  2026-04-02 13:38   bloodstrike_linux/ANTICHEAT_BYPASS_GUIDE.md
+        0  2026-04-02 13:34   bloodstrike_linux/arduino/
+        0  2026-04-02 13:34   bloodstrike_linux/arduino/pixelbot_arduino/
+     5345  2026-04-02 13:34   bloodstrike_linux/arduino/pixelbot_arduino/pixelbot_arduino.ino
+    10392  2026-04-02 13:27   bloodstrike_linux/src/pixelbot.h
+    12347  2026-04-02 13:25   bloodstrike_linux/src/anticheat_bypass.h
+    11412  2026-04-02 12:37   bloodstrike_linux/src/offsets.h
+    18067  2026-04-02 13:32   bloodstrike_linux/src/pixelbot.cpp
+---------                     -------
+   141200                     29 files

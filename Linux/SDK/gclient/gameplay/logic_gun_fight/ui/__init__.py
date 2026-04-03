@@ -1,0 +1,18 @@
+# module: gclient.gameplay.logic_gun_fight.ui
+
+import gun_fight_bottom_arms_comp
+import gun_fight_bottom_arms_v2_comp
+import gun_fight_calculation_manager
+import gun_fight_hud_backpack_comp
+import gun_fight_interactive_comp
+import gun_fight_main_pc_window
+import gun_fight_map_base
+import gun_fight_round_comp
+import gun_fight_scoreboard_comp
+import gun_fight_select_gun_comp
+import gun_fight_state_comp
+import gun_fight_team_arena_comp
+import gun_fight_teaminfo_comp
+import gun_fight_wait_countdown_comp
+import main_uistage
+
