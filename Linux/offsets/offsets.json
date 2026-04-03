@@ -1,0 +1,11 @@
+{
+  "offsets": {
+    "player_base": 356723901,
+    "health_offset": 296154238,
+    "team_offset": 408005048,
+    "position_offset": 359686396,
+    "weapon_offset": 346205399
+  },
+  "timestamp": 1775251933.9482532,
+  "version": "2.0"
+}

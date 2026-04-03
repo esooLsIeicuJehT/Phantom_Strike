@@ -1,6 +1,6 @@
 {
     "aimbot": {
-        "enabled": false,
+        "enabled": true,
         "aim_key": "mouse_right",
         "aim_mode": "smooth",
         "target_bone": "head",
@@ -13,16 +13,16 @@
         "rcs_amount": 0.7
     },
     "esp": {
-        "enabled": false,
+        "enabled": true,
         "show_enemies": true,
-        "show_teammates": true,
+        "show_teammates": false,
         "show_box": true,
         "show_skeleton": true,
-        "show_health": true,
+        "show_health": false,
         "show_name": false,
         "show_distance": true,
-        "show_weapon": true,
-        "show_snaplines": false,
+        "show_weapon": false,
+        "show_snaplines": true,
         "enemy_color": [
             255,
             0,
@@ -72,8 +72,8 @@
         "mode": "internal",
         "socket_port": 6969,
         "file_path": "/tmp/bloodstrike_esp.json",
-        "render_fov_circle": false,
-        "render_crosshair": true,
+        "render_fov_circle": true,
+        "render_crosshair": false,
         "crosshair_size": 10,
         "crosshair_color": [
             255,

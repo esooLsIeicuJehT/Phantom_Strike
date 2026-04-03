@@ -1,0 +1,71 @@
+{
+  "timestamp": 1775254600.775022,
+  "game_version": "latest",
+  "offsets": {
+    "player_base": 0,
+    "position_offset": 0,
+    "weapon_offset": 0,
+    "crosshair_offset": 0,
+    "recoil_offset": 0,
+    "entity_list": 86391,
+    "view_matrix": 733124
+  },
+  "scan_stats": {
+    "total_scans": 5,
+    "successful_scans": 33,
+    "avg_scan_time": 1.1338801383972168,
+    "last_scan": 1775254595.708787
+  },
+  "pattern_info": {
+    "player_base": {
+      "found_count": 0,
+      "last_found": 0.0,
+      "confidence": 0.9
+    },
+    "health_offset": {
+      "found_count": 0,
+      "last_found": 0.0,
+      "confidence": 0.7
+    },
+    "team_offset": {
+      "found_count": 0,
+      "last_found": 0.0,
+      "confidence": 0.7
+    },
+    "position_offset": {
+      "found_count": 0,
+      "last_found": 0.0,
+      "confidence": 0.9
+    },
+    "weapon_offset": {
+      "found_count": 0,
+      "last_found": 0.0,
+      "confidence": 0.7
+    },
+    "entity_list": {
+      "found_count": 0,
+      "last_found": 0.0,
+      "confidence": 0.9
+    },
+    "view_matrix": {
+      "found_count": 0,
+      "last_found": 0.0,
+      "confidence": 0.7
+    },
+    "game_state": {
+      "found_count": 0,
+      "last_found": 0.0,
+      "confidence": 0.5
+    },
+    "crosshair_offset": {
+      "found_count": 0,
+      "last_found": 0.0,
+      "confidence": 0.5
+    },
+    "recoil_offset": {
+      "found_count": 91,
+      "last_found": 1775254600.7693024,
+      "confidence": 0.7
+    }
+  }
+}
