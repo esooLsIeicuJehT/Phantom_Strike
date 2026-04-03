@@ -431,7 +431,7 @@ def main():
     parser.add_argument('--status', '-s', action='store_true', help='Show status information')
     parser.add_argument('--config', help='Load configuration file')
     parser.add_argument('--export', help='Export current configuration')
-    parser.add_argument('--import', help='Import configuration file')
+    parser.add_argument('--import_config', help='Import configuration file')
     parser.add_argument('--reset', help='Reset configuration type')
     parser.add_argument('--protection', choices=['minimal', 'standard', 'aggressive', 'paranoid'], 
                        help='Set protection level')
@@ -478,9 +478,9 @@ def main():
         launcher.config_manager.export_configuration(args.export)
         return
     
-    if args.import and launcher.config_manager:
-        print(f"📥 Importing configuration from: {args.import}")
-        launcher.config_manager.import_configuration(args.import)
+    if args.import_config and launcher.config_manager:
+        print(f"📥 Importing configuration from: {args.import_config}")
+        launcher.config_manager.import_configuration(args.import_config)
     
     if args.reset and launcher.config_manager:
         try:
