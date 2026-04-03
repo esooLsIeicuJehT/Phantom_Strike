@@ -15,13 +15,22 @@
 Phantom_Strike/
 ├── 🐧 Linux/                    # Linux version (Python)
 │   ├── docs/                    # Linux documentation
+│   ├── phantom_strike.py        # Main launcher and entry point
+│   ├── gui_main.py              # GUI control panel
 │   ├── external_overlay_imgui.py # External GUI overlay
-│   ├── auto_updating_cheat.py   # Main cheat engine
+│   ├── ai_aimbot.py             # Advanced AI aimbot with ML
+│   ├── anti_cheat_evasion.py    # Enhanced anti-detection system
 │   ├── skin_changer.py          # Weapon skin system
-│   ├── ai_aimbot.py             # Machine learning aimbot
 │   ├── auto_offset_scanner.py   # Pattern scanner
+│   ├── enhanced_config_manager.py # Advanced configuration system
+│   ├── config.json              # Main configuration file
 │   ├── requirements.txt         # Dependencies
-│   └── linux_install.sh         # Auto-install script
+│   ├── linux_install.sh         # Auto-install script
+│   ├── core/                    # Core system modules
+│   ├── features/                # Feature modules
+│   ├── gui/                     # GUI components
+│   ├── utils/                   # Utility functions
+│   └── venv/                    # Python virtual environment
 │
 ├── 🪟 Windows/                  # Windows version (C++)
 │   ├── docs/                    # Windows documentation
@@ -31,8 +40,9 @@ Phantom_Strike/
 │   ├── build.bat                # Build script
 │   └── README.md                # Windows instructions
 │
-└── 🔍 Offset_Scanner/           # Universal scanner (empty)
-    (Ready for universal scanner implementation)
+└── 🔍 Offset_Scanner/           # Universal scanner
+    ├── auto_offset_scanner.py   # Pattern recognition system
+    └── research_compilation/    # Research data
 ```
 
 ---
@@ -44,7 +54,9 @@ Phantom_Strike/
 cd Linux
 ./linux_install.sh
 source venv/bin/activate
-python external_overlay_imgui.py
+python phantom_strike.py
+# OR for GUI control panel:
+python gui_main.py
 ```
 
 ### **🪟 Windows Users:**
@@ -58,28 +70,35 @@ python dll_injector.py
 - **F1** - Toggle ESP
 - **F2** - Toggle Aimbot
 - **F3** - Toggle AI Aimbot
-- **F4** - Toggle Auto Update
-- **F5** - Toggle Skin Changer
-- **END** - Panic Mode
+- **F4** - Toggle Radar
+- **F5** - Toggle Stats
+- **F6** - Toggle Skins
+- **INSERT** - Toggle Menu
+- **END** - Emergency Stop
 
 ---
 
 ## 🎯 **FEATURES**
 
 ### **🔫 Advanced Aimbot:**
-- Real internal game SDK integration
-- Human-like smooth aiming
-- Smart target selection
-- Bone targeting (head, chest, stomach)
-- Team protection
-- FOV control
+- AI-powered movement prediction
+- Human-like smooth aiming with behavioral simulation
+- Advanced ballistics with bullet drop compensation
+- Smart target selection with threat assessment
+- Multiple bone targeting options
+- Team protection and FOV control
+- Anti-cheat evasion with aim desync
+- Performance tracking and statistics
 
 ### **👁️ Professional ESP:**
-- 2D box ESP with player information
-- Health bars and distance display
-- Skeleton/bone structure display
-- Enemy filtering
-- Customizable rendering distance
+- Advanced 2D/3D box ESP with multiple styles
+- Real-time health bars and armor display
+- Complete skeleton/bone structure rendering
+- Enemy filtering and identification
+- Customizable rendering distance and fading
+- Velocity indicators and movement prediction
+- Head tracers and snaplines
+- Radar system with customizable range
 
 ### **🎨 Skin Changer:**
 - 25+ professional weapon skins
@@ -91,10 +110,12 @@ python dll_injector.py
 
 ### **🧠 AI Aimbot:**
 - Machine learning movement prediction
-- Pattern recognition system
-- Confidence scoring
-- Auto-training capabilities
-- Behavior analysis
+- Advanced pattern recognition system
+- Confidence scoring and accuracy tracking
+- Auto-training and adaptation capabilities
+- Behavior analysis and human simulation
+- Multi-target tracking and prediction
+- Performance optimization and statistics
 
 ### **🔄 Auto-Offset Scanner:**
 - Pattern recognition technology
@@ -222,7 +243,7 @@ python dll_injector.py
 - **Windows:** Run `build.bat`
 
 ### **Step 3: Launch Cheat**
-- **Linux:** `python external_overlay_imgui.py`
+- **Linux:** `python phantom_strike.py` or `python gui_main.py`
 - **Windows:** `python dll_injector.py`
 
 ### **Step 4: Configure Settings**

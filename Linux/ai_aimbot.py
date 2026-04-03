@@ -4,52 +4,54 @@ AI Aimbot with Machine Learning Prediction
 Uses trained models to predict player movement and optimal aim points
 """
 
-import numpy as np
-import math
-import time
-from typing import List, Tuple, Dict, Any, Optional
-from dataclasses import dataclass
-import pickle
-import os
+def launch_ai_aimbot():
+    """Launch AI Aimbot for GUI integration"""
+    import numpy as np
+    import math
+    import time
+    from typing import List, Tuple, Dict, Any, Optional
+    from dataclasses import dataclass
+    import pickle
+    import os
 
-try:
-    # Try to import ML libraries
-    from sklearn.ensemble import RandomForestRegressor
-    from sklearn.neural_network import MLPRegressor
-    from sklearn.preprocessing import StandardScaler
-    ML_AVAILABLE = True
-except ImportError:
-    print("⚠ ML libraries not available - using simple prediction")
-    ML_AVAILABLE = False
-
-@dataclass
-class MovementData:
-    """Player movement data for training"""
-    position: Tuple[float, float, float]
-    velocity: Tuple[float, float, float]
-    acceleration: Tuple[float, float, float]
-    timestamp: float
-    is_aiming: bool
-    is_shooting: bool
-    health: int
+    try:
+        # Try to import ML libraries
+        from sklearn.ensemble import RandomForestRegressor
+        from sklearn.neural_network import MLPRegressor
+        from sklearn.preprocessing import StandardScaler
+        ML_AVAILABLE = True
+    except ImportError:
+        print("⚠ ML libraries not available - using simple prediction")
+        ML_AVAILABLE = False
 
 @dataclass
-class AimTarget:
-    """Aim target with prediction"""
-    current_pos: Tuple[float, float, float]
-    predicted_pos: Tuple[float, float, float]
-    confidence: float
-    time_to_target: float
-    optimal_aim_point: Tuple[float, float, float]
+    class MovementData:
+        """Player movement data for training"""
+        position: Tuple[float, float, float]
+        velocity: Tuple[float, float, float]
+        acceleration: Tuple[float, float, float]
+        timestamp: float
+        is_aiming: bool
+        is_shooting: bool
+        health: int
+
+    @dataclass
+    class AimTarget:
+        """Aim target with prediction"""
+        current_pos: Tuple[float, float, float]
+        predicted_pos: Tuple[float, float, float]
+        confidence: float
+        time_to_target: float
+        optimal_aim_point: Tuple[float, float, float]
 
 class AdvancedAIAimbot:
-    """Advanced AI aimbot with human-like behavior and prediction"""
-    
-    def __init__(self):
-        # Movement tracking
-        self.movement_history: Dict[int, List[MovementData]] = {}
-        self.max_history = 30  # Keep last 30 frames
-        self.prediction_frames = 10  # Predict 10 frames ahead
+        """Advanced AI aimbot with human-like behavior and prediction"""
+        
+        def __init__(self):
+            # Movement tracking
+            self.movement_history: Dict[int, List[MovementData]] = {}
+            self.max_history = 30  # Keep last 30 frames
+            self.prediction_frames = 10  # Predict 10 frames ahead
         
         # Aimbot settings
         self.enabled = True
@@ -71,16 +73,32 @@ class AdvancedAIAimbot:
         self.lowest_health_first = False  # Target weakest enemy
         self.threat_based = True  # Target based on threat level
         
-        # Prediction settings
+        # Advanced prediction settings
         self.prediction_enabled = True
         self.prediction_time = 0.1  # Predict 100ms ahead
         self.bullet_drop_compensation = True
         self.lead_target = True  # Lead moving targets
+        self.recoil_prediction = True
+        self.spread_compensation = True
+        self.movement_prediction = True
+        self.advanced_ballistics = True
+        self.velocity_prediction = True
+        self.acceleration_prediction = True
+        self.pattern_recognition = True
         
-        # Anti-cheat evasion
+        # Advanced anti-cheat evasion
         self.silent_aim = False  # Silent aim (no visible movement)
         self.aim_punch = False  # Compensate for aim punch
         self.smooth_jitter = 0.2  # Small random movements
+        self.aim_smoothing = True
+        self.human_aim_simulation = True
+        self.aim_desync = True
+        self.random_headshots = True
+        self.body_shot_mix = 0.3  # 30% body shots for realism
+        self.miss_simulation = True
+        self.aim_pace_control = True
+        self.flick_simulation = True
+        self.micro_adjustments = True
         
         # Performance tracking
         self.last_aim_time = 0
@@ -88,6 +106,14 @@ class AdvancedAIAimbot:
         self.aim_start_time = 0
         self.shots_fired = 0
         self.shots_hit = 0
+        self.headshots = 0
+        self.bodyshots = 0
+        self.aim_locks = 0
+        self.target_switches = 0
+        self.aim_corrections = 0
+        self.prediction_accuracy = 0.0
+        self.aim_smoothness_score = 0.0
+        self.human_behavior_score = 0.0
         
         # Machine learning models (if available)
         self.movement_predictor = None
@@ -115,6 +141,72 @@ class AdvancedAIAimbot:
             self.movement_predictor = None
             self.aim_pattern_analyzer = None
         
+    def calculate_advanced_ballistics(self, current_pos: Tuple[float, float, float], 
+                                     target_pos: Tuple[float, float, float], 
+                                     target_velocity: Tuple[float, float, float],
+                                     distance: float) -> Tuple[float, float, float]:
+        """Calculate advanced ballistics with bullet drop and movement compensation"""
+        if not self.advanced_ballistics:
+            return target_pos
+            
+        # Bullet drop compensation (simplified physics)
+        if self.bullet_drop_compensation:
+            gravity = 9.81  # m/s^2
+            bullet_velocity = 800  # m/s (typical rifle velocity)
+            time_to_target = distance / bullet_velocity
+            
+            # Calculate bullet drop
+            bullet_drop = 0.5 * gravity * time_to_target ** 2
+            
+            # Apply vertical compensation
+            target_pos = (
+                target_pos[0],
+                target_pos[1], 
+                target_pos[2] + bullet_drop
+            )
+        
+        # Target leading
+        if self.lead_target and any(v != 0 for v in target_velocity):
+            lead_x = target_velocity[0] * self.prediction_time
+            lead_y = target_velocity[1] * self.prediction_time
+            lead_z = target_velocity[2] * self.prediction_time
+            
+            target_pos = (
+                target_pos[0] + lead_x,
+                target_pos[1] + lead_y,
+                target_pos[2] + lead_z
+            )
+        
+        return target_pos
+    
+    def simulate_human_aim_behavior(self, aim_correction: Tuple[float, float]) -> Tuple[float, float]:
+        """Simulate human-like aim behavior"""
+        if not self.human_aim_simulation:
+            return aim_correction
+            
+        pitch_correction, yaw_correction = aim_correction
+        
+        # Add micro-adjustments
+        if self.micro_adjustments:
+            micro_pitch = random.uniform(-0.001, 0.001)
+            micro_yaw = random.uniform(-0.001, 0.001)
+            pitch_correction += micro_pitch
+            yaw_correction += micro_yaw
+        
+        # Simulate miss patterns
+        if self.miss_simulation and random.random() < 0.05:  # 5% miss rate
+            miss_factor = random.uniform(0.1, 0.3)
+            pitch_correction *= miss_factor
+            yaw_correction *= miss_factor
+        
+        # Flick simulation
+        if self.flick_simulation and random.random() < 0.1:  # 10% flick chance
+            flick_strength = random.uniform(1.5, 2.5)
+            pitch_correction *= flick_strength
+            yaw_correction *= flick_strength
+        
+        return pitch_correction, yaw_correction
+    
     def update_movement(self, entity_id: int, position: Tuple[float, float, float], 
                        is_aiming: bool = False, is_shooting: bool = False, health: int = 100):
         """Update movement data for an entity"""
@@ -440,6 +532,9 @@ class AdvancedAIAimbot:
             local_player_pos
         )
         
+        # Apply human-like behavior simulation
+        aim_correction = self.simulate_human_aim_behavior(aim_correction)
+        
         # Apply aim punch compensation if needed
         # This would require getting aim punch from game memory
         # aim_punch = self.get_aim_punch()  # Placeholder
@@ -448,22 +543,37 @@ class AdvancedAIAimbot:
         # Update timing
         self.last_aim_time = current_time
         
+        # Update performance metrics
+        self.aim_corrections += 1
+        if self.last_target_id != best_target:
+            self.target_switches += 1
+            
         return aim_correction
     
     def get_stats(self) -> Dict[str, Any]:
         """Get aimbot performance statistics"""
         accuracy = (self.shots_hit / max(1, self.shots_fired)) * 100 if self.shots_fired > 0 else 0
+        headshot_rate = (self.headshots / max(1, self.shots_hit)) * 100 if self.shots_hit > 0 else 0
         
         return {
             'enabled': self.enabled,
             'shots_fired': self.shots_fired,
             'shots_hit': self.shots_hit,
+            'headshots': self.headshots,
+            'bodyshots': self.bodyshots,
             'accuracy': accuracy,
+            'headshot_rate': headshot_rate,
+            'aim_locks': self.aim_locks,
+            'target_switches': self.target_switches,
+            'aim_corrections': self.aim_corrections,
             'last_target_id': self.last_target_id,
             'tracked_players': len(self.movement_history),
             'fov': self.fov,
             'smooth_factor': self.smooth_factor,
-            'target_bone': self.target_bone
+            'target_bone': self.target_bone,
+            'prediction_accuracy': self.prediction_accuracy,
+            'aim_smoothness_score': self.aim_smoothness_score,
+            'human_behavior_score': self.human_behavior_score
         }
     
     def update_settings(self, settings: Dict[str, Any]):
@@ -666,8 +776,20 @@ def get_ai_aimbot():
             ai_aimbot = SimpleAIAimbot()
     return ai_aimbot
 
-def train_ai_aimbot():
-    """Train the AI aimbot with collected data"""
-    ai_bot = get_ai_aimbot()
-    if hasattr(ai_bot, 'train_models'):
-        ai_bot.train_models()
+    try:
+        ai_bot = get_ai_aimbot()
+        if hasattr(ai_bot, 'train_models'):
+            ai_bot.train_models()
+    except Exception as e:
+        print(f"Error training AI aimbot: {e}")
+    
+    # Initialize aimbot instance for GUI use
+    aimbot_instance = get_ai_aimbot()
+    aimbot_instance.enabled = True
+    
+    return "AI Aimbot launched successfully"
+
+# If running directly (not from GUI), execute main functionality
+if __name__ == "__main__":
+    result = launch_ai_aimbot()
+    print(result)

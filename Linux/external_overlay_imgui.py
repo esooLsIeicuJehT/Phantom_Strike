@@ -78,37 +78,80 @@ class ExternalOverlay:
         self.show_esp = True
         self.show_menu = True
         self.show_stats = True
-        self.show_skeleton = False
-        self.show_head_tracer = False
-        self.show_distance = True
-        self.show_weapon = True
+        # Enhanced ESP features
+        self.show_skeleton = True
+        self.show_head_tracer = True
         self.show_health_bar = True
         self.show_armor_bar = True
-        self.show_crosshair = False
-        self.show_radar = False
+        self.show_distance = True
+        self.show_weapon = True
+        self.show_crosshair = True
+        self.show_radar = True
+        self.show_fov_circle = True
+        self.show_snaplines = True
+        self.show_bounding_box = True
+        self.show_velocity_indicator = True
+        self.show_prediction_trail = False
+        self.show_aimbot_fov = True
+        self.show_performance_stats = True
+        self.show_warning_system = True
         
-        # ESP customization
+        # Advanced ESP customization
         self.esp_box_color = (255, 0, 0)  # Red for enemies
         self.esp_friend_color = (0, 255, 0)  # Green for friends
         self.esp_text_color = (255, 255, 255)
         self.esp_visible_color = (255, 200, 0)  # Yellow for visible enemies
         self.esp_hidden_color = (255, 0, 0)  # Red for hidden enemies
+        self.esp_aimbot_target_color = (255, 0, 255)  # Magenta for aimbot target
         self.menu_bg_color = (20, 20, 30, 200)
+        self.radar_bg_color = (10, 10, 20, 180)
+        self.crosshair_color = (255, 255, 255, 128)
+        self.fov_circle_color = (255, 255, 0, 64)
+        self.snapline_color = (255, 255, 255, 128)
         
-        # ESP settings
-        self.max_render_distance = 500
+        # Advanced ESP settings
+        self.max_render_distance = 800  # Increased render distance
         self.box_thickness = 2
+        self.skeleton_thickness = 1
+        self.snapline_thickness = 1
+        self.tracer_thickness = 2
+        self.font_size = 14
+        self.box_style = "corner"  # full, corner, 3d
+        self.radar_size = 200
+        self.radar_range = 500
+        self.fov_circle_segments = 64
+        self.smoothing_enabled = True
+        self.interpolation_enabled = True
+        self.fade_distance = 600  # Start fading at this distance
+        self.warning_distance = 100  # Warning for close enemies
         self.skeleton_thickness = 1
         self.font_size = 14
         self.health_bar_height = 4
         self.armor_bar_height = 3
         
-        # Aimbot settings
-        self.aimbot_enabled = False
-        self.aimbot_fov = 90
-        self.aimbot_smooth = 10
-        self.aimbot_bone = "head"  # head, chest, stomach
-        self.aimbot_key = 2  # Right mouse button
+        # Performance optimization
+        self.fps_limit = 144
+        self.render_optimization = True
+        self.culling_enabled = True
+        self.lod_enabled = True  # Level of detail
+        self.async_rendering = True
+        self.batch_rendering = True
+        self.memory_pool = True
+        self.texture_cache = True
+        self.vertex_buffer = True
+        self.frame_skip = False
+        self.adaptive_quality = True
+        
+        # Performance monitoring
+        self.frame_times = []
+        self.render_time = 0
+        self.update_time = 0
+        self.network_time = 0
+        self.total_players = 0
+        self.visible_players = 0
+        self.cpu_usage = 0
+        self.memory_usage = 0
+        self.gpu_usage = 0
         
         # Performance monitoring
         self.fps = 0

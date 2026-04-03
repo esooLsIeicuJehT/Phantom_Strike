@@ -1,8 +1,8 @@
-# 🎯 BLOODSTRIKE ULTIMATE CHEAT - START HERE
+# 🎯 PHANTOM STRIKE - LINUX CHEAT - START HERE
 
 ## ⚠️ **IMPORTANT - READ THIS FIRST!**
 
-This is a **professional-grade BloodStrike cheat** with advanced features. Please read the documentation carefully before use.
+This is a **professional-grade Phantom Strike cheat** with advanced features for Linux. Please read the documentation carefully before use.
 
 ---
 
@@ -10,28 +10,30 @@ This is a **professional-grade BloodStrike cheat** with advanced features. Pleas
 
 ### **Step 1: Install Dependencies**
 ```bash
-# Install Python 3.11 from python.org (CHECK "Add to PATH")
-# Install Visual Studio Build Tools 2022
+# Install Python 3.8-3.11 from your package manager
+# Ubuntu/Debian: sudo apt install python3.11 python3.11-venv
+# Fedora: sudo dnf install python3.11 python3.11-pip
+# Arch: sudo pacman -S python311
 
-cd "bloodstrike_python_cheat"
-python -m venv venv
-venv\Scripts\activate
+cd "Phantom_Strike/Linux"
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### **Step 2: Start External Overlay**
+### **Step 2: Start Main Launcher**
 ```bash
-# Keep this window open
+# Option 1: Main launcher with all features
+python phantom_strike.py
+
+# Option 2: GUI control panel
+python gui_main.py
+
+# Option 3: External overlay only
 python external_overlay_imgui.py
 ```
 
-### **Step 3: Inject Internal Cheat**
-```bash
-# Launch BloodStrike first
-# Then inject: auto_updating_cheat.py
-```
-
-**Controls: F1=ESP, F2=Aimbot, F3=AI, F4=Auto-Update, F5=Skins, INSERT=Menu, END=Panic**
+**Controls: F1=ESP, F2=Aimbot, F3=AI, F4=Radar, F5=Stats, F6=Skins, INSERT=Menu, END=Emergency**
 
 ---
 
@@ -108,17 +110,17 @@ python external_overlay_imgui.py
 ## 📋 **SYSTEM REQUIREMENTS**
 
 ### **Minimum:**
-- **OS:** Windows 10 (64-bit)
-- **Python:** 3.8 or higher
+- **OS:** Ubuntu 18.04+, Fedora 30+, Arch Linux
+- **Python:** 3.8-3.11 (3.12+ not compatible)
 - **RAM:** 4GB
-- **GPU:** DirectX 11 compatible
+- **GPU:** OpenGL 3.3+ compatible
 - **Storage:** 2GB free space
 
 ### **Recommended:**
-- **OS:** Windows 11
+- **OS:** Ubuntu 22.04+, Fedora 38+, Arch Linux
 - **Python:** 3.11
 - **RAM:** 8GB+
-- **GPU:** Dedicated graphics card
+- **GPU:** Dedicated graphics card with OpenGL 4.0+
 - **CPU:** Multi-core processor
 
 ---
@@ -129,10 +131,10 @@ Run this to verify your installation:
 
 ```bash
 # Activate virtual environment
-venv\Scripts\activate
+source venv/bin/activate
 
 # Test all critical modules
-python -c "
+python3 -c "
 try:
     import pygame, OpenGL, imgui, sklearn, numpy
     print('✅ All dependencies installed correctly')
@@ -141,8 +143,8 @@ except ImportError as e:
     print('📖 Read: 🔧 DEPENDENCIES & SETUP.md')
 "
 
-# Test external overlay
-python external_overlay_imgui.py
+# Test main launcher
+python3 phantom_strike.py
 ```
 
 **If you see any ❌ errors, read the Dependencies guide!**
@@ -153,19 +155,20 @@ python external_overlay_imgui.py
 
 ### **First Time Setup:**
 1. **Install dependencies** (see above)
-2. **Start external overlay** - `python external_overlay_imgui.py`
-3. **Launch BloodStrike**
-4. **Inject internal cheat** - `auto_updating_cheat.py`
-5. **Press INSERT** to open ImGui menu
+2. **Start main launcher** - `python3 phantom_strike.py`
+3. **Launch game** (BloodStrike or supported game)
+4. **Configure settings** in GUI or config file
+5. **Use F1-F6 keys** to toggle features
 
 ### **Basic Controls:**
 - **F1** - Toggle ESP on/off
 - **F2** - Toggle Aimbot on/off  
 - **F3** - Toggle AI Aimbot on/off
-- **F4** - Toggle Auto-Updates on/off
-- **F5** - Toggle Skin Changer on/off
+- **F4** - Toggle Radar on/off
+- **F5** - Toggle Stats on/off
+- **F6** - Toggle Skin Changer on/off
 - **INSERT** - Show/Hide ImGui Menu
-- **END** - Panic (Disable all features)
+- **END** - Emergency Stop (Disable all features)
 
 ### **GUI Navigation:**
 - **Click tabs** to switch between features
@@ -335,7 +338,7 @@ If you've completed the checklist above, you're ready to use the cheat!
 ## 📁 **FILE STRUCTURE**
 
 ```
-bloodstrike_python_cheat/
+Phantom_Strike/Linux/
 ├── 📁 🔥 BLOODSTRIKE CHEAT - DOCUMENTATION 🔥/  # ← YOU ARE HERE
 │   ├── 📖 README - START HERE.md
 │   ├── 🚀 COMPLETE SETUP GUIDE.md
@@ -353,12 +356,15 @@ bloodstrike_python_cheat/
 ├── 📁 features/                               # Feature implementations
 ├── 📁 gui/                                    # GUI components
 ├── 📁 utils/                                  # Utility functions
-├── 🐍 auto_updating_cheat.py                  # Main internal cheat
+├── 🐍 phantom_strike.py                       # Main launcher
+├── 🖥️ gui_main.py                            # GUI control panel
 ├── 🖥️ external_overlay_imgui.py               # External GUI overlay
+├── 🧠 ai_aimbot.py                            # AI aimbot system
+├── 🛡️ anti_cheat_evasion.py                  # Anti-detection system
 ├── 🔍 auto_offset_scanner.py                  # Auto-offset system
 ├── 🔄 dynamic_offset_manager.py               # Offset management
 ├── 🎨 skin_changer.py                         # Skin changer system
-├── 🧠 ai_aimbot.py                            # AI aimbot system
+├── 📋 enhanced_config_manager.py             # Advanced configuration
 ├── 📋 requirements.txt                        # Dependencies list
 └── ⚙️ config.json                            # Configuration file
 ```
@@ -370,6 +376,6 @@ bloodstrike_python_cheat/
 ---
 
 *Last Updated: 2026-04-03*  
-*Version: 1.0 Ultimate*  
+*Version: 2.0 Enhanced*  
 *Status: Production Ready*  
-*Compatibility: Windows 10/11, Python 3.8-3.11*
+*Compatibility: Linux (Ubuntu, Fedora, Arch), Python 3.8-3.11*

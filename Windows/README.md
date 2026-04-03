@@ -29,7 +29,7 @@ build.bat
 ```bash
 # 1. Open Visual Studio Developer Command Prompt
 # 2. Navigate to windows directory
-cd bloodstrike_python_cheat/windows
+cd Phantom_Strike/Windows
 
 # 3. Compile DLL
 cl /LD /EHsc /O2 phantom_strike_fixed.cpp /Fe:phantom_strike.dll /link d3d11.lib dxgi.lib d2d1.lib dwrite.lib user32.lib gdi32.lib psapi.lib
@@ -132,7 +132,7 @@ END - Panic Mode (Disable all)
 
 ### **📁 File Structure:**
 ```
-windows/
+Windows/
 ├── phantom_strike_fixed.cpp    # Main DLL source (fixed)
 ├── phantom_strike.cpp          # Original DLL source (deprecated)
 ├── dll_injector.py             # Python DLL injector

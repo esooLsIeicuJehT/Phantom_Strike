@@ -1,12 +1,14 @@
-# Game Hacking Research Compilation
+# Phantom Strike Research Compilation
 
-This directory contains all research data, offsets, patterns, and technical information gathered during reverse engineering of Soldier Front and Blood Strike games.
+This directory contains all research data, offsets, patterns, and technical information gathered during reverse engineering of games for the Phantom Strike cheat suite.
 
 ## Files Included
 
 1. **Blood Strike DLL Analysis** - Deep reverse engineering of the Blood Strike cheat DLL
 2. **Soldier Front Research** - Offsets, patterns, and technical data from various sources
 3. **UnknownCheats Forum Data** - Community research on Soldier Front/Special Force
+4. **Pattern Recognition** - Memory signatures for auto-detection
+5. **Anti-Cheat Analysis** - Detection evasion techniques and methods
 
 ## Contents Summary
 
@@ -54,12 +56,30 @@ No Recoil Offset: 0x1C470
 
 ## Usage
 
-This research is for educational purposes only. Use this information to understand game internals and memory manipulation techniques.
+This research is for educational purposes and to support the Phantom Strike cheat suite development. Use this information to understand game internals and memory manipulation techniques.
+
+## Integration with Phantom Strike
+
+The research data in this compilation is used by:
+- `auto_offset_scanner.py` - Pattern recognition and automatic updates
+- `ai_aimbot.py` - Target prediction and movement analysis
+- `anti_cheat_evasion.py` - Detection avoidance techniques
+- `external_overlay_imgui.py` - ESP rendering and player data
 
 ## Sources
 - UnknownCheats forums
 - Community research
 - Direct reverse engineering
+- Phantom Strike development team
+
+## Integration Notes
+
+This research compilation is actively maintained and updated as part of the Phantom Strike project. The data is used to:
+
+1. **Auto-Update System** - Pattern recognition for automatic offset updates
+2. **Anti-Cheat Evasion** - Understanding detection methods
+3. **Feature Development** - Game-specific implementations
+4. **Cross-Platform Support** - Adapting techniques for Linux/Windows
 
 ## Full Research Archive
 
