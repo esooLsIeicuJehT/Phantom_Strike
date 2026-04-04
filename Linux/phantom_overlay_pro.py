@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 """
-PROFESSIONAL PHANTOM STRIKE OVERLAY - Elite In-Game Menu System
+PROFESSIONAL PHANTOM STRIKE OVERLAY - Mouse-Driven Draggable Menu
 Military-grade overlay with professional menu, ESP, aimbot integration, and skin changer
 """
 
-import pygame
+import os
 import sys
+import subprocess
+
+# Set SDL to use dummy audio to avoid pygame audio initialization issues
+os.environ['SDL_AUDIODRIVER'] = 'dummy'
+
+import pygame
 import time
 import math
 import random
@@ -13,9 +19,6 @@ from typing import List, Tuple, Dict, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
 from collections import deque
-
-# Initialize pygame
-pygame.init()
 
 # --- IMPORT PROFESSIONAL COMPONENTS ---
 try:
@@ -48,35 +51,47 @@ class MenuItem:
     max_val: float = 100
     step: float = 1
     item_type: str = "toggle"  # toggle, slider, button
+    rect: pygame.Rect = None  # For mouse collision detection
 
 class ProfessionalMenu:
-    """Professional in-game menu system"""
+    """Professional mouse-driven draggable menu system"""
     
     def __init__(self, screen_width: int, screen_height: int):
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.visible = False
+        self.visible = True  # Start visible
         self.current_category = MenuCategory.ESP
         self.selected_index = 0
         
-        # Menu positioning
+        # Menu positioning (draggable)
         self.menu_x = 50
         self.menu_y = 50
-        self.menu_width = 400
-        self.menu_height = 600
+        self.menu_width = 690
+        self.menu_height = 470
+        self.dragging = False
+        self.drag_offset_x = 0
+        self.drag_offset_y = 0
         
-        # Colors
-        self.bg_color = (20, 20, 30, 230)
-        self.header_color = (40, 40, 60, 255)
-        self.selected_color = (60, 60, 100, 255)
+        # Colors (matching ImGui style)
+        self.bg_color = (25, 25, 30, 240)
+        self.header_color = (35, 35, 45, 255)
+        self.selected_color = (70, 92, 120, 255)
+        self.hover_color = (50, 50, 70, 255)
         self.text_color = (255, 255, 255)
-        self.accent_color = (0, 255, 100)
+        self.accent_color = (112, 146, 190)  # Main color from reference
         self.disabled_color = (100, 100, 100)
+        self.border_color = (60, 60, 80)
         
         # Fonts
-        self.title_font = pygame.font.Font(None, 32)
-        self.category_font = pygame.font.Font(None, 24)
-        self.item_font = pygame.font.Font(None, 20)
+        self.title_font = pygame.font.Font(None, 36)
+        self.category_font = pygame.font.Font(None, 22)
+        self.item_font = pygame.font.Font(None, 18)
+        self.small_font = pygame.font.Font(None, 14)
+        
+        # Mouse state
+        self.mouse_pos = (0, 0)
+        self.mouse_down = False
+        self.dragging_slider = None
         
         # Menu items by category
         self.menu_items = {
@@ -139,46 +154,77 @@ class ProfessionalMenu:
         """Toggle menu visibility"""
         self.visible = not self.visible
     
-    def handle_key(self, key):
-        """Handle keyboard input"""
+    def handle_mouse_down(self, pos):
+        """Handle mouse button down"""
+        self.mouse_down = True
+        
         if not self.visible:
             return
         
-        items = self.menu_items[self.current_category]
+        # Check if clicking on header (for dragging)
+        header_rect = pygame.Rect(self.menu_x, self.menu_y, self.menu_width, 40)
+        if header_rect.collidepoint(pos):
+            self.dragging = True
+            self.drag_offset_x = pos[0] - self.menu_x
+            self.drag_offset_y = pos[1] - self.menu_y
+            return
         
-        if key == pygame.K_UP:
-            self.selected_index = (self.selected_index - 1) % len(items)
-        elif key == pygame.K_DOWN:
-            self.selected_index = (self.selected_index + 1) % len(items)
-        elif key == pygame.K_LEFT:
-            # Previous category
-            categories = list(MenuCategory)
-            current_idx = categories.index(self.current_category)
-            self.current_category = categories[(current_idx - 1) % len(categories)]
-            self.selected_index = 0
-        elif key == pygame.K_RIGHT:
-            # Next category
-            categories = list(MenuCategory)
-            current_idx = categories.index(self.current_category)
-            self.current_category = categories[(current_idx + 1) % len(categories)]
-            self.selected_index = 0
-        elif key == pygame.K_RETURN or key == pygame.K_SPACE:
-            # Toggle/activate selected item
-            item = items[self.selected_index]
-            if item.item_type == "toggle":
-                item.enabled = not item.enabled
-            elif item.item_type == "button":
-                self.handle_button_action(item)
-        elif key == pygame.K_a:
-            # Decrease slider value
-            item = items[self.selected_index]
-            if item.item_type == "slider":
-                item.value = max(item.min_val, item.value - item.step)
-        elif key == pygame.K_d:
-            # Increase slider value
-            item = items[self.selected_index]
-            if item.item_type == "slider":
-                item.value = min(item.max_val, item.value + item.step)
+        # Check category tabs
+        categories = list(MenuCategory)
+        tab_width = (self.menu_width - 40) // len(categories)
+        for i, category in enumerate(categories):
+            tab_x = self.menu_x + 40 + i * tab_width
+            tab_y = self.menu_y + 50
+            tab_rect = pygame.Rect(tab_x, tab_y, tab_width, 35)
+            
+            if tab_rect.collidepoint(pos):
+                self.current_category = category
+                self.selected_index = 0
+                return
+        
+        # Check menu items
+        items = self.menu_items[self.current_category]
+        item_y = self.menu_y + 100
+        item_height = 35
+        
+        for i, item in enumerate(items):
+            if item.rect and item.rect.collidepoint(pos):
+                if item.item_type == "toggle":
+                    item.enabled = not item.enabled
+                elif item.item_type == "button":
+                    self.handle_button_action(item)
+                elif item.item_type == "slider":
+                    self.dragging_slider = item
+                return
+    
+    def handle_mouse_up(self, pos):
+        """Handle mouse button up"""
+        self.mouse_down = False
+        self.dragging = False
+        self.dragging_slider = None
+    
+    def handle_mouse_motion(self, pos):
+        """Handle mouse motion"""
+        self.mouse_pos = pos
+        
+        if self.dragging:
+            self.menu_x = pos[0] - self.drag_offset_x
+            self.menu_y = pos[1] - self.drag_offset_y
+            
+            # Keep menu on screen
+            self.menu_x = max(0, min(self.menu_x, self.screen_width - self.menu_width))
+            self.menu_y = max(0, min(self.menu_y, self.screen_height - self.menu_height))
+        
+        if self.dragging_slider:
+            # Update slider value based on mouse position
+            slider_x = self.menu_width - 160
+            slider_width = 120
+            relative_x = pos[0] - (self.menu_x + slider_x)
+            slider_pos = max(0, min(1, relative_x / slider_width))
+            
+            value_range = self.dragging_slider.max_val - self.dragging_slider.min_val
+            self.dragging_slider.value = self.dragging_slider.min_val + (slider_pos * value_range)
+            self.dragging_slider.value = round(self.dragging_slider.value / self.dragging_slider.step) * self.dragging_slider.step
     
     def handle_button_action(self, item: MenuItem):
         """Handle button actions"""
@@ -194,36 +240,61 @@ class ProfessionalMenu:
             print("💾 Saving configuration...")
     
     def draw(self, screen):
-        """Draw professional menu"""
+        """Draw professional menu with mouse support"""
         if not self.visible:
             return
         
         # Create semi-transparent surface
         menu_surface = pygame.Surface((self.menu_width, self.menu_height), pygame.SRCALPHA)
         
-        # Draw background
+        # Draw main background
         pygame.draw.rect(menu_surface, self.bg_color, (0, 0, self.menu_width, self.menu_height))
-        pygame.draw.rect(menu_surface, self.accent_color, (0, 0, self.menu_width, self.menu_height), 2)
+        pygame.draw.rect(menu_surface, self.border_color, (0, 0, self.menu_width, self.menu_height), 2)
+        
+        # Draw header with gradient effect
+        header_rect = pygame.Rect(0, 0, self.menu_width, 40)
+        pygame.draw.rect(menu_surface, self.header_color, header_rect)
+        pygame.draw.line(menu_surface, self.accent_color, (0, 40), (self.menu_width, 40), 2)
         
         # Draw title
         title_text = self.title_font.render("PHANTOM STRIKE", True, self.accent_color)
-        menu_surface.blit(title_text, (self.menu_width // 2 - title_text.get_width() // 2, 10))
+        menu_surface.blit(title_text, (20, 8))
+        
+        # Draw close button
+        close_text = self.item_font.render("✕", True, self.text_color)
+        menu_surface.blit(close_text, (self.menu_width - 30, 12))
         
         # Draw category tabs
         categories = list(MenuCategory)
-        tab_width = self.menu_width // len(categories)
+        tab_width = (self.menu_width - 40) // len(categories)
+        
         for i, category in enumerate(categories):
-            tab_x = i * tab_width
+            tab_x = 40 + i * tab_width
             tab_y = 50
-            tab_color = self.header_color if category == self.current_category else (30, 30, 40, 200)
             
-            pygame.draw.rect(menu_surface, tab_color, (tab_x, tab_y, tab_width, 30))
-            pygame.draw.rect(menu_surface, self.accent_color if category == self.current_category else (60, 60, 80), 
-                           (tab_x, tab_y, tab_width, 30), 1)
+            # Check if mouse is hovering
+            tab_rect = pygame.Rect(self.menu_x + tab_x, self.menu_y + tab_y, tab_width, 35)
+            is_hover = tab_rect.collidepoint(self.mouse_pos)
+            is_selected = category == self.current_category
             
-            cat_text = self.category_font.render(category.value, True, 
-                                                self.accent_color if category == self.current_category else self.text_color)
-            menu_surface.blit(cat_text, (tab_x + tab_width // 2 - cat_text.get_width() // 2, tab_y + 5))
+            # Draw tab background
+            if is_selected:
+                tab_color = self.accent_color
+                text_color = (255, 255, 255)
+            elif is_hover:
+                tab_color = self.hover_color
+                text_color = self.text_color
+            else:
+                tab_color = (30, 30, 40, 200)
+                text_color = (150, 150, 150)
+            
+            pygame.draw.rect(menu_surface, tab_color, (tab_x, tab_y, tab_width, 35))
+            pygame.draw.rect(menu_surface, self.border_color, (tab_x, tab_y, tab_width, 35), 1)
+            
+            # Draw tab text
+            cat_text = self.category_font.render(category.value, True, text_color)
+            text_x = tab_x + tab_width // 2 - cat_text.get_width() // 2
+            menu_surface.blit(cat_text, (text_x, tab_y + 8))
         
         # Draw menu items
         items = self.menu_items[self.current_category]
@@ -231,81 +302,160 @@ class ProfessionalMenu:
         item_height = 35
         
         for i, item in enumerate(items):
-            # Highlight selected item
-            if i == self.selected_index:
-                pygame.draw.rect(menu_surface, self.selected_color, 
-                               (10, item_y, self.menu_width - 20, item_height))
+            # Create rect for collision detection
+            item_rect = pygame.Rect(self.menu_x + 20, self.menu_y + item_y, self.menu_width - 40, item_height)
+            item.rect = item_rect
+            
+            # Check if mouse is hovering
+            is_hover = item_rect.collidepoint(self.mouse_pos)
+            
+            # Draw item background
+            if is_hover:
+                pygame.draw.rect(menu_surface, self.hover_color, (20, item_y, self.menu_width - 40, item_height))
             
             # Draw item name
             item_color = self.accent_color if item.enabled else self.disabled_color
             item_text = self.item_font.render(item.name, True, item_color)
-            menu_surface.blit(item_text, (20, item_y + 8))
+            menu_surface.blit(item_text, (30, item_y + 10))
             
-            # Draw item value/control
+            # Draw item control
             if item.item_type == "toggle":
-                toggle_text = "ON" if item.enabled else "OFF"
-                toggle_color = self.accent_color if item.enabled else self.disabled_color
-                value_text = self.item_font.render(toggle_text, True, toggle_color)
-                menu_surface.blit(value_text, (self.menu_width - 60, item_y + 8))
+                # Draw toggle switch
+                toggle_width = 40
+                toggle_height = 20
+                toggle_x = self.menu_width - 70
+                toggle_y = item_y + 8
+                
+                # Background
+                bg_color = self.accent_color if item.enabled else (60, 60, 70)
+                pygame.draw.rect(menu_surface, bg_color, (toggle_x, toggle_y, toggle_width, toggle_height), border_radius=10)
+                
+                # Switch circle
+                circle_x = toggle_x + (toggle_width - 16) if item.enabled else toggle_x + 8
+                circle_y = toggle_y + 10
+                pygame.draw.circle(menu_surface, (255, 255, 255), (circle_x, circle_y), 8)
+                
             elif item.item_type == "slider":
-                # Draw slider bar
-                slider_x = self.menu_width - 150
+                # Draw slider
+                slider_x = self.menu_width - 160
                 slider_width = 120
                 slider_y = item_y + 15
                 
-                pygame.draw.rect(menu_surface, (60, 60, 80), (slider_x, slider_y, slider_width, 5))
+                # Background track
+                pygame.draw.rect(menu_surface, (60, 60, 80), (slider_x, slider_y, slider_width, 6), border_radius=3)
                 
-                # Draw slider value
+                # Filled track
                 slider_pos = (item.value - item.min_val) / (item.max_val - item.min_val)
                 slider_fill_width = int(slider_width * slider_pos)
-                pygame.draw.rect(menu_surface, self.accent_color, (slider_x, slider_y, slider_fill_width, 5))
+                pygame.draw.rect(menu_surface, self.accent_color, (slider_x, slider_y, slider_fill_width, 6), border_radius=3)
                 
-                # Draw value text
-                value_text = self.item_font.render(f"{int(item.value)}", True, self.text_color)
-                menu_surface.blit(value_text, (slider_x + slider_width + 10, item_y + 8))
+                # Slider handle
+                handle_x = slider_x + slider_fill_width
+                handle_y = slider_y + 3
+                pygame.draw.circle(menu_surface, (255, 255, 255), (handle_x, handle_y), 8)
+                pygame.draw.circle(menu_surface, self.accent_color, (handle_x, handle_y), 6)
+                
+                # Value text
+                value_text = self.small_font.render(f"{int(item.value)}", True, self.text_color)
+                menu_surface.blit(value_text, (slider_x + slider_width + 10, item_y + 10))
+                
             elif item.item_type == "button":
-                button_text = self.item_font.render("[ENTER]", True, self.accent_color)
-                menu_surface.blit(button_text, (self.menu_width - 80, item_y + 8))
+                # Draw button
+                button_width = 80
+                button_height = 25
+                button_x = self.menu_width - 100
+                button_y = item_y + 5
+                
+                button_color = self.accent_color if is_hover else (70, 70, 90)
+                pygame.draw.rect(menu_surface, button_color, (button_x, button_y, button_width, button_height), border_radius=4)
+                pygame.draw.rect(menu_surface, self.border_color, (button_x, button_y, button_width, button_height), 1, border_radius=4)
+                
+                button_text = self.small_font.render("ACTIVATE", True, self.text_color)
+                text_x = button_x + button_width // 2 - button_text.get_width() // 2
+                menu_surface.blit(button_text, (text_x, button_y + 6))
             
             item_y += item_height
         
-        # Draw controls help
-        help_y = self.menu_height - 80
-        help_texts = [
-            "↑↓ Navigate  ←→ Category  SPACE Toggle",
-            "A/D Adjust Slider  ENTER Activate",
-            "INSERT Close Menu"
-        ]
-        for i, help_text in enumerate(help_texts):
-            help_render = self.item_font.render(help_text, True, (150, 150, 150))
-            menu_surface.blit(help_render, (20, help_y + i * 20))
+        # Draw controls help at bottom
+        help_y = self.menu_height - 30
+        help_text = self.small_font.render("INSERT: Toggle Menu  |  Drag header to move  |  Click to interact", True, (120, 120, 120))
+        menu_surface.blit(help_text, (20, help_y))
         
         # Blit menu to screen
         screen.blit(menu_surface, (self.menu_x, self.menu_y))
 
 class PhantomStrikeOverlay:
-    """Professional Phantom Strike overlay with in-game menu"""
+    """Professional Phantom Strike overlay with mouse-driven menu"""
     
     def __init__(self):
+        # Initialize pygame
+        pygame.init()
+        
         # Get screen info
         info = pygame.display.Info()
         self.width = info.current_w
         self.height = info.current_h
         
-        # Create window
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.NOFRAME)
+        print(f"🖥️  Screen: {self.width}x{self.height}")
+        
+        # Set environment for overlay positioning
+        os.environ['SDL_VIDEO_WINDOW_POS'] = '0,0'
+        
+        # Create transparent overlay window
+        self.screen = pygame.display.set_mode(
+            (self.width, self.height),
+            pygame.NOFRAME | pygame.SRCALPHA | pygame.HWSURFACE | pygame.DOUBLEBUF
+        )
         pygame.display.set_caption("Phantom Strike Professional")
         
-        # Set window to be transparent and always on top
-        try:
-            import ctypes
-            hwnd = pygame.display.get_wm_info()['window']
-            ctypes.windll.user32.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 0x0001 | 0x0002)
-        except:
-            pass
+        # Set window to be always on top and transparent
+        self._setup_overlay_window()
         
         # Initialize menu
         self.menu = ProfessionalMenu(self.width, self.height)
+    
+    def _setup_overlay_window(self):
+        """Configure window to be a proper game overlay"""
+        try:
+            time.sleep(0.3)  # Wait for window creation
+            
+            # Find our overlay window
+            result = subprocess.run(
+                ['xdotool', 'search', '--name', 'Phantom Strike Professional'],
+                capture_output=True, text=True, timeout=2
+            )
+            
+            if result.returncode == 0 and result.stdout.strip():
+                window_id = result.stdout.strip().split('\n')[0]
+                
+                # Make window always on top
+                subprocess.run(
+                    ['wmctrl', '-i', '-r', window_id, '-b', 'add,above,sticky'],
+                    capture_output=True, timeout=2
+                )
+                
+                # Set window type to dock (prevents it from stealing focus)
+                subprocess.run(
+                    ['xprop', '-id', window_id, '-f', '_NET_WM_WINDOW_TYPE', '32a',
+                     '-set', '_NET_WM_WINDOW_TYPE', '_NET_WM_WINDOW_TYPE_DOCK'],
+                    capture_output=True, timeout=2
+                )
+                
+                # Try to make it skip taskbar
+                subprocess.run(
+                    ['wmctrl', '-i', '-r', window_id, '-b', 'add,skip_taskbar,skip_pager'],
+                    capture_output=True, timeout=2
+                )
+                
+                print(f"✅ Overlay window {window_id} configured")
+                print("💡 Overlay is now on top of all windows")
+            else:
+                print("⚠️  Could not find overlay window for configuration")
+                
+        except subprocess.TimeoutExpired:
+            print("⚠️  Window setup timed out")
+        except Exception as e:
+            print(f"⚠️  Window setup: {e}")
         
         # Initialize professional components
         self.real_aimbot = None
@@ -327,13 +477,12 @@ class PhantomStrikeOverlay:
         self.running = True
         
         print("✅ Phantom Strike Professional Overlay initialized")
-        print(f"🎯 Screen: {self.width}x{self.height}")
         print("🔥 Press INSERT to toggle menu")
+        print("🖱️  Click and drag header to move menu")
     
     def initialize_professional_components(self):
         """Initialize all professional components"""
         try:
-            # Get instances from __main__
             import __main__
             
             if hasattr(__main__, 'professional_real_aimbot'):
@@ -393,7 +542,6 @@ class PhantomStrikeOverlay:
         if distance == 0:
             return (self.width // 2, self.height // 2)
         
-        # Simple perspective projection
         fov = math.radians(90)
         scale = (self.height / 2) / math.tan(fov / 2)
         
@@ -404,7 +552,6 @@ class PhantomStrikeOverlay:
     
     def draw_esp(self):
         """Draw ESP for players"""
-        # Check if ESP is enabled in menu
         esp_enabled = self.menu.menu_items[MenuCategory.ESP][0].enabled
         if not esp_enabled:
             return
@@ -424,24 +571,19 @@ class PhantomStrikeOverlay:
             
             screen_x, screen_y = self.world_to_screen(player['position'])
             
-            # Skip if off-screen
             if screen_x < 0 or screen_x > self.width or screen_y < 0 or screen_y > self.height:
                 continue
             
-            # Determine color based on team
             is_enemy = player['team'] == 0
             box_color = (255, 0, 0) if is_enemy else (0, 255, 0)
             
-            # Draw box
             if show_boxes:
                 box_width = 40
                 box_height = 60
                 box_x = screen_x - box_width // 2
                 box_y = screen_y - box_height // 2
-                
                 pygame.draw.rect(self.screen, box_color, (box_x, box_y, box_width, box_height), 2)
             
-            # Draw health bar
             if show_health:
                 health_percent = player['health'] / player['max_health']
                 health_bar_width = 40
@@ -449,16 +591,13 @@ class PhantomStrikeOverlay:
                 health_bar_x = screen_x - health_bar_width // 2
                 health_bar_y = screen_y - 35
                 
-                # Background
                 pygame.draw.rect(self.screen, (60, 60, 60), 
                                (health_bar_x, health_bar_y, health_bar_width, health_bar_height))
-                # Health fill
                 health_fill_width = int(health_bar_width * health_percent)
                 health_color = (0, 255, 0) if health_percent > 0.5 else (255, 255, 0) if health_percent > 0.25 else (255, 0, 0)
                 pygame.draw.rect(self.screen, health_color, 
                                (health_bar_x, health_bar_y, health_fill_width, health_bar_height))
             
-            # Draw armor bar
             if show_armor and player['armor'] > 0:
                 armor_percent = player['armor'] / 100
                 armor_bar_width = 40
@@ -470,7 +609,6 @@ class PhantomStrikeOverlay:
                 pygame.draw.rect(self.screen, (0, 100, 255), 
                                (armor_bar_x, armor_bar_y, armor_fill_width, armor_bar_height))
             
-            # Draw info text
             info_y = screen_y + 35
             
             if show_names:
@@ -492,30 +630,24 @@ class PhantomStrikeOverlay:
         center_x = self.width // 2
         center_y = self.height // 2
         
-        # Draw crosshair lines
         crosshair_size = 15
         crosshair_gap = 5
         crosshair_thickness = 2
         crosshair_color = (0, 255, 100)
         
-        # Top
         pygame.draw.line(self.screen, crosshair_color, 
                         (center_x, center_y - crosshair_gap - crosshair_size), 
                         (center_x, center_y - crosshair_gap), crosshair_thickness)
-        # Bottom
         pygame.draw.line(self.screen, crosshair_color, 
                         (center_x, center_y + crosshair_gap), 
                         (center_x, center_y + crosshair_gap + crosshair_size), crosshair_thickness)
-        # Left
         pygame.draw.line(self.screen, crosshair_color, 
                         (center_x - crosshair_gap - crosshair_size, center_y), 
                         (center_x - crosshair_gap, center_y), crosshair_thickness)
-        # Right
         pygame.draw.line(self.screen, crosshair_color, 
                         (center_x + crosshair_gap, center_y), 
                         (center_x + crosshair_gap + crosshair_size, center_y), crosshair_thickness)
         
-        # Draw center dot
         pygame.draw.circle(self.screen, crosshair_color, (center_x, center_y), 2)
     
     def draw_stats(self):
@@ -548,13 +680,18 @@ class PhantomStrikeOverlay:
                     self.menu.toggle_menu()
                 elif event.key == pygame.K_ESCAPE:
                     self.running = False
-                else:
-                    self.menu.handle_key(event.key)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left click
+                    self.menu.handle_mouse_down(event.pos)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    self.menu.handle_mouse_up(event.pos)
+            elif event.type == pygame.MOUSEMOTION:
+                self.menu.handle_mouse_motion(event.pos)
     
     def run(self):
         """Main overlay loop"""
         while self.running:
-            # Handle events
             self.handle_events()
             
             # Clear screen with transparency
