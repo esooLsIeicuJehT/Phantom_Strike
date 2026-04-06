@@ -11,9 +11,11 @@ def run_offset_scanner():
     try:
         import sys
         import os
+        import glob
         import json
         import time
         import re
+        import shutil
         import threading
         import queue
         import hashlib
@@ -293,13 +295,18 @@ def run_offset_scanner():
                 self.auto_update = True
                 self.cloud_sync = False
                 self.backup_system = True
+                self.max_backup_files = 100
+                self.config_file = "config.json"
                 
                 # File paths
                 self.offsets_file = "offsets/phantom_offsets.json"
-                self.backup_folder = "offsets"
+                self.backup_folder = "offsets/backups"
                 
                 # Ensure offsets folder exists
                 os.makedirs("offsets", exist_ok=True)
+                os.makedirs(self.backup_folder, exist_ok=True)
+                self._load_runtime_config()
+                self._migrate_legacy_offset_files()
                 
                 # Performance tracking
                 self.total_scans = 0
@@ -499,6 +506,75 @@ def run_offset_scanner():
                 
                 self.pattern_validator.add_validation_rule("health_offset", validate_health)
 
+            def _migrate_legacy_offset_files(self):
+                """Move legacy offset files from project root into offsets folders."""
+                try:
+                    legacy_main = "phantom_offsets.json"
+                    if os.path.exists(legacy_main):
+                        if os.path.exists(self.offsets_file):
+                            legacy_name = f"phantom_offsets_legacy_{int(time.time())}.json"
+                            legacy_target = os.path.join(self.backup_folder, legacy_name)
+                            shutil.move(legacy_main, legacy_target)
+                        else:
+                            shutil.move(legacy_main, self.offsets_file)
+
+                    for legacy_backup in glob.glob("phantom_offsets_backup_*.json"):
+                        backup_name = os.path.basename(legacy_backup)
+                        target_backup = os.path.join(self.backup_folder, backup_name)
+
+                        if os.path.exists(target_backup):
+                            base, ext = os.path.splitext(backup_name)
+                            target_backup = os.path.join(
+                                self.backup_folder,
+                                f"{base}_legacy_{int(time.time())}{ext}"
+                            )
+
+                        shutil.move(legacy_backup, target_backup)
+
+                except Exception as e:
+                    print(f"⚠️ Legacy offset migration skipped: {e}")
+
+            def _load_runtime_config(self):
+                """Load runtime options from config.json if available."""
+                try:
+                    if not os.path.exists(self.config_file):
+                        return
+
+                    with open(self.config_file, 'r') as f:
+                        config_data = json.load(f)
+
+                    scanner_cfg = config_data.get('offset_scanner', {})
+                    if not isinstance(scanner_cfg, dict):
+                        return
+
+                    configured_max = scanner_cfg.get('max_backup_files')
+                    if configured_max is None:
+                        return
+
+                    configured_max = int(configured_max)
+                    if configured_max > 0:
+                        self.max_backup_files = configured_max
+
+                except Exception as e:
+                    print(f"⚠️ Runtime config load skipped: {e}")
+
+            def _cleanup_old_backups(self):
+                """Prune old backup files and keep only the newest ones."""
+                if self.max_backup_files <= 0:
+                    return
+
+                try:
+                    backup_files = glob.glob(os.path.join(self.backup_folder, "phantom_offsets_backup_*.json"))
+                    if len(backup_files) <= self.max_backup_files:
+                        return
+
+                    backup_files.sort(key=lambda path: os.path.getmtime(path), reverse=True)
+                    for old_file in backup_files[self.max_backup_files:]:
+                        os.remove(old_file)
+
+                except Exception as e:
+                    print(f"⚠️ Backup cleanup skipped: {e}")
+
             def start_continuous_scanning(self):
                 """Start continuous scanning in background"""
                 if self.running:
@@ -632,14 +708,16 @@ def run_offset_scanner():
                     }
                     
                     # Save main offsets
-                    with open('phantom_offsets.json', 'w') as f:
+                    with open(self.offsets_file, 'w') as f:
                         json.dump(offset_data, f, indent=2)
                     
                     # Create backup
                     if self.backup_system:
                         backup_name = f"phantom_offsets_backup_{int(time.time())}.json"
-                        with open(backup_name, 'w') as f:
+                        backup_path = os.path.join(self.backup_folder, backup_name)
+                        with open(backup_path, 'w') as f:
                             json.dump(offset_data, f, indent=2)
+                        self._cleanup_old_backups()
                     
                     print("💾 Offsets saved successfully")
                     return True
@@ -651,8 +729,8 @@ def run_offset_scanner():
             def load_offsets(self):
                 """Load offsets from file"""
                 try:
-                    if os.path.exists('phantom_offsets.json'):
-                        with open('phantom_offsets.json', 'r') as f:
+                    if os.path.exists(self.offsets_file):
+                        with open(self.offsets_file, 'r') as f:
                             offset_data = json.load(f)
                         
                         self.current_offsets = offset_data.get('offsets', {})

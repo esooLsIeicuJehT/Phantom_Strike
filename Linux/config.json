@@ -90,6 +90,9 @@
         "skin_apply": "f4",
         "panic_key": "end"
     },
+    "offset_scanner": {
+        "max_backup_files": 100
+    },
     "created": "2026-04-03T10:51:06.971473",
     "modified": "2026-04-03T10:58:12.916714"
 }
