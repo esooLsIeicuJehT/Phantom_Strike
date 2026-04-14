@@ -317,6 +317,7 @@ def run_offset_scanner():
                 # Components
                 self.memory_scanner = MemoryScanner()
                 self.pattern_validator = PatternValidator()
+                self.mem_reader = None
                 
                 # Threading
                 self.scan_thread = None
@@ -666,18 +667,32 @@ def run_offset_scanner():
                 return results
 
             def _get_game_memory(self) -> Optional[bytes]:
-                """Get game process memory (simulated for demo)"""
+                """Get game process memory"""
                 try:
-                    # Simulate memory data with patterns
+                    # Try to find game process if not already connected
+                    if not self.mem_reader:
+                        from utils.memory import MemoryReader, find_bloodstrike_pid
+                        pid = find_bloodstrike_pid()
+                        if pid:
+                            self.mem_reader = MemoryReader(pid)
+                            if not self.mem_reader.open():
+                                self.mem_reader = None
+
+                    if self.mem_reader:
+                        # Read actual game memory
+                        base = self.mem_reader.process_info.base_address
+                        size = self.mem_reader.process_info.module_size
+                        if size > 0:
+                            return self.mem_reader.read_bytes(base, size)
+
+                    # Fallback to simulated memory for demo if game not found
+                    print("⚠️ Game not found, using simulated memory for demo")
                     memory_size = 1024 * 1024  # 1MB
                     memory_data = bytearray(memory_size)
-                    
-                    # Insert some patterns at random locations
                     for pattern in self.patterns.values():
-                        if random.random() < 0.7:  # 70% chance pattern exists
+                        if random.random() < 0.7:
                             insert_pos = random.randint(1000, memory_size - len(pattern.signature) - 1000)
                             memory_data[insert_pos:insert_pos+len(pattern.signature)] = pattern.signature
-                    
                     return bytes(memory_data)
                     
                 except Exception as e:

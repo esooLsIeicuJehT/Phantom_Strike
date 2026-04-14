@@ -46,8 +46,17 @@ class ProcessInfo:
         try:
             with open(proc_path / "comm", "r") as f:
                 self.name = f.read().strip()
+
+            # For Proton/Wine, comm might be truncated or generic (e.g., "wine64-preloade")
+            # Check cmdline for a better name
+            with open(proc_path / "cmdline", "r") as f:
+                cmdline = f.read().replace('\0', ' ').strip()
+                if cmdline:
+                    self.cmdline = cmdline
+                    # If comm is generic or we find the target name in cmdline, use cmdline for identification
+                    # But keep self.name as the primary short name
         except:
-            pass
+            self.cmdline = ""
             
         # Get executable path
         try:
@@ -81,7 +90,12 @@ class ProcessInfo:
                     
                     # Find base address (first executable region of main module)
                     if 'x' in perms and self.base_address == 0:
-                        if self.name.lower() in path.lower() or 'bloodstrike' in path.lower():
+                        # Check if path contains process name or if it's a known game module
+                        # For Proton, we often see the full Windows path in the mapping
+                        name_match = self.name.lower() in path.lower()
+                        cmdline_match = any(arg.lower() in path.lower() for arg in self.cmdline.split()) if hasattr(self, 'cmdline') else False
+
+                        if name_match or cmdline_match or 'bloodstrike' in path.lower():
                             self.base_address = start
                             self.module_size = end - start
                             
@@ -257,16 +271,25 @@ class MemoryReader:
     
     @staticmethod
     def find_process_by_name(name: str) -> Optional[int]:
-        """Find process ID by name"""
+        """Find process ID by name, improved for Proton/Wine"""
+        name_lower = name.lower()
         for pid_dir in Path("/proc").iterdir():
             if not pid_dir.name.isdigit():
                 continue
                 
             try:
+                # Check comm first (fast)
                 with open(pid_dir / "comm", "r") as f:
-                    proc_name = f.read().strip()
+                    proc_name = f.read().strip().lower()
+
+                if name_lower in proc_name:
+                    return int(pid_dir.name)
+
+                # Check cmdline (better for Proton/Wine)
+                with open(pid_dir / "cmdline", "r") as f:
+                    cmdline = f.read().replace('\0', ' ').lower()
                     
-                if name.lower() in proc_name.lower():
+                if name_lower in cmdline:
                     return int(pid_dir.name)
             except:
                 pass

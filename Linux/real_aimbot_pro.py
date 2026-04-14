@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from enum import Enum
 import threading
 import queue
+from pynput.mouse import Controller, Button
 
 class AimBone(Enum):
     """Target bone selection"""
@@ -116,38 +117,23 @@ class Target:
     prediction_confidence: float = 1.0
 
 class MouseController:
-    """Advanced mouse control system"""
+    """Advanced mouse control system using pynput for global movement"""
     
     def __init__(self):
-        self.screen_center = (pygame.display.Info().current_w // 2, 
-                              pygame.display.Info().current_h // 2)
-        self.current_pos = list(pygame.mouse.get_pos())
-        self.target_pos = list(self.current_pos)
-        self.aiming = False
+        self.mouse = Controller()
         self.smoothing_buffer = deque(maxlen=10)
         
     def get_mouse_position(self) -> Tuple[int, int]:
-        """Get current mouse position"""
-        return pygame.mouse.get_pos()
+        """Get current mouse position globally"""
+        return self.mouse.position
     
     def set_mouse_position(self, x: int, y: int):
-        """Set mouse position"""
-        # Ensure position is within screen bounds
-        screen_width = pygame.display.Info().current_w
-        screen_height = pygame.display.Info().current_h
-        
-        x = max(0, min(screen_width - 1, x))
-        y = max(0, min(screen_height - 1, y))
-        
-        pygame.mouse.set_pos((x, y))
-        self.current_pos = [x, y]
+        """Set mouse position globally"""
+        self.mouse.position = (x, y)
     
     def move_mouse_relative(self, dx: float, dy: float):
-        """Move mouse relative to current position"""
-        current_x, current_y = self.get_mouse_position()
-        new_x = int(current_x + dx)
-        new_y = int(current_y + dy)
-        self.set_mouse_position(new_x, new_y)
+        """Move mouse relative to current position globally"""
+        self.mouse.move(int(dx), int(dy))
     
     def smooth_move_to_target(self, target_x: int, target_y: int, 
                             smooth_factor: float) -> Tuple[float, float]:
