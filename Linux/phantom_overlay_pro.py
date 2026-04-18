@@ -11,6 +11,12 @@ import subprocess
 # Set SDL to use dummy audio to avoid pygame audio initialization issues
 os.environ['SDL_AUDIODRIVER'] = 'dummy'
 
+# Force X11 backend for SDL to work with XWayland on Fedora GNOME
+# This ensures the overlay can be positioned and made transparent correctly
+if os.environ.get('XDG_SESSION_TYPE') == 'wayland':
+    os.environ['SDL_VIDEODRIVER'] = 'x11'
+    print("🌐 Wayland detected, forcing SDL_VIDEODRIVER=x11 for XWayland compatibility")
+
 import pygame
 import time
 import math
@@ -417,40 +423,43 @@ class PhantomStrikeOverlay:
     def _setup_overlay_window(self):
         """Configure window to be a proper game overlay"""
         try:
-            time.sleep(0.3)  # Wait for window creation
+            time.sleep(0.5)  # Wait for window creation
             
             # Find our overlay window
-            result = subprocess.run(
-                ['xdotool', 'search', '--name', 'Phantom Strike Professional'],
-                capture_output=True, text=True, timeout=2
-            )
-            
-            if result.returncode == 0 and result.stdout.strip():
-                window_id = result.stdout.strip().split('\n')[0]
-                
-                # Make window always on top
-                subprocess.run(
-                    ['wmctrl', '-i', '-r', window_id, '-b', 'add,above,sticky'],
-                    capture_output=True, timeout=2
+            try:
+                result = subprocess.run(
+                    ['xdotool', 'search', '--name', 'Phantom Strike Professional'],
+                    capture_output=True, text=True, timeout=2
                 )
                 
-                # Set window type to dock (prevents it from stealing focus)
-                subprocess.run(
-                    ['xprop', '-id', window_id, '-f', '_NET_WM_WINDOW_TYPE', '32a',
-                     '-set', '_NET_WM_WINDOW_TYPE', '_NET_WM_WINDOW_TYPE_DOCK'],
-                    capture_output=True, timeout=2
-                )
-                
-                # Try to make it skip taskbar
-                subprocess.run(
-                    ['wmctrl', '-i', '-r', window_id, '-b', 'add,skip_taskbar,skip_pager'],
-                    capture_output=True, timeout=2
-                )
-                
-                print(f"✅ Overlay window {window_id} configured")
-                print("💡 Overlay is now on top of all windows")
-            else:
-                print("⚠️  Could not find overlay window for configuration")
+                if result.returncode == 0 and result.stdout.strip():
+                    window_id = result.stdout.strip().split('\n')[0]
+
+                    # Make window always on top
+                    subprocess.run(
+                        ['wmctrl', '-i', '-r', window_id, '-b', 'add,above,sticky'],
+                        capture_output=True, timeout=2
+                    )
+
+                    # Set window type to dock (prevents it from stealing focus)
+                    subprocess.run(
+                        ['xprop', '-id', window_id, '-f', '_NET_WM_WINDOW_TYPE', '32a',
+                         '-set', '_NET_WM_WINDOW_TYPE', '_NET_WM_WINDOW_TYPE_DOCK'],
+                        capture_output=True, timeout=2
+                    )
+
+                    # Try to make it skip taskbar
+                    subprocess.run(
+                        ['wmctrl', '-i', '-r', window_id, '-b', 'add,skip_taskbar,skip_pager'],
+                        capture_output=True, timeout=2
+                    )
+
+                    print(f"✅ Overlay window {window_id} configured")
+                    print("💡 Overlay is now on top of all windows")
+                else:
+                    print("⚠️  Could not find overlay window for configuration via xdotool")
+            except FileNotFoundError:
+                print("⚠️  xdotool or wmctrl not found. Please install them for best overlay experience.")
                 
         except subprocess.TimeoutExpired:
             print("⚠️  Window setup timed out")

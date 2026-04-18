@@ -76,6 +76,8 @@ class BloodStrikeSDK:
         """
         try:
             from utils.memory import MemoryReader
+            import json
+            import os
             
             # Create memory reader for the process
             self.memory_reader = MemoryReader(pid)
@@ -85,12 +87,18 @@ class BloodStrikeSDK:
                 print(f"[SDK] Failed to open process memory for PID {pid}")
                 return False
             
-            # In external mode, we can't directly access game objects
-            # We would need to find memory addresses and read them
-            # For now, mark as initialized but with limited functionality
+            # Load offsets for external mode
+            offsets_path = os.path.join(os.path.dirname(__file__), '..', 'offsets', 'phantom_offsets.json')
+            if os.path.exists(offsets_path):
+                with open(offsets_path, 'r') as f:
+                    self.offsets = json.load(f).get('offsets', {})
+                print(f"[SDK] Loaded {len(self.offsets)} offsets for external mode")
+            else:
+                self.offsets = {}
+                print("[SDK] Warning: No offsets found for external mode")
+
             self.initialized = True
             print(f"[SDK] External mode initialized for PID {pid}")
-            print("[SDK] Note: External mode has limited functionality")
             
             return True
         except Exception as e:
@@ -105,18 +113,33 @@ class BloodStrikeSDK:
     
     def get_local_player(self) -> Optional[Any]:
         """Get the local player entity"""
-        if not self.initialized or not self.space:
+        if not self.initialized:
             return None
+
+        if self.space:
+            try:
+                # Access local player through Space instance (internal)
+                if hasattr(self.space, 'local_player'):
+                    return self.space.local_player
+                elif hasattr(self.space, 'player'):
+                    return self.space.player
+            except:
+                pass
         
-        try:
-            # Access local player through Space instance
-            if hasattr(self.space, 'local_player'):
-                return self.space.local_player
-            elif hasattr(self.space, 'player'):
-                return self.space.player
-            return None
-        except:
-            return None
+        if hasattr(self, 'memory_reader') and 'player_base' in self.offsets:
+            try:
+                # External mode memory reading
+                base_addr = self.memory_reader.process_info.base_address
+                player_ptr_addr = base_addr + self.offsets['player_base']
+                player_addr = self.memory_reader.read_pointer(player_ptr_addr)
+
+                if player_addr > 0:
+                    # Return a proxy object that looks like an entity
+                    return {'address': player_addr, 'is_local': True}
+            except:
+                pass
+
+        return None
     
     def get_entities(self) -> List[Any]:
         """Get all entities in the game world"""
